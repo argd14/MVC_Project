@@ -96,6 +96,16 @@ public class UserController {
         return response;
     }
 
+    public Response updateUser(@RequestBody User user){
+        User userDB = userRepository.getById(user.getId());
+        if(userDB != null){
+
+            userDB.setName(user.getName());
+        }
+
+
+        return response;
+    }
 
     private boolean validedToken(String token) {
         String userId = jwtUtil.getKey(token);
