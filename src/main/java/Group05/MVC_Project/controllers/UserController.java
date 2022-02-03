@@ -18,11 +18,12 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
     private Response response = new Response();
-    @Autowired
-    private StringValidation stringValidation;
-    @Autowired
-    private JWTUtil jwtUtil;
+    private StringValidation stringValidation = new StringValidation();
+
+
+    private JWTUtil jwtUtil = new JWTUtil();
 
     //api para registrar
     @RequestMapping(value = "api/register", method = RequestMethod.POST)
@@ -30,10 +31,12 @@ public class UserController {
 
         if (stringValidation.validateAlphabetic(user.getName(), 40)) {
             if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
-                if (stringValidation.validateAlphabetic(user.getPhoneNumber(), 40)) {
+                if (stringValidation.validateAlphanumeric(user.getPhoneNumber(), 40)) {
                     if (stringValidation.validateEmail(user.getEmail())) {
                         if (stringValidation.validateAlphanumeric(user.getPassword(), 40)) {
                             userRepository.save(user);
+                            response.setStatus(true);
+                            response.setMessage("Registered successfully");
                         } else {
                             response.setException("invalid password");
                         }
@@ -96,16 +99,6 @@ public class UserController {
         return response;
     }
 
-    public Response updateUser(@RequestBody User user){
-        User userDB = userRepository.getById(user.getId());
-        if(userDB != null){
-
-            userDB.setName(user.getName());
-        }
-
-
-        return response;
-    }
 
     private boolean validedToken(String token) {
         String userId = jwtUtil.getKey(token);

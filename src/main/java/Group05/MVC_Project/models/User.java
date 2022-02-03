@@ -12,9 +12,6 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "users")
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class User implements Serializable {
 
     @Id
@@ -24,8 +21,6 @@ public class User implements Serializable {
     private String name;
     private String userName;
     private String phoneNumber;
-
-    @NotNull
     private String email;
     private String password;
     private int rol;

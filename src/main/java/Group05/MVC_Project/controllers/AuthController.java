@@ -14,15 +14,10 @@ public class AuthController {
 
     private Response response = new Response();
     private UserRepository userRepository;
-    User user = new User(1L, "juan", "juan503", "2323423", "sdsdfs", "2312", 2);
-    User user2 = new User(1L, "juan", "juan503", "2323423", "sdsdfs", "2312", 2);
-
 
     @GetMapping(value = "api/prueba")
     public @ResponseBody
     Response prueba() {
-        response.getDataset().add(user);
-        response.getDataset().add(user2);
         return response;
     }
 
