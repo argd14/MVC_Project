@@ -1,0 +1,114 @@
+body {
+    background-color: #e8e8e8;
+}
+
+.rounded-border {
+    border-radius: 14px;
+}
+
+.custom-btn {
+    background-color: transparent;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #585757;
+    transition: all 0.2s;
+}
+
+.custom-btn:hover {
+    background-color: #e8e8e8;
+    border: 2px solid #e8e8e8;
+    color: #585757;
+    border-radius: 13px;
+    font-family: 'Inter', sans-serif;
+}
+
+.icon-color {
+    color: #585757;
+    font-size: 20px;
+}
+
+.modal-icon {
+    color: #00ba34;
+    font-size: 20px;
+}
+
+.modal-icon-background {
+    background-color: #e6f8eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 24px;
+}
+
+.btn-close {
+    border: 2px solid #989898 !important;
+    border-radius: 24px !important;
+    padding: 10px !important;
+    font-size: 10px !important;
+}
+
+.custom-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #585757;
+    margin-bottom: 8px;
+}
+
+th {
+    font-family: 'Inter Extra Thin', sans-serif !important;
+    font-size: 16px;
+    color:#585757
+}
+
+td {
+    font-family: 'Inter Extra Thin', sans-serif !important;
+    font-size: 16px;
+    color:#989898
+}
+
+.modal-content{
+    border-radius: 24px !important;
+    border: 0px !important;
+}
+
+.modal-header {
+    border: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.modal-body {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    border: 0 !important;
+}
+
+.modal-footer {
+    padding-top: 0 !important;
+    border: 0 !important;
+}
+
+.form-control {
+    border: 2px solid #e8e8e8;
+    font-family: 'Inter', sans-serif !important;
+    border-radius: 10px !important;
+    padding-top: 10px !important;
+    padding-bottom: 8px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    font-size: 15px !important;
+}
+
+.form-select{
+    border: 2px solid #e8e8e8;
+    font-family: 'Inter', sans-serif !important;
+    border-radius: 10px !important;
+    padding-top: 10px !important;
+    padding-bottom: 8px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    font-size: 15px !important;
+}
