@@ -1,41 +1,77 @@
-<!doctype html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
+    <title>Register</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet">
+        rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animate.min.css">
 </head>
 
 <body>
 
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="container bg-white p-5 rounded-border">
+            <h1 class="lead">Please fill all the blanks.</h1>
+            <form action="#">
+                <div class="row">
+                    <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
+                        <div class="mb-2">
+                            <label for="txtName" class="custom-text">Name:</label>
+                            <input type="text" class="form-control" id="txtName" placeholder="Your name...">
+                        </div>
+                        <div class="mb-2">
+                            <label for="txtUsername" class="custom-text">Username:</label>
+                            <input type="text" class="form-control" id="txtUsername" placeholder="Your username...">
+                        </div>
+                        <div class="mb-2">
+                            <label for="txtPhone" class="custom-text">Phone Number:</label>
+                            <input type="text" class="form-control" id="txtPhone" placeholder="0000-0000">
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
+                        <div class="mb-2">
+                            <label for="txtEmail" class="custom-text">Email:</label>
+                            <input type="text" class="form-control" id="txtEmail" placeholder="example@mail.com">
+                        </div>
+                        <div class="mb-2">
+                            <label for="txtPassword1" class="custom-text">Password:</label>
+                            <input type="password" class="form-control" id="txtPassword1" placeholder="*************">
+                        </div>
+                        <div class="mb-2">
+                            <label for="txtPassword2" class="custom-text">Confirm password:</label>
+                            <input type="password" class="form-control" id="txtPassword2" placeholder="*************">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12 d-flex justify-content-center align-items-center">
+                        <button class="btn custom-btn pe-3 mx-1">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <i class="bi bi-plus icon-color me-1"></i><span>Register</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
-<script src="js/jquery-3.6.0.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="controller/index.js"></script>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/components.js"></script>
+    <script src="controller/index.js"></script>
 </body>
 
-</html>
-</body>
 </html>

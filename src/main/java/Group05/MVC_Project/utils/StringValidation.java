@@ -18,6 +18,14 @@ public class StringValidation {
         }
     }
 
+    public boolean validatePassword(String value){
+        // compiles the character sequence as a pattern
+        Pattern pat = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$");
+        // checks if there's a match with the pattern and the string value
+        Matcher mat = pat.matcher(value);
+        return mat.matches();
+    }
+
     public boolean validateAlphanumeric(String value, int max) {
         if (value.length() <= max) {
             // compiles the character sequence as a pattern
