@@ -10,7 +10,6 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class Response {
     private boolean status;
     private boolean error;
@@ -18,8 +17,12 @@ public class Response {
     private String exception;
     private List<Object> dataset = new ArrayList<>();
 
-    public Response(boolean status, boolean error) {
+    public Response() {
         this.status = false;
         this.error = false;
+        this.message = null;
+        this.exception = null;
+        this.dataset = null;
     }
+
 }

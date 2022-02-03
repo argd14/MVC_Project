@@ -5,6 +5,7 @@ import Group05.MVC_Project.models.Response;
 import Group05.MVC_Project.models.User;
 import Group05.MVC_Project.repositories.UserRepository;
 import Group05.MVC_Project.utils.JWTUtil;
+import Group05.MVC_Project.utils.NumberValidation;
 import Group05.MVC_Project.utils.StringValidation;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
@@ -19,8 +20,9 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    private Response response = new Response();
+    private Response response;
     private StringValidation stringValidation = new StringValidation();
+    private NumberValidation numberValidation = new NumberValidation();
 
 
     private JWTUtil jwtUtil = new JWTUtil();
@@ -28,12 +30,12 @@ public class UserController {
     //api para registrar
     @RequestMapping(value = "api/register", method = RequestMethod.POST)
     public Response registerUser(@RequestBody User user) {
-
+        initializeResponse();
         if (stringValidation.validateAlphabetic(user.getName(), 40)) {
             if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
-                if (stringValidation.validateAlphanumeric(user.getPhoneNumber(), 40)) {
+                if (numberValidation.validatePhone(user.getPhoneNumber())) {
                     if (stringValidation.validateEmail(user.getEmail())) {
-                        if (stringValidation.validateAlphanumeric(user.getPassword(), 40)) {
+                        if (stringValidation.validatePassword(user.getPassword())) {
                             userRepository.save(user);
                             response.setStatus(true);
                             response.setMessage("Registered successfully");
@@ -103,6 +105,10 @@ public class UserController {
     private boolean validedToken(String token) {
         String userId = jwtUtil.getKey(token);
         return userId != null;
+    }
+
+    public void initializeResponse() {
+        this.response = new Response();
     }
 
 }
