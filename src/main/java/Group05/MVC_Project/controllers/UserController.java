@@ -19,21 +19,29 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JWTUtil jwtUtil ;
 
     private Response response;
     private StringValidation stringValidation = new StringValidation();
     private NumberValidation numberValidation = new NumberValidation();
-    private JWTUtil jwtUtil = new JWTUtil();
+
 
     //api para registrar
     @RequestMapping(value = "api/register", method = RequestMethod.POST)
     public Response registerUser(@RequestBody User user) {
         initializeResponse();
+        System.out.println(user);
         if (stringValidation.validateAlphabetic(user.getName(), 40)) {
             if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
                 if (numberValidation.validatePhone(user.getPhone_number())) {
                     if (stringValidation.validateEmail(user.getEmail())) {
                         if (stringValidation.validatePassword(user.getPassword())) {
+                            user.setId_status(1);
+                            user.setId_rol(3);
+                            Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+                            String hash = argon2.hash(1, 1024, 1, user.getPassword());
+                            user.setPassword(hash);
                             userRepository.save(user);
                             response.setStatus(true);
                             response.setMessage("Registered successfully");
@@ -52,9 +60,7 @@ public class UserController {
         } else {
             response.setException("invalid name");
         }
-        Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
-        String hash = argon2.hash(1, 1024, 1, user.getPassword());
-        user.setPassword(hash);
+
         return response;
     }
 
