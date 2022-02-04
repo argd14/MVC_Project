@@ -17,7 +17,7 @@ function login() {
             // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
             if (response.status) {
                 Swal.fire('Success!',response.message,'success').then(function (){
-                    window.location.href = "../index.html"
+                    //
                 });
             } else {
                 Swal.fire('Warning!',response.exception,'warning');
