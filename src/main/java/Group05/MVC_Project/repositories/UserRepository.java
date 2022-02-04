@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query(value = "SELECT u FROM User u WHERE u.email LIKE %:email%  ")
-    User getCredentials(@Param("email") String email);
+    @Query(value = "SELECT u FROM User u WHERE u.email LIKE %:email% AND u.password LIKE %:password%")
+    User getCredentials(@Param("email") String email, @Param("password") String password);
 }

@@ -19,7 +19,7 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private JWTUtil jwtUtil ;
+    private JWTUtil jwtUtil;
     private Response response;
     private StringValidation stringValidation = new StringValidation();
 
@@ -28,15 +28,22 @@ public class AuthController {
     public Response login(@RequestBody User user) {
         initializeResponse();
         if (user != null) {
-            User userDB = userRepository.getCredentials(user.getEmail());
-            String tokenJwt = jwtUtil.create((userDB.getId()), userDB.getEmail());
-            response.setMessage(tokenJwt);
-            response.setException("loggin successfully");
+            if (stringValidation.validateEmail(user.getEmail())) {
+                if (stringValidation.validatePassword(user.getPassword())) {
+                    User userDB = userRepository.getCredentials(user.getEmail(),user.getPassword());
+                    String tokenJwt = jwtUtil.create((userDB.getId()), userDB.getEmail());
+                    response.setMessage(tokenJwt);
+                    response.setException("loggin successfully");
+                } else {
+                    response.setException("invalid password");
+                }
+            } else {
+                response.setException("invalid email");
+            }
 
         } else {
             response.setException("not found user");
         }
-
         return response;
     }
 

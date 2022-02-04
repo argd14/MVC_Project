@@ -17,7 +17,6 @@ public class Response implements Serializable {
     private String message;
     private String exception;
     private List<Object> dataset ;
-    private Object obj;
 
 
     public Response() {
