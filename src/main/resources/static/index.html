@@ -21,44 +21,36 @@
 <body>
 
     <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-        <div class="container bg-white p-5 rounded-border">
-            <h1 class="lead">Please fill all the blanks.</h1>
+        <div id="login-div" class="container bg-white p-5 rounded-border animate__animated animate__zoomIn animate__faster">
+            <div class="d-flex justify-content-center align-items-center mb-3">
+                <div class="modal-icon-background me-3">
+                    <i class="bi bi-person-circle modal-icon"></i>
+                </div>
+                <h5 class="text-center pt-2">Log In</h5>
+            </div>
             <form action="#">
                 <div class="row">
-                    <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
-                        <div class="mb-2">
-                            <label for="txtName" class="custom-text">Name:</label>
-                            <input type="text" class="form-control" id="txtName" placeholder="Your name...">
-                        </div>
+                    <div class="col-12">
                         <div class="mb-2">
                             <label for="txtUsername" class="custom-text">Username:</label>
                             <input type="text" class="form-control" id="txtUsername" placeholder="Your username...">
                         </div>
                         <div class="mb-2">
-                            <label for="txtPhone" class="custom-text">Phone Number:</label>
-                            <input type="text" class="form-control" id="txtPhone" placeholder="0000-0000">
+                            <label for="txtPassword" class="custom-text">Password:</label>
+                            <input type="password" class="form-control" id="txtPassword" placeholder="*************">
                         </div>
                     </div>
-                    <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
-                        <div class="mb-2">
-                            <label for="txtEmail" class="custom-text">Email:</label>
-                            <input type="text" class="form-control" id="txtEmail" placeholder="example@mail.com">
-                        </div>
-                        <div class="mb-2">
-                            <label for="txtPassword1" class="custom-text">Password:</label>
-                            <input type="password" class="form-control" id="txtPassword1" placeholder="*************">
-                        </div>
-                        <div class="mb-2">
-                            <label for="txtPassword2" class="custom-text">Confirm password:</label>
-                            <input type="password" class="form-control" id="txtPassword2" placeholder="*************">
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <a href="developer/register.html">Not registered yet? <span><b>Create an account.</b></span></a>
                     </div>
                 </div>
                 <div class="row mt-4">
                     <div class="col-12 d-flex justify-content-center align-items-center">
-                        <button class="btn custom-btn pe-3 mx-1">
+                        <button class="btn custom-btn px-5 mx-1">
                             <div class="d-flex justify-content-center align-items-center">
-                                <i class="bi bi-plus icon-color me-1"></i><span>Register</span>
+                                <span>Continue</span>
                             </div>
                         </button>
                     </div>
@@ -71,6 +63,7 @@
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/components.js"></script>
+    <script src="js/sweetalert2@11.js"></script>
     <script src="controller/index.js"></script>
 </body>
 

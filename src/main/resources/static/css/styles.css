@@ -2,6 +2,18 @@ body {
     background-color: #e8e8e8;
 }
 
+#login-div{
+    width: 25%;
+}
+
+@media (max-width: 1100px) {
+    #login-div{
+        width: 80% !important;
+    }
+}
+
+
+
 .rounded-border {
     border-radius: 14px;
 }
@@ -51,6 +63,18 @@ body {
     font-size: 10px !important;
 }
 
+.custom-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    color: #585757 !important;
+}
+
+.container {
+    box-shadow: -1px 6px 15px -12px rgba(0, 0, 0, 1);
+    -webkit-box-shadow: -1px 6px 15px -12px rgba(0, 0, 0, 1);
+    -moz-box-shadow: -1px 6px 15px -12px rgba(0, 0, 0, 1);
+}
+
 .custom-text {
     font-family: 'Inter', sans-serif;
     font-size: 15px;
@@ -58,19 +82,31 @@ body {
     margin-bottom: 8px;
 }
 
+a{
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #989898 !important;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+a:hover{
+    color: #585757 !important;
+}
+
 th {
     font-family: 'Inter Extra Thin', sans-serif !important;
     font-size: 16px;
-    color:#585757
+    color: #585757
 }
 
 td {
     font-family: 'Inter Extra Thin', sans-serif !important;
     font-size: 16px;
-    color:#989898
+    color: #989898
 }
 
-.modal-content{
+.modal-content {
     border-radius: 24px !important;
     border: 0px !important;
 }
@@ -102,7 +138,7 @@ td {
     font-size: 15px !important;
 }
 
-.form-select{
+.form-select {
     border: 2px solid #e8e8e8;
     font-family: 'Inter', sans-serif !important;
     border-radius: 10px !important;
