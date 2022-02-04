@@ -5,24 +5,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class Response {
+public class Response implements Serializable {
     private boolean status;
     private boolean error;
     private String message;
     private String exception;
-    private List<Object> dataset = new ArrayList<>();
+    private List<Object> dataset ;
+    private Object obj;
+
 
     public Response() {
         this.status = false;
         this.error = false;
         this.message = null;
         this.exception = null;
-        this.dataset = null;
+        this.dataset = new ArrayList<>();
+
     }
 
 }

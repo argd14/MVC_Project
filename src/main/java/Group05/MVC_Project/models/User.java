@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User implements Serializable {
 
     @Id
@@ -20,8 +21,10 @@ public class User implements Serializable {
     private Long id;
     private String name;
     private String userName;
-    private String phoneNumber;
+    private String phone_number;
     private String email;
     private String password;
-    private int rol;
+    private String id_status;
+    private int id_rol;
+    private LocalDateTime creation_date;
 }

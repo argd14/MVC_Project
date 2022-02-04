@@ -23,8 +23,6 @@ public class UserController {
     private Response response;
     private StringValidation stringValidation = new StringValidation();
     private NumberValidation numberValidation = new NumberValidation();
-
-
     private JWTUtil jwtUtil = new JWTUtil();
 
     //api para registrar
@@ -33,7 +31,7 @@ public class UserController {
         initializeResponse();
         if (stringValidation.validateAlphabetic(user.getName(), 40)) {
             if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
-                if (numberValidation.validatePhone(user.getPhoneNumber())) {
+                if (numberValidation.validatePhone(user.getPhone_number())) {
                     if (stringValidation.validateEmail(user.getEmail())) {
                         if (stringValidation.validatePassword(user.getPassword())) {
                             userRepository.save(user);
@@ -67,7 +65,7 @@ public class UserController {
             response.setException("don't logged in");
         } else {
             if (userRepository.getById(id) != null) {
-                response.getDataset().add(userRepository.getById(id));
+                response.getDataset().add(userRepository.findById(id).get());
             } else {
                 response.setException("User does not exist");
             }
@@ -92,7 +90,7 @@ public class UserController {
         if (!validedToken(token)) {
             response.setException("don't logged in");
         } else {
-            if (userRepository.getById(id) != null) {
+            if (userRepository.findById(id).get() != null) {
                 userRepository.deleteById(id);
             } else {
                 response.setException("User does not exist");
@@ -101,6 +99,51 @@ public class UserController {
         return response;
     }
 
+    @RequestMapping(value = "api/update", method = RequestMethod.POST)
+    public Response updateUser(@RequestHeader(value = "Authorization") String token, @RequestBody User user) {
+        initializeResponse();
+        if (!validedToken(token)) {
+            response.setException("don't logged in");
+        } else {
+            response.setException("don't logged in");
+            if (user != null) {
+                if (stringValidation.validateAlphabetic(user.getName(), 40)) {
+                    if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
+                        if (numberValidation.validatePhone(user.getPhone_number())) {
+                            if (stringValidation.validateEmail(user.getEmail())) {
+                                if (stringValidation.validatePassword(user.getPassword())) {
+                                    User userDB = userRepository.findById(user.getId()).get();
+                                    userDB.setName(user.getName());
+                                    userDB.setUserName(user.getUserName());
+                                    userDB.setPhone_number(user.getPhone_number());
+                                    userDB.setEmail(user.getEmail());
+                                    userDB.setPassword(user.getPassword());
+                                    userDB.setId_rol(user.getId_rol());
+                                    userRepository.save(userDB);
+                                    response.setStatus(true);
+                                    response.setMessage("updated successfully");
+                                } else {
+                                    response.setException("invalid password");
+                                }
+                            } else {
+                                response.setException("invalid email");
+                            }
+                        } else {
+                            response.setException("invalid phone number");
+                        }
+                    } else {
+                        response.setException("invalid user name");
+                    }
+                } else {
+                    response.setException("invalid name");
+                }
+            } else {
+                response.setException("not found user");
+            }
+
+        }
+        return response;
+    }
 
     private boolean validedToken(String token) {
         String userId = jwtUtil.getKey(token);
