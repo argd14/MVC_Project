@@ -3,11 +3,11 @@ function register() {
         let data = {}
         data.name = document.getElementById('txtName').value;
         data.userName = document.getElementById('txtUsername').value;
-        data.phoneNumber = document.getElementById('txtPhone').value;
         data.email = document.getElementById('txtEmail').value;
+        data.phone_number = document.getElementById('txtPhone').value;
         data.password = document.getElementById('txtPassword1').value;
 
-        fetch('api/register', {
+        fetch('../api/register', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -19,7 +19,9 @@ function register() {
             request.json().then(function (response) {
                 // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
                 if (response.status) {
-                    Swal.fire('Success!',response.message,'success');
+                    Swal.fire('Success!',response.message,'success').then(function(){
+                        window.location.href = "../index.html"
+                    });
                 } else {
                     Swal.fire('Warning!',response.exception,'warning');
                 }

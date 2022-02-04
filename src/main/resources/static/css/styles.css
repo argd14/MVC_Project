@@ -41,13 +41,28 @@ body {
     font-size: 20px;
 }
 
-.modal-icon {
+.modal-icon-green {
     color: #00ba34;
     font-size: 20px;
 }
 
-.modal-icon-background {
+.modal-icon-background-green {
     background-color: #e6f8eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 24px;
+}
+
+.modal-icon-blue {
+    color: #188ECA;
+    font-size: 20px;
+}
+
+.modal-icon-background-blue {
+    background-color: #DBEDF6;
     display: flex;
     justify-content: center;
     align-items: center;

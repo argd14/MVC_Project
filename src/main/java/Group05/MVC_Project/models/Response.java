@@ -16,8 +16,8 @@ public class Response implements Serializable {
     private boolean error;
     private String message;
     private String exception;
+    private String token;
     private List<Object> dataset ;
-
 
     public Response() {
         this.status = false;
@@ -25,7 +25,6 @@ public class Response implements Serializable {
         this.message = null;
         this.exception = null;
         this.dataset = new ArrayList<>();
-
     }
 
 }

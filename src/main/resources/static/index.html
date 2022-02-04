@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Log In</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,9 +22,9 @@
 
     <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
         <div id="login-div" class="container bg-white p-5 rounded-border animate__animated animate__zoomIn animate__faster">
-            <div class="d-flex justify-content-center align-items-center mb-3">
-                <div class="modal-icon-background me-3">
-                    <i class="bi bi-person-circle modal-icon"></i>
+            <div class="d-flex mb-3">
+                <div class="modal-icon-background-green me-3">
+                    <i class="bi bi-person-circle modal-icon-green"></i>
                 </div>
                 <h5 class="text-center pt-2">Log In</h5>
             </div>
@@ -32,8 +32,8 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="mb-2">
-                            <label for="txtUsername" class="custom-text">Username:</label>
-                            <input type="text" class="form-control" id="txtUsername" placeholder="Your username...">
+                            <label for="txtEmail" class="custom-text">Email:</label>
+                            <input type="email" class="form-control" id="txtEmail" placeholder="example@mail.com">
                         </div>
                         <div class="mb-2">
                             <label for="txtPassword" class="custom-text">Password:</label>
@@ -48,9 +48,9 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-12 d-flex justify-content-center align-items-center">
-                        <button class="btn custom-btn px-5 mx-1">
+                        <button onclick="login()" class="btn custom-btn px-5 mx-1">
                             <div class="d-flex justify-content-center align-items-center">
-                                <span>Continue</span>
+                                <span>Log In</span>
                             </div>
                         </button>
                     </div>

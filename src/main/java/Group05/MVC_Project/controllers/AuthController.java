@@ -37,8 +37,9 @@ public class AuthController {
                     Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
                     if (argon2.verify(passHash, user.getPassword())) {
                         String tokenJwt = jwtUtil.create((userDB.getId()), userDB.getEmail());
-                        response.setMessage(tokenJwt);
-                        response.setException("loggin successfully");
+                        response.setStatus(true);
+                        response.setToken(tokenJwt);
+                        response.setMessage("Loged in successfully!");
 
                     } else {
                         response.setException("Password invalid, no coincidences");
