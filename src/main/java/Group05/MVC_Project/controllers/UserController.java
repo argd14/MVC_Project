@@ -4,15 +4,15 @@ package Group05.MVC_Project.controllers;
 import Group05.MVC_Project.models.Response;
 import Group05.MVC_Project.models.User;
 import Group05.MVC_Project.repositories.UserRepository;
+import Group05.MVC_Project.utils.SQLException;
 import Group05.MVC_Project.utils.JWTUtil;
 import Group05.MVC_Project.utils.NumberValidation;
 import Group05.MVC_Project.utils.StringValidation;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class UserController {
@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private JWTUtil jwtUtil ;
+    private JWTUtil jwtUtil;
 
     private Response response;
     private StringValidation stringValidation = new StringValidation();
@@ -31,7 +31,6 @@ public class UserController {
     @RequestMapping(value = "api/register", method = RequestMethod.POST)
     public Response registerUser(@RequestBody User user) {
         initializeResponse();
-        System.out.println(user);
         if (stringValidation.validateAlphabetic(user.getName(), 40)) {
             if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
                 if (numberValidation.validatePhone(user.getPhone_number())) {
@@ -42,15 +41,20 @@ public class UserController {
                             Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
                             String hash = argon2.hash(1, 1024, 1, user.getPassword());
                             user.setPassword(hash);
-                            userRepository.save(user);
-                            response.setStatus(true);
-                            response.setMessage("Registered successfully");
+                            try {
+                                userRepository.save(user);
+                                response.setStatus(true);
+                                response.setMessage("Registered successfully");
+                            } catch (DataAccessException ex) {
+                                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                            }
                         } else {
                             response.setException("invalid password");
                         }
                     } else {
                         response.setException("invalid email");
                     }
+
                 } else {
                     response.setException("invalid phone number");
                 }

@@ -5,6 +5,8 @@ import Group05.MVC_Project.models.User;
 import Group05.MVC_Project.repositories.UserRepository;
 import Group05.MVC_Project.utils.JWTUtil;
 import Group05.MVC_Project.utils.StringValidation;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,10 +32,17 @@ public class AuthController {
         if (user != null) {
             if (stringValidation.validateEmail(user.getEmail())) {
                 if (stringValidation.validatePassword(user.getPassword())) {
-                    User userDB = userRepository.getCredentials(user.getEmail(),user.getPassword());
-                    String tokenJwt = jwtUtil.create((userDB.getId()), userDB.getEmail());
-                    response.setMessage(tokenJwt);
-                    response.setException("loggin successfully");
+                    User userDB = userRepository.getCredentials(user.getEmail());
+                    String passHash = userDB.getPassword();
+                    Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+                    if (argon2.verify(passHash, user.getPassword())) {
+                        String tokenJwt = jwtUtil.create((userDB.getId()), userDB.getEmail());
+                        response.setMessage(tokenJwt);
+                        response.setException("loggin successfully");
+
+                    } else {
+                        response.setException("Password invalid, no coincidences");
+                    }
                 } else {
                     response.setException("invalid password");
                 }
@@ -42,7 +51,7 @@ public class AuthController {
             }
 
         } else {
-            response.setException("not found user");
+            response.setException("user no found");
         }
         return response;
     }
