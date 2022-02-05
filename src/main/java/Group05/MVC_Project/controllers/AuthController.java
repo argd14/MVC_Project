@@ -29,7 +29,7 @@ public class AuthController {
     @RequestMapping(value = "api/login", method = RequestMethod.POST)
     public Response login(@RequestBody User user) {
         initializeResponse();
-        if (user != null) {
+        if (user.getEmail() != "" || user.getPassword() != "") {
             if (stringValidation.validateEmail(user.getEmail())) {
                 if (stringValidation.validatePassword(user.getPassword())) {
                     User userDB = userRepository.getCredentials(user.getEmail());
@@ -39,20 +39,18 @@ public class AuthController {
                         String tokenJwt = jwtUtil.create((userDB.getId()), userDB.getEmail());
                         response.setStatus(true);
                         response.setToken(tokenJwt);
-                        response.setMessage("Loged in successfully!");
-
+                        response.setMessage("Session created successfully!");
                     } else {
-                        response.setException("Password invalid, no coincidences");
+                        response.setException("Incorrect password.");
                     }
                 } else {
-                    response.setException("invalid password");
+                    response.setException("Sorry! Looks like your password is invalid.");
                 }
             } else {
-                response.setException("invalid email");
+                response.setException("Sorry! Looks like your email is invalid.");
             }
-
         } else {
-            response.setException("user no found");
+            response.setException("Please fill all the fields.");
         }
         return response;
     }

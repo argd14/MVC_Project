@@ -71,7 +71,7 @@ public class UserController {
     //api para obtener un usuario por id
     @RequestMapping(value = "api/user/{id}", method = RequestMethod.GET)
     public Response getUser(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
-        if (!validedToken(token)) {
+        if (!validateToken(token)) {
             response.setException("don't logged in");
         } else {
             if (userRepository.getById(id) != null) {
@@ -86,7 +86,7 @@ public class UserController {
     //api para obtener todos los usuarios
     @RequestMapping(value = "api/users", method = RequestMethod.GET)
     public Response getUsers(@RequestHeader(value = "Authorization") String token) {
-        if (!validedToken(token)) {
+        if (!validateToken(token)) {
             response.setException("don't logged in");
         } else {
             response.getDataset().add(userRepository.findAll());
@@ -97,7 +97,7 @@ public class UserController {
     //api para borrar un usuario por id
     @RequestMapping(value = "api/delete/{id}", method = RequestMethod.DELETE)
     public Response deleteUser(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
-        if (!validedToken(token)) {
+        if (!validateToken(token)) {
             response.setException("don't logged in");
         } else {
             if (userRepository.findById(id).get() != null) {
@@ -112,7 +112,7 @@ public class UserController {
     @RequestMapping(value = "api/update", method = RequestMethod.POST)
     public Response updateUser(@RequestHeader(value = "Authorization") String token, @RequestBody User user) {
         initializeResponse();
-        if (!validedToken(token)) {
+        if (!validateToken(token)) {
             response.setException("don't logged in");
         } else {
             response.setException("don't logged in");
@@ -155,7 +155,7 @@ public class UserController {
         return response;
     }
 
-    private boolean validedToken(String token) {
+    private boolean validateToken(String token) {
         String userId = jwtUtil.getKey(token);
         return userId != null;
     }

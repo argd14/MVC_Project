@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import Group05.MVC_Project.utils.JWTUtil;
 
@@ -18,20 +20,20 @@ public class PageController {
         return userId != null;
     }
     
-    @GetMapping("/")
+    @RequestMapping(value="/", method = RequestMethod.GET)
     public String index(){
         return "index";
     }
 
-    @GetMapping("developer/register")
+    @RequestMapping(value="developer/register", method = RequestMethod.GET)
     public String registerDeveloper(){
         return "developer/register";
     }
 
-    @GetMapping("manager/dashboard")
+    @RequestMapping(value="manager/dashboard", method = RequestMethod.GET)
     public String dashboardManager(@RequestHeader(value = "Authorization") String token){
         if(!validateToken(token)){
-            return "index";
+            return "../index";
         } else {
             return "manager/dashboard";
         }
