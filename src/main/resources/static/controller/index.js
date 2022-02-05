@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded',function(){
-    if(localStorage.token != null){
-        window.location.href = `manager/dashboard`;
-    }
+    
 });
 
-function login() {
+document.getElementById('login-form').addEventListener('submit',function(event){
+    event.preventDefault();
+
     let data = {}
     data.email = document.getElementById('txtEmail').value;
     data.password = document.getElementById('txtPassword').value;
@@ -24,7 +24,7 @@ function login() {
             if (response.status) {
                 Swal.fire('Success!',response.message,'success').then(function (){
                     localStorage.token = response.token;
-                    
+                        
                     window.location.href = `manager/dashboard?token=${response.token}`;
                 });
             } else {
@@ -34,4 +34,4 @@ function login() {
     }).catch(function (error) {
         console.log(error);
     });
-}
+});
