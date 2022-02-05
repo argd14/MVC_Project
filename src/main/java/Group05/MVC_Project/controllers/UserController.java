@@ -26,7 +26,6 @@ public class UserController {
     private StringValidation stringValidation = new StringValidation();
     private NumberValidation numberValidation = new NumberValidation();
 
-
     //api para registrar
     @RequestMapping(value = "api/register", method = RequestMethod.POST)
     public Response registerUser(@RequestBody User user) {

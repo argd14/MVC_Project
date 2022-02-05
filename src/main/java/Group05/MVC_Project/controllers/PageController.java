@@ -16,8 +16,15 @@ public class PageController {
     private JWTUtil jwtUtil;
 
     private boolean validateToken(String token) {
-        String userId = jwtUtil.getKey(token);
-        return userId != null;
+       try{
+           String userId = jwtUtil.getKey(token);
+           return userId != null ;
+       }catch(Exception e){
+           return false;
+       }
+
+
+       // return userId != null;
     }
     
     @RequestMapping(value="/", method = RequestMethod.GET)
@@ -32,7 +39,7 @@ public class PageController {
 
     @RequestMapping(value="manager/dashboard", method = RequestMethod.GET)
     public String dashboardManager(@RequestHeader(value = "Authorization") String token){
-        if(!validateToken(token)){
+        if(validateToken(token)){
             return "manager/dashboard";
         } else {
             return "index";
