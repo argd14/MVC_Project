@@ -33,9 +33,9 @@ public class PageController {
     @RequestMapping(value="manager/dashboard", method = RequestMethod.GET)
     public String dashboardManager(@RequestHeader(value = "Authorization") String token){
         if(!validateToken(token)){
-            return "../index";
-        } else {
             return "manager/dashboard";
+        } else {
+            return "index";
         }
         
     }
