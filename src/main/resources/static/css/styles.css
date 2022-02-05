@@ -1,16 +1,44 @@
-.background-gray{
+.background-gray {
     background-color: #e8e8e8;
+}
+
+body {
+    overflow-x: hidden !important;
 }
 
 #login-div {
     width: 25%;
 }
 
-a{
+.collapsing {
+    height: 0;
+    overflow: hidden;
+    transition: height .10s ease-in-out !important;
+}
+
+@media (prefers-reduced-motion:reduce) {
+    .collapsing {
+        transition: none
+    }
+}
+
+.collapsing.collapse-horizontal {
+    width: 0;
+    height: auto;
+    transition: height .10s ease-in-out !important;
+}
+
+@media (prefers-reduced-motion:reduce) {
+    .collapsing.collapse-horizontal {
+        transition: none
+    }
+}
+
+a {
     cursor: pointer !important;
 }
 
-a:hover{
+a:hover {
     cursor: pointer !important;
 }
 
@@ -32,7 +60,7 @@ a:hover{
     background-color: #ffffff;
 }
 
-#user-nav-space{
+#user-nav-space {
     border-bottom: 2px solid #e8e8e8;
     height: 250px;
     display: flex;
@@ -111,7 +139,7 @@ a:hover{
     font-family: 'Inter', sans-serif;
 }
 
-.icon-size{
+.icon-size {
     font-size: 24px;
 }
 
