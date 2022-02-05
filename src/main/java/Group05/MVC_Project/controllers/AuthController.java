@@ -5,6 +5,7 @@ import Group05.MVC_Project.models.User;
 import Group05.MVC_Project.repositories.UserRepository;
 import Group05.MVC_Project.utils.JWTUtil;
 import Group05.MVC_Project.utils.StringValidation;
+import Group05.MVC_Project.utils.ValidateToken;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class AuthController {
     private UserRepository userRepository;
     @Autowired
     private JWTUtil jwtUtil;
+
+    private ValidateToken validateToken;
+
     private Response response;
     private StringValidation stringValidation = new StringValidation();
 
@@ -39,6 +43,7 @@ public class AuthController {
                         String tokenJwt = jwtUtil.create((userDB.getId()), userDB.getEmail());
                         response.setStatus(true);
                         response.setToken(tokenJwt);
+                        response.getDataset().add(userDB);
                         response.setMessage("Session created successfully!");
                     } else {
                         response.setException("Incorrect password.");

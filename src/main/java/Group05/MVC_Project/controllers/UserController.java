@@ -4,23 +4,22 @@ package Group05.MVC_Project.controllers;
 import Group05.MVC_Project.models.Response;
 import Group05.MVC_Project.models.User;
 import Group05.MVC_Project.repositories.UserRepository;
-import Group05.MVC_Project.utils.SQLException;
-import Group05.MVC_Project.utils.JWTUtil;
-import Group05.MVC_Project.utils.NumberValidation;
-import Group05.MVC_Project.utils.StringValidation;
+import Group05.MVC_Project.utils.*;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
-    private JWTUtil jwtUtil;
+    private ValidateToken validateToken;
 
     private Response response;
     private StringValidation stringValidation = new StringValidation();
@@ -70,7 +69,7 @@ public class UserController {
     //api para obtener un usuario por id
     @RequestMapping(value = "api/user/{id}", method = RequestMethod.GET)
     public Response getUser(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
-        if (!validateToken(token)) {
+        if (!validateToken.validateToken(token)) {
             response.setException("don't logged in");
         } else {
             if (userRepository.getById(id) != null) {
@@ -81,11 +80,10 @@ public class UserController {
         }
         return response;
     }
-
     //api para obtener todos los usuarios
     @RequestMapping(value = "api/users", method = RequestMethod.GET)
     public Response getUsers(@RequestHeader(value = "Authorization") String token) {
-        if (!validateToken(token)) {
+        if (!validateToken.validateToken(token)) {
             response.setException("don't logged in");
         } else {
             response.getDataset().add(userRepository.findAll());
@@ -96,7 +94,7 @@ public class UserController {
     //api para borrar un usuario por id
     @RequestMapping(value = "api/delete/{id}", method = RequestMethod.DELETE)
     public Response deleteUser(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
-        if (!validateToken(token)) {
+        if (!validateToken.validateToken(token)) {
             response.setException("don't logged in");
         } else {
             if (userRepository.findById(id).get() != null) {
@@ -111,7 +109,7 @@ public class UserController {
     @RequestMapping(value = "api/update", method = RequestMethod.POST)
     public Response updateUser(@RequestHeader(value = "Authorization") String token, @RequestBody User user) {
         initializeResponse();
-        if (!validateToken(token)) {
+        if (!validateToken.validateToken(token)) {
             response.setException("don't logged in");
         } else {
             response.setException("don't logged in");
@@ -154,10 +152,7 @@ public class UserController {
         return response;
     }
 
-    private boolean validateToken(String token) {
-        String userId = jwtUtil.getKey(token);
-        return userId != null;
-    }
+
 
     public void initializeResponse() {
         this.response = new Response();
