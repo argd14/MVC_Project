@@ -1,4 +1,4 @@
-package Group05.MVC_Project.controllers;
+package Group05.MVC_Project.services;
 
 
 import Group05.MVC_Project.models.Response;
@@ -25,7 +25,7 @@ public class UserController {
     private StringValidation stringValidation = new StringValidation();
     private NumberValidation numberValidation = new NumberValidation();
 
-    //api para registrar
+    // api for register
     @RequestMapping(value = "api/register", method = RequestMethod.POST)
     public Response registerUser(@RequestBody User user) {
         initializeResponse();
@@ -47,60 +47,60 @@ public class UserController {
                                 response.setException(SQLException.getException(String.valueOf(ex.getCause())));
                             }
                         } else {
-                            response.setException("invalid password");
+                            response.setException("Invalid password. Please check that your password satisfies all the requirements.");
                         }
                     } else {
-                        response.setException("invalid email");
+                        response.setException("Invalid email.");
                     }
-
                 } else {
-                    response.setException("invalid phone number");
+                    response.setException("Invalid phone number.");
                 }
             } else {
-                response.setException("invalid user name");
+                response.setException("Invalid username.");
             }
         } else {
-            response.setException("invalid name");
+            response.setException("Invalid name.");
         }
 
         return response;
     }
 
-    //api para obtener un usuario por id
+    // api to get user data by his id
     @RequestMapping(value = "api/user/{id}", method = RequestMethod.GET)
     public Response getUser(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
         if (!validateToken.validateToken(token)) {
-            response.setException("don't logged in");
+            response.setException("Unauthorized access.");
         } else {
             if (userRepository.getById(id) != null) {
                 response.getDataset().add(userRepository.findById(id).get());
             } else {
-                response.setException("User does not exist");
+                response.setException("The user doesn't exists.");
             }
         }
         return response;
     }
-    //api para obtener todos los usuarios
+
+    // api to get all the users
     @RequestMapping(value = "api/users", method = RequestMethod.GET)
     public Response getUsers(@RequestHeader(value = "Authorization") String token) {
         if (!validateToken.validateToken(token)) {
-            response.setException("don't logged in");
+            response.setException("Unauthorized access.");
         } else {
             response.getDataset().add(userRepository.findAll());
         }
         return response;
     }
 
-    //api para borrar un usuario por id
+    //api for deleting a user by his id
     @RequestMapping(value = "api/delete/{id}", method = RequestMethod.DELETE)
     public Response deleteUser(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
         if (!validateToken.validateToken(token)) {
-            response.setException("don't logged in");
+            response.setException("Unauthorized access.");
         } else {
             if (userRepository.findById(id).get() != null) {
                 userRepository.deleteById(id);
             } else {
-                response.setException("User does not exist");
+                response.setException("The user doesn't exists.");
             }
         }
         return response;
@@ -110,10 +110,9 @@ public class UserController {
     public Response updateUser(@RequestHeader(value = "Authorization") String token, @RequestBody User user) {
         initializeResponse();
         if (!validateToken.validateToken(token)) {
-            response.setException("don't logged in");
+            response.setException("Unauthorized access.");
         } else {
-            response.setException("don't logged in");
-            if (user != null) {
+            if (user.equals(null)) {
                 if (stringValidation.validateAlphabetic(user.getName(), 40)) {
                     if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
                         if (numberValidation.validatePhone(user.getPhone_number())) {
@@ -128,26 +127,25 @@ public class UserController {
                                     userDB.setId_rol(user.getId_rol());
                                     userRepository.save(userDB);
                                     response.setStatus(true);
-                                    response.setMessage("updated successfully");
+                                    response.setMessage("Updated successfully.");
                                 } else {
                                     response.setException("invalid password");
                                 }
                             } else {
-                                response.setException("invalid email");
+                                response.setException("Invalid email.");
                             }
                         } else {
-                            response.setException("invalid phone number");
+                            response.setException("Invalid phone number.");
                         }
                     } else {
-                        response.setException("invalid user name");
+                        response.setException("Invalid username.");
                     }
                 } else {
-                    response.setException("invalid name");
+                    response.setException("Invalid name.");
                 }
             } else {
-                response.setException("not found user");
+                response.setException("You can't do an update with empty fields.");
             }
-
         }
         return response;
     }

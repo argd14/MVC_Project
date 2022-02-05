@@ -3,7 +3,6 @@ package Group05.MVC_Project.utils;
 import Group05.MVC_Project.controllers.PageController;
 import Group05.MVC_Project.models.User;
 import Group05.MVC_Project.repositories.UserRepository;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +13,6 @@ public class ValidateToken {
     private JWTUtil jwtUtil;
     @Autowired
     private UserRepository userRepository;
-    private PageController page = new PageController();
     private Long userId;
 
     public boolean validateToken(String token) {

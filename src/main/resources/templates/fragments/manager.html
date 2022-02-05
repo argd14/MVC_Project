@@ -37,16 +37,16 @@
                 <a href="#" class="nav-link"><i class="bi bi-gear icon-size me-3"></i>Settings</a>
             </li>
             <li class="nav-item d-flex justify-content-center">
-                <a href="#" class="nav-link"><i class="bi bi-box-arrow-left icon-size me-3"></i>Log out</a>
+                <a onclick="logout()" class="nav-link"><i class="bi bi-box-arrow-left icon-size me-3"></i>Log out</a>
             </li>
         </ul>
     </div>
     <ul class="nav flex-column mb-0 mt-3">
         <li class="nav-item d-flex justify-content-center">
-            <a href="#" class="nav-link"><i class="bi bi-house-door icon-size me-3"></i>Overview</a>
+            <a onclick="redirect('dashboard')" class="nav-link"><i class="bi bi-house-door icon-size me-3"></i>Overview</a>
         </li>
         <li class="nav-item d-flex justify-content-center">
-            <a href="users" class="nav-link"><i class="bi bi-person-video2 icon-size me-3"></i>Users</a>
+            <a onclick="redirect('users')" class="nav-link"><i class="bi bi-person-video2 icon-size me-3"></i>Users</a>
         </li>
         <li class="nav-item d-flex justify-content-center">
             <a href="#" class="nav-link"><i class="bi bi-box icon-size me-3"></i>Projects</a>

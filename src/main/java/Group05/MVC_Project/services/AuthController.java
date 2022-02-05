@@ -1,11 +1,10 @@
-package Group05.MVC_Project.controllers;
+package Group05.MVC_Project.services;
 
 import Group05.MVC_Project.models.Response;
 import Group05.MVC_Project.models.User;
 import Group05.MVC_Project.repositories.UserRepository;
 import Group05.MVC_Project.utils.JWTUtil;
 import Group05.MVC_Project.utils.StringValidation;
-import Group05.MVC_Project.utils.ValidateToken;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 public class AuthController {
 
@@ -23,8 +20,6 @@ public class AuthController {
     private UserRepository userRepository;
     @Autowired
     private JWTUtil jwtUtil;
-
-    private ValidateToken validateToken;
 
     private Response response;
     private StringValidation stringValidation = new StringValidation();

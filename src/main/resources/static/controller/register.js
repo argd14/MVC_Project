@@ -1,4 +1,6 @@
-function register() {
+document.getElementById('register-form').addEventListener('submit',function(event){
+    event.preventDefault();
+
     if (document.getElementById('txtPassword1').value == document.getElementById('txtPassword2').value) {
         let data = {}
         data.name = document.getElementById('txtName').value;
@@ -32,4 +34,4 @@ function register() {
     } else {
         Swal.fire('Warning!',"The passwords aren't the same.",'warning');
     }
-}
+});
