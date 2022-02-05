@@ -2,9 +2,11 @@ function redirect(url){
     fetch(url, {
         method: 'GET',
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
             'Authorization': localStorage.token
         }
+    }).then(function (request) {
+        request.json(function(response){
+            window.location.href = response;
+        });
     })
 }
