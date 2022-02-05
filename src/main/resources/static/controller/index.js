@@ -17,10 +17,10 @@ document.getElementById('login-form').addEventListener('submit',function(event){
         },
         body: JSON.stringify(data)
     }).then(function (request) {
-        // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
+        // parses request to json
         request.json().then(function (response) {
             console.log(response);
-            // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+            // checks response status
             if (response.status) {
                 Swal.fire('Success!',response.message,'success').then(function (){
                     localStorage.token = response.token;

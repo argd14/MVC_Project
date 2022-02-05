@@ -34,7 +34,7 @@
         </div>
         <ul class="nav flex-column mb-0 mt-3">
             <li class="nav-item d-flex justify-content-center">
-                <a href="#" class="nav-link"><i class="bi bi-gear icon-size me-3"></i>Settings</a>
+                <a onclick="redirect('settings')" class="nav-link"><i class="bi bi-gear icon-size me-3"></i>Settings</a>
             </li>
             <li class="nav-item d-flex justify-content-center">
                 <a onclick="logout()" class="nav-link"><i class="bi bi-box-arrow-left icon-size me-3"></i>Log out</a>
@@ -63,7 +63,6 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/components.js"></script>
     <script src="../js/sweetalert2@11.js"></script>
-    <script src="../controller/index.js"></script>
     <script>
         $('#sidebarCollapse').on('click', function () {
             $('#sidebar, #content').toggleClass('active');
