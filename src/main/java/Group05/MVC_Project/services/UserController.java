@@ -43,6 +43,7 @@ public class UserController {
                             if (numberValidation.validateInteger(String.valueOf(user.getId_rol()))) {
                                 if (numberValidation.validateInteger(String.valueOf(user.getId_status()))) {
                                     userRepository.save(user);
+                                    response.setStatus(true);
                                 } else {
                                     response.setException("Invalid status");
                                 }
@@ -75,6 +76,7 @@ public class UserController {
         } else {
             if (userRepository.findById(id) != null) {
                 response.getDataset().add(userRepository.findById(id).get());
+                response.setStatus(true);
             } else {
                 response.setException("The user doesn't exists.");
             }
@@ -86,6 +88,7 @@ public class UserController {
     public Response getUsers(@RequestHeader(value = "Authorization") String token) {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
+            response.setStatus(true);
         } else {
             response.getDataset().add(userRepository.findAll());
         }
@@ -99,6 +102,7 @@ public class UserController {
         } else {
             if (userRepository.findById(id).get() != null) {
                 userRepository.deleteById(id);
+                response.setStatus(true);
             } else {
                 response.setException("The user doesn't exists.");
             }
@@ -118,6 +122,7 @@ public class UserController {
                     userDB.setId_status(user.getId_status());
                     userRepository.save(userDB);
                     response.setMessage("Status updated successfully.");
+                    response.setStatus(true);
                 } else {
                     response.setException("You can't update a user to the same status.");
                 }
@@ -146,8 +151,9 @@ public class UserController {
                                 userDB.setEmail(user.getEmail());
                                 userDB.setId_rol(user.getId_rol());
                                 userRepository.save(userDB);
-                                response.setStatus(true);
                                 response.setMessage("Updated successfully.");
+                                response.setStatus(true);
+
                             } else {
                                 response.setException("Invalid email.");
                             }
@@ -174,6 +180,7 @@ public class UserController {
             response.setException("Unauthorized access.");
         } else {
             response.getDataset().add(statusRepository.ListStatus());
+            response.setStatus(true);
         }
         return response;
 
@@ -186,6 +193,7 @@ public class UserController {
             response.setException("Unauthorized access.");
         } else {
             response.getDataset().add(roleRepository.ListRole());
+            response.setStatus(true);
         }
         return response;
     }
@@ -197,6 +205,7 @@ public class UserController {
             response.setException("Unauthorized access.");
         } else {
             response.getDataset().add(userRepository.developers());
+            response.setStatus(true);
         }
         return response;
     }
@@ -208,6 +217,33 @@ public class UserController {
             response.setException("Unauthorized access.");
         } else {
             response.getDataset().add(userRepository.managers());
+            response.setStatus(true);
+        }
+        return response;
+    }
+
+    @PostMapping("/updatePassword")
+    public Response updatePassword(@RequestHeader(value = "Authorization") String token, @RequestParam(name = "password1") String password1, @RequestParam(name = "password2") String password2) {
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            User userDB = validateToken.userDB();
+            if (stringValidation.validatePassword(password1)) {
+                if (stringValidation.validatePassword(password2)) {
+                    if (userDB.getPassword() == password1) {
+                        userDB.setPassword(password2);
+                        userRepository.save(userDB);
+                        response.setStatus(true);
+                    }else{
+                        response.setException("password not equals");
+                    }
+                }else{
+                    response.setMessage("current password invalid");
+                }
+            } else {
+                response.setMessage("new password invalid");
+            }
         }
         return response;
     }

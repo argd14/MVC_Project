@@ -78,6 +78,7 @@ public class AuthController {
                                 userRepository.save(user);
                                 response.setStatus(true);
                                 response.setMessage("Registered successfully");
+                                response.setStatus(true);
                             } catch (DataAccessException ex) {
                                 response.setException(SQLException.getException(String.valueOf(ex.getCause())));
                             }
