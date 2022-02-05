@@ -5,8 +5,6 @@ function redirect(url){
             'Authorization': localStorage.token
         }
     }).then(function (request) {
-        request.json(function(response){
-            window.location.href = response;
-        });
+        console.log(request);
     })
 }

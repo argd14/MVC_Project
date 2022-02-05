@@ -1,3 +1,9 @@
+document.addEventListener('DOMContentLoaded',function(){
+    if(localStorage.token != null){
+        window.location.href = `manager/dashboard`;
+    }
+});
+
 function login() {
     let data = {}
     data.email = document.getElementById('txtEmail').value;
@@ -18,7 +24,8 @@ function login() {
             if (response.status) {
                 Swal.fire('Success!',response.message,'success').then(function (){
                     localStorage.token = response.token;
-                    redirect('manager/dashboard');
+                    
+                    window.location.href = `manager/dashboard?token=${response.token}`;
                 });
             } else {
                 Swal.fire('Warning!',response.exception,'warning');

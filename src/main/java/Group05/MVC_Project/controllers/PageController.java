@@ -2,10 +2,10 @@ package Group05.MVC_Project.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import Group05.MVC_Project.utils.JWTUtil;
 
@@ -22,9 +22,6 @@ public class PageController {
        }catch(Exception e){
            return false;
        }
-
-
-       // return userId != null;
     }
     
     @RequestMapping(value="/", method = RequestMethod.GET)
@@ -38,11 +35,11 @@ public class PageController {
     }
 
     @RequestMapping(value="manager/dashboard", method = RequestMethod.GET)
-    public String dashboardManager(@RequestHeader(value = "Authorization") String token){
+    public String dashboardManager(@RequestParam(name="token", required = false) String token){
         if(validateToken(token)){
             return "manager/dashboard";
         } else {
-            return "index";
+            return "redirect:/";
         }
         
     }
