@@ -96,8 +96,8 @@
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
             <div class="modal-content p-3">
                 <div class="modal-header d-flex justify-content-start">
-                    <div class="modal-icon-background-blue me-3">
-                        <i class="bi bi-person-video2 modal-icon-blue"></i>
+                    <div class="modal-icon-background-red me-3">
+                        <i class="bi bi-person-video2 modal-icon-red"></i>
                     </div>
                     <h5 class="modal-title" id="modal-title">Change this on js controller</h5>
                 </div>
@@ -125,7 +125,7 @@
                                         <input type="text" class="form-control" id="phone_number" placeholder="00000000">
                                     </div>
                                     <div class="mb-2">
-                                        <label for="email" class="custom-text">Phone number:</label>
+                                        <label for="email" class="custom-text">Email:</label>
                                         <input type="email" class="form-control" id="email" placeholder="example@mail.com">
                                     </div>
                                 </div>
@@ -146,7 +146,12 @@
                                     </div>
                                     <div class="mb-2">
                                         <label for="password" class="custom-text">Password:</label>
-                                        <input type="password" class="form-control" id="password" placeholder="Password">
+                                        <input type="password" class="form-control" id="password" placeholder="Password" data-bs-toggle="tooltip" data-bs-placement="bottom" 
+                                        title="Password must contain at least one digit [0-9].
+                                        Password must contain at least one lowercase Latin character [a-z].
+                                        Password must contain at least one uppercase Latin character [A-Z].
+                                        Password must contain at least one special character like ! @ # & ( ).
+                                        Password must contain a length of at least 8 characters and a maximum of 20 characters.">
                                     </div>
                                     <div class="mb-2">
                                         <label for="password" class="custom-text">Confirm password:</label>

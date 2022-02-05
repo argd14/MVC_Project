@@ -35,3 +35,17 @@ document.getElementById('register-form').addEventListener('submit',function(even
         Swal.fire('Warning!',"The passwords aren't the same.",'warning');
     }
 });
+
+function showHidePassword(checkbox, pass1, pass2) {
+    var check = document.getElementById(checkbox);
+    var password1 = document.getElementById(pass1);
+    var password2 = document.getElementById(pass2);
+
+    if (check.checked == true) {
+        password1.type = 'text';
+        password2.type = 'text';
+    } else {
+        password1.type = 'password';
+        password2.type = 'password';
+    }
+}

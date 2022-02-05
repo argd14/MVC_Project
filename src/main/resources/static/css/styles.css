@@ -148,6 +148,21 @@ a:hover {
     font-size: 20px;
 }
 
+.modal-icon-red {
+    color: #ba0000;
+    font-size: 20px;
+}
+
+.modal-icon-background-red {
+    background-color: #f8e6e6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 24px;
+}
+
 .modal-icon-green {
     color: #00ba34;
     font-size: 20px;

@@ -2,7 +2,16 @@ function redirect(url) {
     window.location.href = `${url}?token=${localStorage.token}`;
 }
 
-function saveOrUpdate(endpoint, data, modal, action){
+document.addEventListener('DOMContentLoaded', function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+    
+    document.getElementById('lblUsername').textContent = localStorage.username;
+});
+
+function saveOrUpdate(endpoint, data, modal, action) {
     fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -17,11 +26,11 @@ function saveOrUpdate(endpoint, data, modal, action){
             // checks response status
             if (response.status) {
                 closeModal(modal);
-                Swal.fire('Success!',response.message,'success').then(function (){
+                Swal.fire('Success!', response.message, 'success').then(function () {
                     action();
                 });
             } else {
-                Swal.fire('Warning!',response.exception,'warning');
+                Swal.fire('Warning!', response.exception, 'warning');
             }
         });
     }).catch(function (error) {
@@ -46,7 +55,7 @@ function logout() {
                 'Done!',
                 "We hope we're gonna see you again!",
                 'success'
-            ).then(function(){
+            ).then(function () {
                 window.location.href = "/";
             });
         }

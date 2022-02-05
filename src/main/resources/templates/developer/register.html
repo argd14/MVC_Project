@@ -50,11 +50,20 @@
                         </div>
                         <div class="mb-2">
                             <label for="txtPassword1" class="custom-text">Password:</label>
-                            <input type="password" class="form-control" id="txtPassword1" placeholder="*************">
+                            <input type="password" class="form-control" id="txtPassword1" placeholder="*************" data-bs-toggle="tooltip" data-bs-placement="bottom" 
+                            title="Password must contain at least one digit [0-9].
+                            Password must contain at least one lowercase Latin character [a-z].
+                            Password must contain at least one uppercase Latin character [A-Z].
+                            Password must contain at least one special character like ! @ # & ( ).
+                            Password must contain a length of at least 8 characters and a maximum of 20 characters.">
                         </div>
                         <div class="mb-2">
                             <label for="txtPassword2" class="custom-text">Confirm password:</label>
                             <input type="password" class="form-control" id="txtPassword2" placeholder="*************">
+                        </div>
+                        <div class="form-check form-switch mt-1">
+                            <input onchange="showHidePassword('showPassword','txtPassword1', 'txtPassword2')" class="form-check-input" type="checkbox" role="switch" id="showPassword">
+                            <label class="custom-text" for="showPassword">Show password</label>
                         </div>
                     </div>
                 </div>
