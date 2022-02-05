@@ -112,25 +112,20 @@ public class UserController {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            if (user.equals(null)) {
+            if ((user.getId()!=null)) {
                 if (stringValidation.validateAlphabetic(user.getName(), 40)) {
                     if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
                         if (numberValidation.validatePhone(user.getPhone_number())) {
                             if (stringValidation.validateEmail(user.getEmail())) {
-                                if (stringValidation.validatePassword(user.getPassword())) {
                                     User userDB = userRepository.findById(user.getId()).get();
                                     userDB.setName(user.getName());
                                     userDB.setUserName(user.getUserName());
                                     userDB.setPhone_number(user.getPhone_number());
                                     userDB.setEmail(user.getEmail());
-                                    userDB.setPassword(user.getPassword());
                                     userDB.setId_rol(user.getId_rol());
                                     userRepository.save(userDB);
                                     response.setStatus(true);
                                     response.setMessage("Updated successfully.");
-                                } else {
-                                    response.setException("invalid password");
-                                }
                             } else {
                                 response.setException("Invalid email.");
                             }
