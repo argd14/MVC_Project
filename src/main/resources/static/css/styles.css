@@ -1,18 +1,67 @@
-body {
+.background-gray{
     background-color: #e8e8e8;
 }
 
-#login-div{
+#login-div {
     width: 25%;
 }
 
 @media (max-width: 1100px) {
-    #login-div{
+    #login-div {
         width: 80% !important;
     }
 }
 
+.vertical-nav {
+    min-width: 17rem;
+    width: 17rem;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-right: 2px solid #e8e8e8;
+    transition: all 0.4s;
+    background-color: #ffffff;
+}
 
+#user-nav-space{
+    border-bottom: 2px solid #e8e8e8;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-content {
+    width: calc(100% - 17rem);
+    margin-left: 17rem;
+    transition: all 0.4s;
+}
+
+#sidebar.active {
+    margin-left: -17rem;
+}
+
+#content.active {
+    width: 100%;
+    margin: 0;
+}
+
+.nav-link {
+    width: 150px !important;
+    height: 40px !important;
+    color: #747678 !important;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px !important;
+    border-radius: 10px !important;
+    display: flex;
+    align-items: center;
+}
+
+.nav-link:hover {
+    background-color: #e8e8e8 !important;
+}
 
 .rounded-border {
     border-radius: 14px;
@@ -34,6 +83,28 @@ body {
     color: #585757;
     border-radius: 13px;
     font-family: 'Inter', sans-serif;
+}
+
+.custom-btn-2 {
+    background-color: transparent;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #585757;
+    transition: all 0.2s;
+}
+
+.custom-btn-2:hover {
+    background-color: #e8e8e8;
+    border: 2px solid #e8e8e8;
+    color: #585757;
+    border-radius: 13px;
+    font-family: 'Inter', sans-serif;
+}
+
+.icon-size{
+    font-size: 24px;
 }
 
 .icon-color {
@@ -88,6 +159,7 @@ body {
     box-shadow: -1px 6px 15px -12px rgba(0, 0, 0, 1);
     -webkit-box-shadow: -1px 6px 15px -12px rgba(0, 0, 0, 1);
     -moz-box-shadow: -1px 6px 15px -12px rgba(0, 0, 0, 1);
+    background-color: white;
 }
 
 .custom-text {
@@ -97,7 +169,7 @@ body {
     margin-bottom: 8px;
 }
 
-a{
+a {
     font-family: 'Inter', sans-serif;
     font-size: 12px;
     color: #989898 !important;
@@ -105,7 +177,7 @@ a{
     transition: all 0.2s;
 }
 
-a:hover{
+a:hover {
     color: #585757 !important;
 }
 
