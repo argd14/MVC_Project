@@ -49,7 +49,6 @@ function fillSelect(endpoint, select, selected) {
     }).then(function (request) {
         // parses request to json
         request.json().then(function (response) {
-            
             // checks response status
             if (response.status) {
                 let content = '';
@@ -60,9 +59,15 @@ function fillSelect(endpoint, select, selected) {
 
                 console.log(response.dataset);
 
+                
+
                 response.dataset.map(function (row) {
+                    console.log(row[1]);
                     value = Object.values(row)[0];
                     text = Object.values(row)[1];
+
+                    console.log(value);
+                    console.log(text);
                 
                     if (value != selected) {
                         content += `<option value="${value}">${text}</option>`;

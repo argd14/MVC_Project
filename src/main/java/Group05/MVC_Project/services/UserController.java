@@ -179,7 +179,7 @@ public class UserController {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            response.getDataset().add(statusRepository.ListStatus());
+            response.getDataset().addAll(statusRepository.ListStatus()); 
             response.setStatus(true);
         }
         return response;
