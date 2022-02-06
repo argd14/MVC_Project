@@ -1,17 +1,15 @@
 package Group05.MVC_Project.repositories;
 
-import Group05.MVC_Project.models.Role;
+import Group05.MVC_Project.models.Priority;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
-
-    @Query(value = "SELECT id,role FROM role WHERE status_id = 1",
+public interface PriorityRepository extends JpaRepository<Priority,Long> {
+    @Query(value = "SELECT id,priority FROM priority WHERE id_status = 1",
             nativeQuery = true )
-    List<Object> ListRole();
+    List<Object> ListPriority();
 }

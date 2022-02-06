@@ -1,17 +1,17 @@
 package Group05.MVC_Project.repositories;
 
-import Group05.MVC_Project.models.Role;
+import Group05.MVC_Project.models.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @Query(value = "SELECT id,role FROM role WHERE status_id = 1",
+    @Query(value = "SELECT id,comment,id_user FROM comment WHERE id_status = 1",
             nativeQuery = true )
-    List<Object> ListRole();
+    List<Object> ListComment();
+
 }

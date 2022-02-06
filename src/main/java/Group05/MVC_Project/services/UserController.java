@@ -92,6 +92,7 @@ public class UserController {
 
     @GetMapping("/users")
     public Response getUsers(@RequestHeader(value = "Authorization") String token) {
+        initializeResponse();
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
             response.setStatus(true);
@@ -103,6 +104,7 @@ public class UserController {
 
     @DeleteMapping("/delete")
     public Response deleteUser(@RequestHeader(value = "Authorization") String token, @RequestParam(name = "id") Long id) {
+        initializeResponse();
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
@@ -222,7 +224,7 @@ public class UserController {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            response.getDataset().addAll(userRepository.developers());
+            response.getDataset().addAll(userRepository.developers(validateToken.userDB().getId()));
             response.setStatus(true);
         }
         return response;
@@ -234,7 +236,7 @@ public class UserController {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            response.getDataset().addAll(userRepository.managers());
+            response.getDataset().addAll(userRepository.managers(validateToken.userDB().getId()));
             response.setStatus(true);
         }
         return response;

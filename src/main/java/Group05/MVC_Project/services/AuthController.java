@@ -24,6 +24,7 @@ public class AuthController {
     @Autowired
     private JWTUtil jwtUtil;
 
+
     private Response response;
     private StringValidation stringValidation = new StringValidation();
     private NumberValidation numberValidation = new NumberValidation();
@@ -36,16 +37,20 @@ public class AuthController {
             if (stringValidation.validateEmail(user.getEmail())) {
                 if (stringValidation.validatePassword(user.getPassword())) {
                     User userDB = userRepository.getCredentials(user.getEmail());
-                    String passHash = userDB.getPassword();
-                    Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
-                    if (argon2.verify(passHash, user.getPassword())) {
-                        String tokenJwt = jwtUtil.create((userDB.getId()), userDB.getEmail());
-                        response.setStatus(true);
-                        response.setToken(tokenJwt);
-                        response.getDataset().add(userDB);
-                        response.setMessage("Session created successfully!");
+                    if (userDB.getId_status() != 2) {
+                        String passHash = userDB.getPassword();
+                        Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+                        if (argon2.verify(passHash, user.getPassword())) {
+                            String tokenJwt = jwtUtil.create((userDB.getId()), userDB.getEmail());
+                            response.setStatus(true);
+                            response.setToken(tokenJwt);
+                            response.getDataset().add(userDB);
+                            response.setMessage("Session created successfully!");
+                        } else {
+                            response.setException("Incorrect password.");
+                        }
                     } else {
-                        response.setException("Incorrect password.");
+                        response.setException("your user is inactive");
                     }
                 } else {
                     response.setException("Sorry! Looks like your password is invalid.");
@@ -59,8 +64,6 @@ public class AuthController {
         return response;
     }
 
-
-    // api for register
     @RequestMapping(value = "api/register", method = RequestMethod.POST)
     public Response registerUser(@RequestBody User user) {
         initializeResponse();
