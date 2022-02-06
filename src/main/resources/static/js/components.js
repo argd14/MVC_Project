@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     });
-    
+
     document.getElementById('lblUsername').textContent = localStorage.username;
 });
 
@@ -29,6 +29,49 @@ function saveOrUpdate(endpoint, data, modal, action) {
                 Swal.fire('Success!', response.message, 'success').then(function () {
                     action();
                 });
+            } else {
+                Swal.fire('Warning!', response.exception, 'warning');
+            }
+        });
+    }).catch(function (error) {
+        console.log(error);
+    });
+}
+
+function fillSelect(endpoint, select, selected) {
+    fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        }
+    }).then(function (request) {
+        // parses request to json
+        request.json().then(function (response) {
+            
+            // checks response status
+            if (response.status) {
+                let content = '';
+                // default option
+                if (!selected) {
+                    content += '<option disabled selected>Seleccionar...</option>';
+                }
+
+                console.log(response.dataset);
+
+                response.dataset.map(function (row) {
+                    value = Object.values(row)[0];
+                    text = Object.values(row)[1];
+                
+                    if (value != selected) {
+                        content += `<option value="${value}">${text}</option>`;
+                    } else {
+                        content += `<option value="${value}" selected>${text}</option>`;
+                    }
+                });
+
+                document.getElementById(select).innerHTML = content;
             } else {
                 Swal.fire('Warning!', response.exception, 'warning');
             }

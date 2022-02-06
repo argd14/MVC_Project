@@ -1,3 +1,8 @@
+document.addEventListener('DOMContentLoaded',function(){
+    fillSelect('../api/users/ListStatus','id_status',null);
+    fillSelect('../api/users/ListRol','id_rol',null);
+});
+
 // resets the form when the add button is pressed
 document.getElementById('btnOpenAddModal').addEventListener('click',function(){
     document.getElementById('manageUsers-form').reset();
