@@ -5,6 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.Fetch;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +22,7 @@ public class Response implements Serializable {
     private String exception;
     private String token;
     private String url;
-    private List<Object> dataset ;
+    private List<Object> dataset;
 
     public Response() {
         this.status = false;
@@ -26,7 +30,7 @@ public class Response implements Serializable {
         this.message = null;
         this.exception = null;
         this.url = null;
-        this.dataset = new ArrayList<>();
+        this.dataset = new ArrayList<Object>();
     }
 
 }

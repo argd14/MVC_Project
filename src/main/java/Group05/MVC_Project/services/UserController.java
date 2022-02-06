@@ -33,7 +33,7 @@ public class UserController {
 
 
     @PostMapping("/create")
-    public Response createUser(@RequestBody User user) {
+    public Response createUser(@RequestHeader(value = "Authorization") String token, @RequestBody User user) {
         initializeResponse();
         if (stringValidation.validateAlphabetic(user.getName(), 40)) {
             if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
@@ -42,8 +42,13 @@ public class UserController {
                         if (stringValidation.validatePassword(user.getPassword())) {
                             if (numberValidation.validateInteger(String.valueOf(user.getId_rol()))) {
                                 if (numberValidation.validateInteger(String.valueOf(user.getId_status()))) {
-                                    userRepository.save(user);
-                                    response.setStatus(true);
+                                    try{
+                                        userRepository.save(user);
+                                        response.setStatus(true);
+                                        response.setMessage("Saved successfully!");
+                                    } catch(DataAccessException ex){
+                                        response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                                    }
                                 } else {
                                     response.setException("Invalid status");
                                 }
@@ -101,8 +106,13 @@ public class UserController {
             response.setException("Unauthorized access.");
         } else {
             if (userRepository.findById(id).get() != null) {
-                userRepository.deleteById(id);
-                response.setStatus(true);
+                try{
+                    userRepository.deleteById(id);
+                    response.setStatus(true);
+                    response.setMessage("User deleted successfully!");
+                }catch(DataAccessException ex){
+                    response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                }
             } else {
                 response.setException("The user doesn't exists.");
             }
@@ -119,10 +129,14 @@ public class UserController {
             if (user.getId() != null) {
                 User userDB = userRepository.findById(user.getId()).get();
                 if (userDB.getId_status() != user.getId_status()) {
-                    userDB.setId_status(user.getId_status());
-                    userRepository.save(userDB);
-                    response.setMessage("Status updated successfully.");
-                    response.setStatus(true);
+                    try{
+                        userDB.setId_status(user.getId_status());
+                        userRepository.save(userDB);
+                        response.setMessage("Status updated successfully.");
+                        response.setStatus(true);
+                    }catch(DataAccessException ex){
+                        response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                    }
                 } else {
                     response.setException("You can't update a user to the same status.");
                 }
@@ -144,16 +158,19 @@ public class UserController {
                     if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
                         if (numberValidation.validatePhone(user.getPhone_number())) {
                             if (stringValidation.validateEmail(user.getEmail())) {
-                                User userDB = userRepository.findById(user.getId()).get();
-                                userDB.setName(user.getName());
-                                userDB.setUserName(user.getUserName());
-                                userDB.setPhone_number(user.getPhone_number());
-                                userDB.setEmail(user.getEmail());
-                                userDB.setId_rol(user.getId_rol());
-                                userRepository.save(userDB);
-                                response.setMessage("Updated successfully.");
-                                response.setStatus(true);
-
+                                try{
+                                    User userDB = userRepository.findById(user.getId()).get();
+                                    userDB.setName(user.getName());
+                                    userDB.setUserName(user.getUserName());
+                                    userDB.setPhone_number(user.getPhone_number());
+                                    userDB.setEmail(user.getEmail());
+                                    userDB.setId_rol(user.getId_rol());
+                                    userRepository.save(userDB);
+                                    response.setMessage("Updated successfully.");
+                                    response.setStatus(true);
+                                }catch(DataAccessException ex){
+                                    response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                                }
                             } else {
                                 response.setException("Invalid email.");
                             }
@@ -192,7 +209,7 @@ public class UserController {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            response.getDataset().add(roleRepository.ListRole());
+            response.getDataset().addAll(roleRepository.ListRole());
             response.setStatus(true);
         }
         return response;
@@ -204,7 +221,7 @@ public class UserController {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            response.getDataset().add(userRepository.developers());
+            response.getDataset().addAll(userRepository.developers());
             response.setStatus(true);
         }
         return response;
@@ -216,7 +233,7 @@ public class UserController {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            response.getDataset().add(userRepository.managers());
+            response.getDataset().addAll(userRepository.managers());
             response.setStatus(true);
         }
         return response;
@@ -231,10 +248,15 @@ public class UserController {
             User userDB = validateToken.userDB();
             if (stringValidation.validatePassword(password1)) {
                 if (stringValidation.validatePassword(password2)) {
-                    if (userDB.getPassword() == password1) {
-                        userDB.setPassword(password2);
-                        userRepository.save(userDB);
-                        response.setStatus(true);
+                    if (userDB.getPassword().equals(password1)) {
+                        try{
+                            userDB.setPassword(password2);
+                            userRepository.save(userDB);
+                            response.setStatus(true);
+                            response.setMessage("Password updated successfully!");
+                        }catch(DataAccessException ex){
+                            response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                        }
                     }else{
                         response.setException("password not equals");
                     }

@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('lblUsername').textContent = localStorage.username;
 });
 
-function saveOrUpdate(endpoint, data, modal, action) {
-    fetch(endpoint, {
+async function saveOrUpdateData(endpoint, data, modal) {
+    const request = await fetch(endpoint, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -20,71 +20,63 @@ function saveOrUpdate(endpoint, data, modal, action) {
             'Authorization': localStorage.token
         },
         body: JSON.stringify(data)
-    }).then(function (request) {
-        // parses request to json
-        request.json().then(function (response) {
-            // checks response status
-            if (response.status) {
-                closeModal(modal);
-                Swal.fire('Success!', response.message, 'success').then(function () {
-                    action();
-                });
-            } else {
-                Swal.fire('Warning!', response.exception, 'warning');
-            }
-        });
-    }).catch(function (error) {
-        console.log(error);
+    });
+
+    // parses request to json
+    request.json().then(function (response) {
+        // checks response status
+        if (response.status) {
+            closeModal(modal);
+            Swal.fire('Success!', response.message, 'success').then(function () {
+                
+            });
+        } else {
+            Swal.fire('Warning!', response.exception, 'warning');
+        }
     });
 }
 
-function fillSelect(endpoint, select, selected) {
-    fetch(endpoint, {
+async function fillSelect(endpoint, select, selected) {
+    const request = await fetch(endpoint, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': localStorage.token
         }
-    }).then(function (request) {
-        // parses request to json
-        request.json().then(function (response) {
-            // checks response status
-            if (response.status) {
-                let content = '';
-                // default option
-                if (!selected) {
-                    content += '<option disabled selected>Seleccionar...</option>';
-                }
-
-                console.log(response.dataset);
-
-                
-
-                response.dataset.map(function (row) {
-                    console.log(row[1]);
-                    value = Object.values(row)[0];
-                    text = Object.values(row)[1];
-
-                    console.log(value);
-                    console.log(text);
-                
-                    if (value != selected) {
-                        content += `<option value="${value}">${text}</option>`;
-                    } else {
-                        content += `<option value="${value}" selected>${text}</option>`;
-                    }
-                });
-
-                document.getElementById(select).innerHTML = content;
-            } else {
-                Swal.fire('Warning!', response.exception, 'warning');
-            }
-        });
-    }).catch(function (error) {
-        console.log(error);
     });
-}
+
+    request.json().then(function(response){
+        // checks response status
+        if (response.status) {
+            let content = '';
+            let value = '';
+            let text = '';
+            // default option
+            if (!selected) {
+                content += '<option value="1" disabled selected>Choose an option...</option>';
+            }
+
+            console.log(response.dataset);
+
+            response.dataset.forEach(function(e){
+                value = e[0];
+                text = e[1];
+            
+                if (value != selected) {
+                    content += `<option value="${value}">${text}</option>`;
+                } else {
+                    content += `<option value="${value}" selected>${text}</option>`;
+                }
+            });
+
+            document.getElementById(select).innerHTML = content;
+
+        } else {
+            Swal.fire('Warning!', response.exception, 'warning');
+        }
+    });
+  }
 
 function logout() {
     Swal.fire({
@@ -108,4 +100,12 @@ function logout() {
             });
         }
     })
+}
+
+function openModal(form) {
+    $(document.getElementById(form)).modal('show');
+}
+
+function closeModal(form) {
+    $(document.getElementById(form)).modal('hide');
 }
