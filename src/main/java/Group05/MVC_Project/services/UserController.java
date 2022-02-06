@@ -35,42 +35,45 @@ public class UserController {
     @PostMapping("/create")
     public Response createUser(@RequestHeader(value = "Authorization") String token, @RequestBody User user) {
         initializeResponse();
-        if (stringValidation.validateAlphabetic(user.getName(), 40)) {
-            if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
-                if (numberValidation.validatePhone(user.getPhone_number())) {
-                    if (stringValidation.validateEmail(user.getEmail())) {
-                        if (stringValidation.validatePassword(user.getPassword())) {
-                            if (numberValidation.validateInteger(String.valueOf(user.getId_rol()))) {
-                                if (numberValidation.validateInteger(String.valueOf(user.getId_status()))) {
-                                    try{
-                                        userRepository.save(user);
-                                        response.setStatus(true);
-                                        response.setMessage("Saved successfully!");
-                                    } catch(DataAccessException ex){
-                                        response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            if (stringValidation.validateAlphabetic(user.getName(), 40)) {
+                if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
+                    if (numberValidation.validatePhone(user.getPhone_number())) {
+                        if (stringValidation.validateEmail(user.getEmail())) {
+                            if (stringValidation.validatePassword(user.getPassword())) {
+                                if (numberValidation.validateInteger(String.valueOf(user.getId_rol()))) {
+                                    if (numberValidation.validateInteger(String.valueOf(user.getId_status()))) {
+                                        try {
+                                            userRepository.save(user);
+                                            response.setStatus(true);
+                                            response.setMessage("Saved successfully!");
+                                        } catch (DataAccessException ex) {
+                                            response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                                        }
+                                    } else {
+                                        response.setException("Invalid status");
                                     }
                                 } else {
-                                    response.setException("Invalid status");
+                                    response.setException("Invalid rol");
                                 }
                             } else {
-                                response.setException("Invalid rol");
+                                response.setException("Invalid password. Please check that your password satisfies all the requirements.");
                             }
                         } else {
-                            response.setException("Invalid password. Please check that your password satisfies all the requirements.");
+                            response.setException("Invalid email.");
                         }
                     } else {
-                        response.setException("Invalid email.");
+                        response.setException("Invalid phone number.");
                     }
                 } else {
-                    response.setException("Invalid phone number.");
+                    response.setException("Invalid username.");
                 }
             } else {
-                response.setException("Invalid username.");
+                response.setException("Invalid name.");
             }
-        } else {
-            response.setException("Invalid name.");
         }
-
         return response;
     }
 
@@ -109,11 +112,11 @@ public class UserController {
             response.setException("Unauthorized access.");
         } else {
             if (userRepository.findById(id).get() != null) {
-                try{
+                try {
                     userRepository.deleteById(id);
                     response.setStatus(true);
                     response.setMessage("User deleted successfully!");
-                }catch(DataAccessException ex){
+                } catch (DataAccessException ex) {
                     response.setException(SQLException.getException(String.valueOf(ex.getCause())));
                 }
             } else {
@@ -132,12 +135,12 @@ public class UserController {
             if (user.getId() != null) {
                 User userDB = userRepository.findById(user.getId()).get();
                 if (userDB.getId_status() != user.getId_status()) {
-                    try{
+                    try {
                         userDB.setId_status(user.getId_status());
                         userRepository.save(userDB);
                         response.setMessage("Status updated successfully.");
                         response.setStatus(true);
-                    }catch(DataAccessException ex){
+                    } catch (DataAccessException ex) {
                         response.setException(SQLException.getException(String.valueOf(ex.getCause())));
                     }
                 } else {
@@ -161,7 +164,7 @@ public class UserController {
                     if (stringValidation.validateAlphanumeric(user.getUserName(), 40)) {
                         if (numberValidation.validatePhone(user.getPhone_number())) {
                             if (stringValidation.validateEmail(user.getEmail())) {
-                                try{
+                                try {
                                     User userDB = userRepository.findById(user.getId()).get();
                                     userDB.setName(user.getName());
                                     userDB.setUserName(user.getUserName());
@@ -171,7 +174,7 @@ public class UserController {
                                     userRepository.save(userDB);
                                     response.setMessage("Updated successfully.");
                                     response.setStatus(true);
-                                }catch(DataAccessException ex){
+                                } catch (DataAccessException ex) {
                                     response.setException(SQLException.getException(String.valueOf(ex.getCause())));
                                 }
                             } else {
@@ -199,7 +202,7 @@ public class UserController {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            response.getDataset().addAll(statusRepository.ListStatus()); 
+            response.getDataset().addAll(statusRepository.ListStatus());
             response.setStatus(true);
         }
         return response;
@@ -252,18 +255,18 @@ public class UserController {
             if (stringValidation.validatePassword(password1)) {
                 if (stringValidation.validatePassword(password2)) {
                     if (userDB.getPassword().equals(password1)) {
-                        try{
+                        try {
                             userDB.setPassword(password2);
                             userRepository.save(userDB);
                             response.setStatus(true);
                             response.setMessage("Password updated successfully!");
-                        }catch(DataAccessException ex){
+                        } catch (DataAccessException ex) {
                             response.setException(SQLException.getException(String.valueOf(ex.getCause())));
                         }
-                    }else{
+                    } else {
                         response.setException("password not equals");
                     }
-                }else{
+                } else {
                     response.setMessage("current password invalid");
                 }
             } else {
