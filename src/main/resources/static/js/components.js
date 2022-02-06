@@ -27,14 +27,13 @@ async function saveOrUpdateData(endpoint, data, modal) {
         // checks response status
         if (response.status) {
             closeModal(modal);
-            Swal.fire('Success!', response.message, 'success').then(function () {
-                
-            });
+            Swal.fire('Success!', response.message, 'success')
         } else {
             Swal.fire('Warning!', response.exception, 'warning');
         }
     });
 }
+
 
 async function fillSelect(endpoint, select, selected) {
     const request = await fetch(endpoint, {
@@ -46,7 +45,7 @@ async function fillSelect(endpoint, select, selected) {
         }
     });
 
-    request.json().then(function(response){
+    request.json().then(function (response) {
         // checks response status
         if (response.status) {
             let content = '';
@@ -57,12 +56,10 @@ async function fillSelect(endpoint, select, selected) {
                 content += '<option value="1" disabled selected>Choose an option...</option>';
             }
 
-            console.log(response.dataset);
-
-            response.dataset.forEach(function(e){
+            response.dataset.forEach(function (e) {
                 value = e[0];
                 text = e[1];
-            
+
                 if (value != selected) {
                     content += `<option value="${value}">${text}</option>`;
                 } else {
@@ -76,7 +73,7 @@ async function fillSelect(endpoint, select, selected) {
             Swal.fire('Warning!', response.exception, 'warning');
         }
     });
-  }
+}
 
 function logout() {
     Swal.fire({

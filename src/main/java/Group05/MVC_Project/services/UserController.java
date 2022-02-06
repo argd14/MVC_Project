@@ -76,6 +76,7 @@ public class UserController {
 
     @GetMapping("/user")
     public Response getUser(@RequestHeader(value = "Authorization") String token, @RequestParam(name = "id") Long id) {
+        initializeResponse();
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {

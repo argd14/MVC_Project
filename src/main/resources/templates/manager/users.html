@@ -141,22 +141,24 @@
                                             
                                         </select>
                                     </div>
-                                    <div class="mb-2">
-                                        <label for="password" class="custom-text">Password:</label>
-                                        <input type="password" class="form-control" id="password" placeholder="Password" data-bs-toggle="tooltip" data-bs-placement="bottom" 
-                                        title="Password must contain at least one digit [0-9].
-                                        Password must contain at least one lowercase Latin character [a-z].
-                                        Password must contain at least one uppercase Latin character [A-Z].
-                                        Password must contain at least one special character like ! @ # & ( ).
-                                        Password must contain a length of at least 8 characters and a maximum of 20 characters.">
-                                    </div>
-                                    <div class="mb-2">
-                                        <label for="password2" class="custom-text">Confirm password:</label>
-                                        <input type="password" class="form-control" id="password2" placeholder="Confirm password">
-                                    </div>
-                                    <div class="form-check form-switch mt-1">
-                                        <input onchange="showHidePassword('showPassword','password', 'password2')" class="form-check-input" type="checkbox" role="switch" id="showPassword">
-                                        <label class="custom-text" for="showPassword">Show password</label>
+                                    <div id="passwordControllers">
+                                        <div class="mb-2">
+                                            <label for="password" class="custom-text">Password:</label>
+                                            <input type="password" class="form-control" id="password" placeholder="Password" data-bs-toggle="tooltip" data-bs-placement="bottom" 
+                                            title="Password must contain at least one digit [0-9].
+                                            Password must contain at least one lowercase Latin character [a-z].
+                                            Password must contain at least one uppercase Latin character [A-Z].
+                                            Password must contain at least one special character like ! @ # & ( ).
+                                            Password must contain a length of at least 8 characters and a maximum of 20 characters.">
+                                        </div>
+                                        <div class="mb-2">
+                                            <label for="password2" class="custom-text">Confirm password:</label>
+                                            <input type="password" class="form-control" id="password2" placeholder="Confirm password">
+                                        </div>
+                                        <div class="form-check form-switch mt-1">
+                                            <input onchange="showHidePassword('showPassword','password', 'password2')" class="form-check-input" type="checkbox" role="switch" id="showPassword">
+                                            <label class="custom-text" for="showPassword">Show password</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

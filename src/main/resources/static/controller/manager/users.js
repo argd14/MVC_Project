@@ -3,11 +3,15 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 async function makeRequests() {
-
     fillManagersTable().then(function () {
         fillDevelopersTable().then(function () {
             fillSelect('../api/users/ListRol', 'id_rol', null).then(function () {
-                fillSelect('../api/users/ListStatus', 'id_status', null);
+                fillSelect('../api/users/ListStatus', 'id_status', null).then(function () {
+                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl)
+                    });
+                })
             });
         });
     });
@@ -30,6 +34,7 @@ async function fillManagersTable() {
         if (response.status) {
             $('#manager-table').DataTable().destroy();
             let content = '';
+            console.log(response.dataset);
             response.dataset.map(function (row) {
                 content += `
                 <tr>
@@ -40,18 +45,102 @@ async function fillManagersTable() {
                     <td>${row[5]}</td>
                     <th scope="row">
                         <div>
-                            <a href="#" class="btn btn-sm custom-btn"><i class="bi bi-pencil-fill"></i></a>
-                            <a href="#" class="btn btn-sm custom-btn"><i class="bi bi-trash2-fill"></i></a>
-                        </div>
-                    </th>
-                </tr>
+                            <a onclick="getOneManager(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
+                            <a onclick="deleteUsers(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>
+                                                                                                                                                
                 `
+
+                if (row[5] == 'Active') {
+                    content += `
+                                <a onclick="disableUser(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set inactive"><i class="bi bi-x"></i></a>
+                            </div>
+                        </th>
+                    </tr>   
+                    `
+                } else if (row[5] == 'Inactive') {
+                    content += `
+                                <a onclick="enableUser(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set active"><i class="bi bi bi-check"></i></a>
+                            </div>
+                        </th>
+                    </tr>   
+                    `
+                }
+
+
             });
 
             document.getElementById('tbody-managers').innerHTML = content;
             $('#manager-table').DataTable();
         } else {
             Swal.fire('Warning!', response.exception, 'warning');
+        }
+    });
+}
+
+async function getOneManager(id) {
+    const request = await fetch(`../api/users/user?id=${id}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        }
+    });
+
+    request.json().then(function (response) {
+        if (response.status) {
+
+            document.getElementById('id_user').value = response.dataset[0].id;
+            document.getElementById('name').value = response.dataset[0].name;
+            document.getElementById('userName').value = response.dataset[0].userName;
+            document.getElementById('phone_number').value = response.dataset[0].phone_number;
+            document.getElementById('email').value = response.dataset[0].email;
+            fillSelect('../api/users/ListRol', 'id_rol', response.dataset[0].id_rol).then(function () {
+                fillSelect('../api/users/ListStatus', 'id_status', response.dataset[0].id_status);
+            });
+
+            document.getElementById('passwordControllers').classList.add('d-none');
+
+            document.getElementById('modal-title').textContent = 'Update user';
+
+            openModal('manageUsersModal');
+
+        } else {
+            Swal.fire('Error!', response.exception, 'error')
+        }
+    });
+}
+
+
+function deleteUsers(id) {
+    Swal.fire({
+        title: 'Delete',
+        text: "Are you sure that you want to delete this register?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it.'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`../api/users/delete?id=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.token
+                }
+            }).then(function (request) {
+                request.json().then(function (response) {
+                    // checks response status
+                    if (response.status) {
+                        makeRequests();
+                        Swal.fire('Success!', response.message, 'success');
+                    } else {
+                        Swal.fire('Warning!', response.exception, 'warning');
+                    }
+                });
+            });
         }
     });
 }
@@ -72,7 +161,6 @@ async function fillDevelopersTable() {
         if (response.status) {
             let content = '';
             response.dataset.map(function (row) {
-                $('#developer-table').DataTable().destroy();
                 content += `
                 <tr>
                     <th scope="row">${row[0]}</th>
@@ -82,18 +170,108 @@ async function fillDevelopersTable() {
                     <td>${row[5]}</td>
                     <th scope="row">
                         <div>
-                            <a href="#" class="btn btn-sm custom-btn"><i class="bi bi-pencil-fill"></i></a>
-                            <a href="#" class="btn btn-sm custom-btn"><i class="bi bi-trash2-fill"></i></a>
-                        </div>
-                    </th>
-                </tr>
+                            <a onclick="getOneManager(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
+                            <a onclick="deleteUsers(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>
+                                                                                                                                                
                 `
+
+                if (row[5] == 'Active') {
+                    content += `
+                                <a onclick="disableUser(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set inactive"><i class="bi bi-x"></i></a>
+                            </div>
+                        </th>
+                    </tr>   
+                    `
+                } else if (row[5] == 'Inactive') {
+                    content += `
+                                <a onclick="enableUser(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set active"><i class="bi bi bi-check"></i></a>
+                            </div>
+                        </th>
+                    </tr>   
+                    `
+                }
+
+
             });
 
             document.getElementById('tbody-developers').innerHTML = content;
             $('#developer-table').DataTable();
         } else {
             Swal.fire('Warning!', response.exception, 'warning');
+        }
+    });
+}
+
+function disableUser(id) {
+    data = {};
+    data.id = id;
+    data.id_status = 2;
+    Swal.fire({
+        title: 'Set inactive',
+        text: "Are you sure that you want to set inactive this register?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, set it.'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`../api/users/changeStatus`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.token
+                },
+                body: JSON.stringify(data)
+            }).then(function (request) {
+                request.json().then(function (response) {
+                    // checks response status
+                    if (response.status) {
+                        makeRequests();
+                        Swal.fire('Success!', response.message, 'success');
+                    } else {
+                        Swal.fire('Warning!', response.exception, 'warning');
+                    }
+                });
+            });
+        }
+    });
+}
+
+function enableUser(id) {
+    data = {};
+    data.id = id;
+    data.id_status = 1;
+    Swal.fire({
+        title: 'Set active',
+        text: "Are you sure that you want to set active this register?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, set it.'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`../api/users/changeStatus`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.token
+                },
+                body: JSON.stringify(data)
+            }).then(function (request) {
+                request.json().then(function (response) {
+                    // checks response status
+                    if (response.status) {
+                        makeRequests();
+                        Swal.fire('Success!', response.message, 'success');
+                    } else {
+                        Swal.fire('Warning!', response.exception, 'warning');
+                    }
+                });
+            });
         }
     });
 }
@@ -115,6 +293,7 @@ function showHidePassword(checkbox, pass1, pass2) {
 // resets the form when the add button is pressed
 document.getElementById('btnOpenAddModal').addEventListener('click', function () {
     document.getElementById('manageUsers-form').reset();
+    document.getElementById('passwordControllers').classList.remove('d-none');
     document.getElementById('modal-title').textContent = 'Add users';
 });
 
@@ -138,13 +317,15 @@ document.getElementById('manageUsers-form').addEventListener('submit', function 
         data.password = document.getElementById('password').value;
         if (document.getElementById('id_user').value != '') {
             data.id = document.getElementById('id_user').value;
-
+            saveOrUpdateData('../api/users/update', data, 'manageUsersModal').then(function () {
+                makeRequests();
+            });
         } else {
             saveOrUpdateData('../api/users/create', data, 'manageUsersModal').then(function () {
                 makeRequests();
             });
         }
     } else {
-        Swal.fire('Warning!',"The passwords aren't the same.",'warning');
+        Swal.fire('Warning!', "The passwords aren't the same.", 'warning');
     }
 });
