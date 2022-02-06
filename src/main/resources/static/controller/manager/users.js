@@ -38,7 +38,7 @@ async function fillManagersTable() {
             response.dataset.map(function (row) {
                 content += `
                 <tr>
-                    <th scope="row">${row[0]}</th>
+                    <th scope="row" class="id-padding">${row[0]}</th>
                     <td>${row[1]}</td>
                     <td>${row[2]}</td>
                     <td>${row[3]}</td>
@@ -163,7 +163,7 @@ async function fillDevelopersTable() {
             response.dataset.map(function (row) {
                 content += `
                 <tr>
-                    <th scope="row">${row[0]}</th>
+                    <th scope="row" class="id-padding">${row[0]}</th>
                     <td>${row[1]}</td>
                     <td>${row[2]}</td>
                     <td>${row[3]}</td>
