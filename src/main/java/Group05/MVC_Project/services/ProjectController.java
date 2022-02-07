@@ -123,6 +123,22 @@ public class ProjectController {
         return response;
     }
 
+    @GetMapping("/getAvailableDevelopers")
+    public Response getAvailableDevelopers(@RequestHeader(value = "Authorization") String token){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            try {
+                response.getDataset().addAll(projectRepository.getAvailableDevelopers());
+                response.setStatus(true);
+            } catch (DataAccessException ex) {
+                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+            }
+        }
+        return response;
+    }
+
     public void initializeResponse() {
         this.response = new Response();
     }

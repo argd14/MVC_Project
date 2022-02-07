@@ -159,6 +159,7 @@ async function fillDevelopersTable() {
     request.json().then(function (response) {
         // checks response status
         if (response.status) {
+            $('#developer-table').DataTable().destroy();
             let content = '';
             response.dataset.map(function (row) {
                 content += `
