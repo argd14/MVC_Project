@@ -1,16 +1,14 @@
 package Group05.MVC_Project.models;
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
@@ -27,4 +25,11 @@ public class User implements Serializable {
     private int id_status;
     private int id_rol;
     private LocalDateTime creation_date;
+
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_project",
+            joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_project"))
+    private Collection<Project> project;
 }

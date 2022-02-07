@@ -1,11 +1,11 @@
 package Group05.MVC_Project.models;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Entity
 @Data
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Project implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id_project", nullable = false)
     private Long id;
 
     private String project_code;
@@ -29,6 +29,9 @@ public class Project implements Serializable {
     private String description;
 
     private LocalDateTime creation_date;
+
+    @ManyToMany(mappedBy = "project")
+    private Collection<User> User;
 
 
 }
