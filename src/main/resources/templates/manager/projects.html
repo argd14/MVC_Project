@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org" lang="es">
+
+<head th:replace="fragments/manager :: head"></head>
+
+<body>
+
+    <div th:replace="fragments/manager :: sidebar"></div>
+
+    <div class="page-content" id="content">
+        <button id="sidebarCollapse" type="button" class="m-2 btn custom-btn-2"><i class="bi bi-list"></i></button>
+        <div class="container-fluid animate__animated animate__fadeInRight px-5">
+            <div>
+                <div class="d-flex align-items-center">
+                    <div class="modal-icon-background-blue me-3">
+                        <i class="bi bi-box modal-icon-blue"></i>
+                    </div>
+                    <h5 class="mt-2">Projects</h5>
+                </div>
+                <label class="custom-text mt-2">Manage what developers are working now.</label>
+            </div>
+            <div class="row mt-1">
+                <div class="col-12">
+                    <div class="d-flex">
+                        <button id="btnOpenAddModal" class="btn custom-btn px-3" data-bs-toggle="modal"
+                            data-bs-target="#createProjectModal">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <i class="bi bi-plus icon-color me-1"></i><span>Create New Project</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-12 d-flex justify-content-end">
+                    <div class="mb-2 d-flex align-items-center">
+                        <label for="name" class="custom-text pt-2 me-3">Search:</label>
+                        <input type="text" class="form-control" id="search" placeholder="Search something...">
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2 mb-5" id="tbody-projects">
+                <div class="d-flex justify-content-center col-xl-3 col-md-6 col-sm-12 col-xs-12">
+                    <button class="btn custom-card">
+                        <div class="row mb-4 pb-2 pe-3">
+                            <div class="col-12 d-flex justify-content-end flex-column align-items-end">
+                                <i class="bi bi-box h3"></i>
+                            </div>
+                        </div>
+                        <div class="row ps-3">
+                            <div class="col-12 d-flex justify-content-start flex-column align-items-start">
+                                <h4>DEVELOPMENT01</h3>
+                                <label>Citiger System</label>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for creating new projects -->
+    <div class="modal fade" id="createProjectModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+            <div class="modal-content p-3">
+                <div class="modal-header d-flex justify-content-start">
+                    <div class="modal-icon-background-red me-3">
+                        <i class="bi bi-box modal-icon-red"></i>
+                    </div>
+                    <h5 class="modal-title">Create Project</h5>
+                </div>
+
+                <div class="modal-body mb-3 mt-1">
+                    <form action="#" id="createProject-form">
+                        <label class="custom-text">Please fill all the fields.</label>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mt-1">
+                                    <div class="mb-2">
+                                        <label for="project_name" class="custom-text">Give a name to the new project:</label>
+                                        <input type="text" class="form-control" id="project_name" placeholder="Name of the new project...">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="project_code" class="custom-text">Give a code to the new project:</label>
+                                        <input type="text" class="form-control" id="project_code"
+                                            placeholder="Code of the new project...">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="description" class="custom-text">Description of the new project:</label>
+                                        <textarea rows="4" type="text" class="form-control" id="description"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" id="submit-form" class="d-none"></button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn custom-btn pe-3" data-bs-dismiss="modal">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-x icon-color me-1"></i><span>Close</span>
+                        </div>
+                    </button>
+                    <button id="btnContinue" class="btn custom-btn pe-3">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-arrow-right-short icon-color me-1"></i><span>Continue</span>
+                        </div>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding users to project -->
+    <div class="modal fade" id="addUsersProject" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+            <div class="modal-content p-3">
+                <div class="modal-header d-flex justify-content-start">
+                    <div class="modal-icon-background-red me-3">
+                        <i class="bi bi-person-video2 modal-icon-red"></i>
+                    </div>
+                    <h5 class="modal-title">Manage the users of your project</h5>
+                </div>
+
+                <div class="modal-body mb-3 mt-1">
+                    <form action="#" id="createProject-form">
+                        <label class="custom-text">Choose some developers for the new project.</label>
+                        <div class="row">
+                            <div class="p-4 col-xl-6 col-md-12 col-sm-12 col-xs-12">
+                                <div style="width: 330px !important;">
+                                    <h5 class="text-center">Available:</h5>
+                                    <table id="developer-table" class="table table-borderless mt-3">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-developers">
+                                            <tr>
+                                                <th scope="row" class="id-padding">1</th>
+                                                <td>Eduardo Rivera</td>
+                                                <th scope="row">
+                                                    <div>
+                                                        
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="p-4 col-xl-6 col-md-12 col-sm-12 col-xs-12">
+                                <div style="width: 330px !important;">
+                                    <h5 class="text-center">Selected:</h5>
+                                    <table id="developer-table-selected" class="table table-borderless mt-3">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-developers-selected">
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" id="submit-form" class="d-none"></button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="saveProject()" class="btn custom-btn pe-3">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-check icon-color me-1"></i><span>Create</span>
+                        </div>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../controller/manager/projects.js"></script>
+
+    <div th:replace="fragments/manager :: scripts"></div>
+</body>
+
+</html>
