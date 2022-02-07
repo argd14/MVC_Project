@@ -19,17 +19,8 @@ public class Project implements Serializable {
 
     private String project_code;
     private String project_name;
-
-    @Transient
-    private Long stat;
-    @ManyToOne
-    @JoinColumn(name = "id_status")
-    private Status id_status ;
-
     private String description;
-
     private LocalDateTime creation_date;
-
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_project",
