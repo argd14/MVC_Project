@@ -101,7 +101,7 @@
                             <i class="bi bi-x icon-color me-1"></i><span>Close</span>
                         </div>
                     </button>
-                    <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#addUsersProject" class="btn custom-btn pe-3">
+                    <button id="btnContinue" class="btn custom-btn pe-3">
                         <div class="d-flex justify-content-center align-items-center">
                             <i class="bi bi-arrow-right-short icon-color me-1"></i><span>Continue</span>
                         </div>
@@ -127,9 +127,9 @@
                     <form action="#" id="createProject-form">
                         <label class="custom-text">Choose some developers for the new project.</label>
                         <div class="row">
-                            <div class="p-4 col-xl-6 col-md-6 col-sm-12 col-xs-12 d-flex justify-content-center align-items-center" style="border: 2px solid #e8e8e8;">
-                                <div>
-                                    <h5>Available:</h5>
+                            <div class="p-4 col-xl-6 col-md-12 col-sm-12 col-xs-12">
+                                <div style="width: 330px !important;">
+                                    <h5 class="text-center">Available:</h5>
                                     <table id="developer-table" class="table table-borderless mt-3">
                                         <thead>
                                             <tr>
@@ -144,7 +144,7 @@
                                                 <td>Eduardo Rivera</td>
                                                 <th scope="row">
                                                     <div>
-                                                        <a class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Add"><i class="bi bi-plus"></i></a>
+                                                        
                                                     </div>
                                                 </th>
                                             </tr>
@@ -152,9 +152,9 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="p-4 col-xl-6 col-md-6 col-sm-12 col-xs-12 d-flex justify-content-center align-items-center" style="border: 2px solid #e8e8e8;">
-                                <div>
-                                    <h5>Selected:</h5>
+                            <div class="p-4 col-xl-6 col-md-12 col-sm-12 col-xs-12">
+                                <div style="width: 330px !important;">
+                                    <h5 class="text-center">Selected:</h5>
                                     <table id="developer-table-selected" class="table table-borderless mt-3">
                                         <thead>
                                             <tr>
@@ -164,15 +164,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="tbody-developers-selected">
-                                            <tr>
-                                                <th scope="row" class="id-padding">1</th>
-                                                <td>Eduardo Rivera</td>
-                                                <th scope="row">
-                                                    <div>
-                                                        <a class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Add"><i class="bi bi-plus"></i></a>
-                                                    </div>
-                                                </th>
-                                            </tr>
+                                            
                                         </tbody>
                                     </table>
                                 </div>
@@ -182,9 +174,9 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#addUsersProject" class="btn custom-btn pe-3">
+                    <button onclick="saveProject()" class="btn custom-btn pe-3">
                         <div class="d-flex justify-content-center align-items-center">
-                            <i class="bi bi-arrow-right-short icon-color me-1"></i><span>Create</span>
+                            <i class="bi bi-check icon-color me-1"></i><span>Create</span>
                         </div>
                     </button>
                 </div>
