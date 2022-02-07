@@ -13,11 +13,103 @@ document.getElementById('btnContinue').addEventListener('click',function(){
     }
 });
 
-function saveProject(){
+async function createProject(){
+    data = {}
+    
+    data.project_name = document.getElementById('project_name').value;
+    data.project_code = document.getElementById('project_code').value;
+    data.description = document.getElementById('description').value;
+    
+    const request = await fetch('../api/projects/create',{
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        },
+        body: JSON.stringify(data)
+    });
+
+    request.json().then(function(response){
+        if (response.status) {
+            let id = response.dataset[0]; 
+            saveProject(id)
+        } else {
+            Swal.fire('Warning!',response.exception,'warning').then(function(){
+                closeModal('addUsersProject');
+                openModal('createProjectModal');
+            });
+        }
+    });
+}
+
+async function saveProject(id){
     if(getSelectedValues().length != 0){
-        console.log(JSON.stringify(getSelectedValues()));
+        console.log(id);
+        data = {};
+        data.id_project = id;
+        data.developers = getSelectedValues();
+        
+        if (id != 0) {
+            const request = await fetch('../api/projects/addDevelopersToProject',{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.token
+                },
+                body: JSON.stringify(data)
+            });
+        
+            request.json().then(function(response){
+                if (response.status) {
+                    closeModal('addUsersProject');
+                    Swal.fire("Success!",response.message,'success');
+                } else {
+                    Swal.fire('Warning!',response.exception,'warning').then(function(){
+                        fetch(`../api/projects/delete?id=${id}`,{
+                            method: 'DELETE',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                                'Authorization': localStorage.token
+                            }
+                        }).then(function(request){
+                            request.json().then(function(response){
+                                if (response.status) {
+                                    console.log(response.message);
+                                } else {
+                                    console.log(response.exception);
+                                }
+                            });
+                        });
+                    });
+                }
+            });
+        } else {
+            Swal.fire("Error!",`We have an error, the id of the project is ${id}.`,'error');
+        }
     } else {
-        Swal.fire('Warning!',"You need to select developers for the project.",'warning');
+        console.log(id);
+        Swal.fire('Warning!',"You need to select developers for the project.",'warning').then(function(){
+            fetch(`../api/projects/delete?id=${id}`,{
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.token
+                }
+            }).then(function(request){
+                request.json().then(function(response){
+                    if (response.status) {
+                        console.log(response.message);
+                    } else {
+                        console.log(response.exception);
+                    }
+                });
+            });
+        });
+        
     }
 }
 

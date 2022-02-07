@@ -2,13 +2,6 @@ package Group05.MVC_Project.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-
-import org.hibernate.FetchMode;
-import org.hibernate.annotations.Fetch;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

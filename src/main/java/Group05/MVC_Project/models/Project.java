@@ -30,8 +30,12 @@ public class Project implements Serializable {
 
     private LocalDateTime creation_date;
 
-    @ManyToMany(mappedBy = "project")
-    private Collection<User> User;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_project",
+            joinColumns = @JoinColumn(name = "id_project"),
+            inverseJoinColumns = @JoinColumn(name = "id_user"))
+    private Collection<User> user;
 
 
 }
