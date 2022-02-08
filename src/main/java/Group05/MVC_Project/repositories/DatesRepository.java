@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public interface DatesRepository extends JpaRepository<Dates, Long> {
 
-    @Query(value = "SELECT started_date,end_date,target_date FROM dates WHERE id_issue = :id",
+    @Query(value = "SELECT started_date,end_date,target_date FROM dates WHERE id_issue=:id",
             nativeQuery = true )
-    List<Object> listDatesByIssue(@Param("id_issue") Long id);
+    List<Object> listDatesByIssue(@Param("id") Long id);
 
 }

@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 public interface TimelogRepository extends JpaRepository<TimeLog, Long> {
 
-    @Query(value = "SELECT hours, comment, id_user, id_status, creation_date FROM time_log WHERE id_issue = :id",
+    @Query(value = "SELECT hours, comment, id_user, id_status, creation_date FROM time_log WHERE id_issue=:id",
             nativeQuery = true )
-    List<Object> listDatesByIssue(@Param("id_issue") Long id);
+    List<Object> listDatesByIssue(@Param("id") Long id);
 
 }

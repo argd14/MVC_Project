@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @Query(value = "SELECT id,comment,id_user FROM comment WHERE id_issue = :id",
+    @Query(value = "SELECT id,comment,id_user FROM comment WHERE id_issue=:id",
             nativeQuery = true )
-    List<Object> listCommentByIssue(@Param("id_issue") Long id);
+    List<Object> listCommentByIssue(@Param("id") Long id);
 
 }
