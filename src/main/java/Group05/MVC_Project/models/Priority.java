@@ -17,9 +17,5 @@ public class Priority implements Serializable {
 
     private String priority;
 
-    @ManyToOne
-    @JoinColumn(name = "id_status")
-    private Status id_status;
-
     private LocalDateTime creation_date;
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface PriorityRepository extends JpaRepository<Priority,Long> {
-    @Query(value = "SELECT id,priority FROM priority WHERE id_status = 1",
+    @Query(value = "SELECT id,priority FROM priority",
             nativeQuery = true )
     List<Object> ListPriority();
 }

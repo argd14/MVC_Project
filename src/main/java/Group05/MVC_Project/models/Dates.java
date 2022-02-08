@@ -8,28 +8,21 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "development_cycle")
-public class DevelopmentCicle implements Serializable {
+@Table(name = "dates")
+public class Dates implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private String cycle_name;
-
-    private String duration;
-
-    private LocalDateTime start_date;
+    private LocalDateTime started_date;
 
     private LocalDateTime end_date;
 
-    private String description;
+    private LocalDateTime target_date;
 
     @ManyToOne
-    @JoinColumn(name = "id_status")
-    private Status id_status;
-
-    private LocalDateTime creation_date;
-
+    @JoinColumn(name = "id_issue")
+    private Issue id_issue;
 
 }
