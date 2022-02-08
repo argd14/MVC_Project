@@ -22,6 +22,14 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
            nativeQuery = true )
     List<Object> searchProjects(@Param("search") String search);
 
+    @Query(value = "SELECT id_project,project_code,project_name,description FROM project WHERE id_project = :id",
+            nativeQuery = true )
+    Object getProjectDetails(@Param("id") Long id);
+
+    @Query(value = "SELECT u.id_user, u.name FROM user_project p, user u WHERE p.id_user = u.id_user AND p.id_project = :id",
+            nativeQuery = true )
+    List<Object> getDevelopersOfAProject(@Param("id") Long id);
+
     @Query(value = "SELECT id_user, name FROM user WHERE id_rol = 3 AND id_status = 1;",
             nativeQuery = true )
     List<Object> getAvailableDevelopers();
