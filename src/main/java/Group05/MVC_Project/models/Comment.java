@@ -22,8 +22,8 @@ public class Comment implements Serializable {
     private User id_user;
 
     @ManyToOne
-    @JoinColumn(name = "id_status")
-    private Status id_status;
+    @JoinColumn(name = "id_issue")
+    private Issue id_issue;
 
     private LocalDateTime creation_date;
 
