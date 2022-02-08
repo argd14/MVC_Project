@@ -1,9 +1,6 @@
 package Group05.MVC_Project.services;
 
-import Group05.MVC_Project.models.Project;
-import Group05.MVC_Project.models.Response;
-import Group05.MVC_Project.models.Status;
-import Group05.MVC_Project.models.User;
+import Group05.MVC_Project.models.*;
 import Group05.MVC_Project.repositories.ProjectRepository;
 import Group05.MVC_Project.repositories.StatusRepository;
 import Group05.MVC_Project.repositories.UserRepository;
@@ -16,9 +13,12 @@ import antlr.collections.List;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 @RestController
 @RequestMapping("api/projects")
@@ -44,27 +44,20 @@ public class ProjectController {
             response.setException("Unauthorized access.");
         } else {
             User userDB = validateToken.userDB();
-            project.setStat(1L);
             if (userDB.getId_rol() != 3) {
                 if (stringValidation.validateAlphanumeric(project.getProject_code(), 15)) {
                     if (stringValidation.validateAlphabetic(project.getProject_name(), 150)) {
-                        if (numberValidation.validateInteger(String.valueOf(project.getStat()))) {
-                            if (stringValidation.validateAlphabetic(project.getDescription(), 250)) {
-                                try {
-                                    Status status = statusRepository.getById(project.getStat());
-                                    project.setId_status(status);
-                                    Project newProject = projectRepository.save(project);
-                                    response.getDataset().add(newProject.getId());
-                                    response.setStatus(true);
-                                    response.setMessage("Saved successfully!");
-                                } catch (DataAccessException ex) {
-                                    response.setException(SQLException.getException(String.valueOf(ex.getCause())));
-                                }
-                            } else {
-                                response.setException("Invalid description.");
+                        if (stringValidation.validateAlphabetic(project.getDescription(), 250)) {
+                            try {
+                                Project newProject = projectRepository.save(project);
+                                response.getDataset().add(newProject.getId());
+                                response.setStatus(true);
+                                response.setMessage("Saved successfully!");
+                            } catch (DataAccessException ex) {
+                                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
                             }
                         } else {
-                            response.setException("Invalid status.");
+                            response.setException("Invalid description.");
                         }
                     } else {
                         response.setException("Invalid project name.");
@@ -86,30 +79,24 @@ public class ProjectController {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            int rolDB = validateToken.userDB().getId_rol();
-            if (rolDB != 3) {
-                project.setStat(1L);
+            User userDB = validateToken.userDB();
+            if (userDB.getId_rol() != 3) {
                 if (stringValidation.validateAlphanumeric(project.getProject_code(), 15)) {
                     if (stringValidation.validateAlphabetic(project.getProject_name(), 150)) {
-                        if (numberValidation.validateInteger(String.valueOf(project.getStat()))) {
-                            if (stringValidation.validateAlphabetic(project.getDescription(), 250)) {
-                                try {
-                                    Status status = statusRepository.getById(project.getStat());
-                                    Project projectDB = projectRepository.getById(project.getId());
-                                    projectDB.setProject_code(project.getProject_code());
-                                    projectDB.setProject_name(projectDB.getProject_name());
-                                    projectDB.setDescription(project.getDescription());
-                                    projectDB.setId_status(status);
-                                    response.setMessage("Updated successfully.");
-                                    response.setStatus(true);
-                                }catch (DataAccessException ex) {
-                                    response.setException(SQLException.getException(String.valueOf(ex.getCause())));
-                                }
-                            } else {
-                                response.setException("Invalid description.");
+                        if (stringValidation.validateAlphabetic(project.getDescription(), 250)) {
+                            try {
+                                Project existentProject = projectRepository.findById(project.getId()).get();
+                                existentProject.setProject_code(project.getProject_code());
+                                existentProject.setProject_name(project.getProject_name());
+                                existentProject.setDescription(project.getDescription());
+                                projectRepository.save(existentProject);
+                                response.setStatus(true);
+                                response.setMessage("Updated successfully!");
+                            } catch (DataAccessException ex) {
+                                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
                             }
                         } else {
-                            response.setException("Invalid id status.");
+                            response.setException("Invalid description.");
                         }
                     } else {
                         response.setException("Invalid project name.");
@@ -121,6 +108,7 @@ public class ProjectController {
                 response.setException("You are not a manager.");
             }
         }
+
         return response;
     }
 
@@ -140,18 +128,192 @@ public class ProjectController {
         return response;
     }
 
-    @GetMapping("/addDevelopersToProject")
-    /*public Response addDevelopersToProject(@RequestHeader(value = "Authorization") String token){
+    @PostMapping("/addDevelopersToProject")
+    public Response addDevelopersToProject(@RequestHeader(value = "Authorization") String token, @RequestBody UserProject object){
         initializeResponse();
-        try{
+        if(!validateToken.validateToken(token)){
+            response.setException("Unauthorized access.");
+        } else {
+            int rolDB = validateToken.userDB().getId_rol();
+            if (rolDB != 3){
+                if(!object.getDevelopers().isEmpty()){
+                    try{
+                        Project project = projectRepository.findById(object.getId_project()).get();
 
-            response.setStatus(true);
-            response.setMessage("Saved successfully!");
-        } catch (SQLGrammarException ex){
-            response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                        for (int i = 0; i < object.getDevelopers().size(); i++) {
+                            User user = userRepository.findById(object.getDevelopers().get(i)).get();
+                            if (!project.getUser().contains(user)){
+                                project.getUser().add(user);
+                                projectRepository.save(project);
+                            }
+                        }
+
+                        response.setStatus(true);
+                        response.setMessage("Saved successfully!");
+                    } catch (DataAccessException ex){
+                        response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                    }
+                } else {
+                    response.setException("You didn't add any developers to the project.");
+                }
+            } else {
+                response.setException("You are not manager.");
+            }
         }
         return response;
-    }*/
+    }
+
+    @GetMapping("/getDevelopersOfAProject")
+    public Response getDevelopersOfAProject(@RequestHeader(value = "Authorization") String token, @RequestParam Long id){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            int userDB = validateToken.userDB().getId_rol();
+            if (userDB != 3) {
+                try{
+                    response.getDataset().addAll(projectRepository.getDevelopersOfAProject(id));
+                    response.setStatus(true);
+                } catch (NullPointerException ex){
+                    response.setException(String.valueOf(ex.getCause()));
+                }
+            } else {
+                response.setException("You are not manager.");
+            }
+        }
+        return response;
+    }
+
+    @DeleteMapping("/delete")
+    public Response deleteProject(@RequestHeader(value = "Authorization") String token, @RequestParam(name = "id") Long id){
+        initializeResponse();
+        if(!validateToken.validateToken(token)){
+            response.setException("Unauthorized access.");
+        } else {
+            int rolDB = validateToken.userDB().getId_rol();
+            if (rolDB != 3){
+                if (projectRepository.existsById(id)){
+                    try {
+                        Project project = projectRepository.findById(id).get();
+                        project.getUser().removeAll(project.getUser());
+                        projectRepository.deleteById(id);
+                        response.setStatus(true);
+                        response.setMessage("Project deleted successfully!");
+                    } catch(DataAccessException ex) {
+                        response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                    }
+                } else {
+                    response.setException("The id that you set does not exists.");
+                }
+            } else {
+                response.setException("You are not manager.");
+            }
+        }
+        return response;
+    }
+
+    @PostMapping("/updateDevelopersOfAProject")
+    public Response updateDevelopersOfAProject(@RequestHeader(value = "Authorization") String token, @RequestBody UserProject object){
+        if (!validateToken.validateToken(token)){
+            response.setException("Unauthorized access.");
+        } else {
+            int userDB = validateToken.userDB().getId_rol();
+            if (userDB != 3){
+                if (projectRepository.existsById(object.getId_project())){
+                    if (!object.getDevelopers().isEmpty()) {
+                        try {
+                            Project project = projectRepository.findById(object.getId_project()).get();
+                            project.getUser().removeAll(project.getUser());
+
+                            for (int i = 0; i < object.getDevelopers().size(); i++) {
+                                User user = userRepository.findById(object.getDevelopers().get(i)).get();
+                                if (!project.getUser().contains(user)){
+                                    project.getUser().add(user);
+                                    projectRepository.save(project);
+                                }
+                            }
+
+                            response.setStatus(true);
+                            response.setMessage("Updated successfully!");
+                        } catch (DataAccessException ex) {
+                            response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                        }
+                    } else {
+                        response.setException("You need to select at least one developer for updating the project.");
+                    }
+                } else {
+                    response.setException("The id that you set does not exists.");
+                }
+            } else {
+                response.setException("Unauthorized access.");
+            }
+        }
+        return response;
+    }
+
+    @GetMapping("/getProjectDetails")
+    public Response getProjectDetails(@RequestHeader(value = "Authorization") String token, @RequestParam Long id){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            int userBD = validateToken.userDB().getId_rol();
+            if (userBD != 3){
+                if (projectRepository.existsById(id)){
+                    response.getDataset().add(projectRepository.getProjectDetails(id));
+                    response.setStatus(true);
+                } else {
+                    response.setException("The id that you set does not exists.");
+                }
+            } else {
+                response.setException("You are not manager.");
+            }
+        }
+        return response;
+    }
+
+    @GetMapping("/getProjects")
+    public Response getProjects(@RequestHeader(value = "Authorization") String token){
+        initializeResponse();
+        if (!validateToken.validateToken(token)){
+            response.setException("Unauthorized access.");
+        } else {
+            int rolDB = validateToken.userDB().getId_rol();
+            if (rolDB != 3){
+                try{
+                    response.getDataset().addAll(projectRepository.getProjects());
+                    response.setStatus(true);
+                }catch(StackOverflowError ex){
+                    response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                }
+            } else {
+                response.setException("You are not manager.");
+            }
+        }
+        return response;
+    }
+
+    @GetMapping("/search")
+    public Response searchProjects(@RequestHeader(value = "Authorization") String token,
+                                   @RequestParam(name = "search") String search){
+        initializeResponse();
+        if (!validateToken.validateToken(token)){
+            response.setException("Unauthorized access.");
+        } else {
+            int rolDB = validateToken.userDB().getId_rol();
+            if (rolDB != 3){
+                try{
+                    response.getDataset().addAll(projectRepository.searchProjects(search));
+                    response.setStatus(true);
+                }catch(StackOverflowError ex){
+                    response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                }
+            } else {
+                response.setException("You are not manager.");
+            }
+        }
+        return response;
+    }
 
     public void initializeResponse() {
         this.response = new Response();

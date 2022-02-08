@@ -26,10 +26,6 @@ public class User implements Serializable {
     private int id_rol;
     private LocalDateTime creation_date;
 
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_project",
-            joinColumns = @JoinColumn(name = "id_user"),
-            inverseJoinColumns = @JoinColumn(name = "id_project"))
+    @ManyToMany(mappedBy = "user")
     private Collection<Project> project;
 }

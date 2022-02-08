@@ -33,28 +33,16 @@
             </div>
             <div class="row mt-1">
                 <div class="col-12 d-flex justify-content-end">
-                    <div class="mb-2 d-flex align-items-center">
-                        <label for="name" class="custom-text pt-2 me-3">Search:</label>
-                        <input type="text" class="form-control" id="search" placeholder="Search something...">
-                    </div>
+                    <form action="#" id="search-form">
+                        <div class="mb-2 d-flex align-items-center">
+                            <label for="name" class="custom-text pt-2 me-3">Search:</label>
+                            <input type="text" class="form-control" id="search" placeholder="{Code, Name}">
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="row mt-2 mb-5" id="tbody-projects">
-                <div class="d-flex justify-content-center col-xl-3 col-md-6 col-sm-12 col-xs-12">
-                    <button class="btn custom-card">
-                        <div class="row mb-4 pb-2 pe-3">
-                            <div class="col-12 d-flex justify-content-end flex-column align-items-end">
-                                <i class="bi bi-box h3"></i>
-                            </div>
-                        </div>
-                        <div class="row ps-3">
-                            <div class="col-12 d-flex justify-content-start flex-column align-items-start">
-                                <h4>DEVELOPMENT01</h3>
-                                <label>Citiger System</label>
-                            </div>
-                        </div>
-                    </button>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -67,7 +55,7 @@
                     <div class="modal-icon-background-red me-3">
                         <i class="bi bi-box modal-icon-red"></i>
                     </div>
-                    <h5 class="modal-title">Create Project</h5>
+                    <h5 class="modal-title" id="createProjectModal-title">Create Project</h5>
                 </div>
 
                 <div class="modal-body mb-3 mt-1">
@@ -76,17 +64,18 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="mt-1">
+                                    <input type="hidden" id="id_project">
                                     <div class="mb-2">
-                                        <label for="project_name" class="custom-text">Give a name to the new project:</label>
+                                        <label for="project_name" class="custom-text">Name of the project:</label>
                                         <input type="text" class="form-control" id="project_name" placeholder="Name of the new project...">
                                     </div>
                                     <div class="mb-2">
-                                        <label for="project_code" class="custom-text">Give a code to the new project:</label>
+                                        <label for="project_code" class="custom-text">Code of the project:</label>
                                         <input type="text" class="form-control" id="project_code"
                                             placeholder="Code of the new project...">
                                     </div>
                                     <div class="mb-2">
-                                        <label for="description" class="custom-text">Description of the new project:</label>
+                                        <label for="description" class="custom-text">Description of the project:</label>
                                         <textarea rows="4" type="text" class="form-control" id="description"></textarea>
                                     </div>
                                 </div>
@@ -104,6 +93,11 @@
                     <button id="btnContinue" class="btn custom-btn pe-3">
                         <div class="d-flex justify-content-center align-items-center">
                             <i class="bi bi-arrow-right-short icon-color me-1"></i><span>Continue</span>
+                        </div>
+                    </button>
+                    <button id="btnUpdate" class="btn custom-btn pe-3">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-check icon-color me-1"></i><span>Save</span>
                         </div>
                     </button>
                 </div>
@@ -125,7 +119,8 @@
 
                 <div class="modal-body mb-3 mt-1">
                     <form action="#" id="createProject-form">
-                        <label class="custom-text">Choose some developers for the new project.</label>
+                        <label class="custom-text" id="text-addusers">Choose some developers for the new project.</label>
+                        <input type="hidden" id="id_project2">
                         <div class="row">
                             <div class="p-4 col-xl-6 col-md-12 col-sm-12 col-xs-12">
                                 <div style="width: 330px !important;">
@@ -174,9 +169,19 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button onclick="saveProject()" class="btn custom-btn pe-3">
+                    <button class="btn custom-btn pe-3" data-bs-dismiss="modal">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-x icon-color me-1"></i><span>Close</span>
+                        </div>
+                    </button>
+                    <button id="btnCreateProject" class="btn custom-btn pe-3">
                         <div class="d-flex justify-content-center align-items-center">
                             <i class="bi bi-check icon-color me-1"></i><span>Create</span>
+                        </div>
+                    </button>
+                    <button id="btnUpdateProject" class="btn custom-btn pe-3">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-check icon-color me-1"></i><span>Update</span>
                         </div>
                     </button>
                 </div>
