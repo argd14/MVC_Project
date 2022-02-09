@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,18 +17,12 @@ public class DevelopmentCicle implements Serializable {
     private Long id;
 
     private String cycle_name;
-
     private String duration;
-
-    private LocalDateTime start_date;
-
-    private LocalDateTime end_date;
-
+    private LocalDate start_date;
+    private LocalDate end_date;
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "id_status")
-    private Status id_status;
+    private int id_status;
 
     private LocalDateTime creation_date;
 
