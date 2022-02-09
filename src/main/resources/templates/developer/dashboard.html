@@ -5,20 +5,19 @@
 
 <body>
 
-    <div th:replace="fragments/developer :: sidebar"></div>
+    <div th:replace="fragments/developer :: navbar"></div>
 
-    <div class="page-content" id="content">
-        <button id="sidebarCollapse" type="button" class="m-2 btn custom-btn-2"><i class="bi bi-list"></i></button>
-        <div class="container-fluid animate__animated animate__fadeInRight px-5">
-            <div>
-                <div class="d-flex align-items-center">
-                    <div class="modal-icon-background-blue me-3">
-                        <i class="bi bi-house-door modal-icon-blue"></i>
-                    </div>
-                    <h5 class="mt-2">Overview</h5>
-                </div>
-                <label class="custom-text mt-2">Get a general view of everything.</label>
+    <div class="container-fluid p-5 mt-5 animate__animated animate__fadeInUp">
+        <div class="d-flex align-items-center">
+            <div class="modal-icon-background-blue me-3">
+                <i class="bi bi-box modal-icon-blue"></i>
             </div>
+            <h5 class="mt-2">My Projects</h5>
+        </div>
+        <label class="custom-text mt-2">All the projects where you are enrolled in.</label>
+
+        <div class="row mt-2" id="tbody-projects">
+            
         </div>
     </div>
 

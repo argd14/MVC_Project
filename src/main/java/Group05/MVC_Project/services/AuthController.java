@@ -42,9 +42,12 @@ public class AuthController {
                         Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
                         if (argon2.verify(passHash, user.getPassword())) {
                             String tokenJwt = jwtUtil.create((userDB.getId()), userDB.getEmail());
+                            User returnUser = new User();
+                            returnUser.setId_rol(userDB.getId_rol());
+                            returnUser.setUserName(userDB.getUserName());
                             response.setStatus(true);
                             response.setToken(tokenJwt);
-                            response.getDataset().add(userDB);
+                            response.getDataset().add(returnUser);
                             response.setMessage("Session created successfully!");
                         } else {
                             response.setException("Incorrect password.");
