@@ -1,13 +1,10 @@
 package Group05.MVC_Project.services;
 
 
-import Group05.MVC_Project.models.DevelopmentCicle;
 import Group05.MVC_Project.models.Response;
 import Group05.MVC_Project.models.User;
 import Group05.MVC_Project.repositories.*;
 import Group05.MVC_Project.utils.*;
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.*;
@@ -123,7 +120,7 @@ public class UserController {
     }
 
     @GetMapping("/getAvailableIssues")
-public Response getAvailableIssues(@RequestHeader(value = "Authorization") String token){
+    public Response getAvailableIssues(@RequestHeader(value = "Authorization") String token){
         initializeResponse();
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");

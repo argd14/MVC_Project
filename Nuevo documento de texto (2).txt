@@ -1,8 +1,4 @@
-package Group05.MVC_Project.models;
 
-import lombok.Data;
-
-import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
