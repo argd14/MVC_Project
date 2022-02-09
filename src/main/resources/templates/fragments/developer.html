@@ -27,29 +27,29 @@
                     <div class="modal-icon-background-green mb-2">
                         <i class="bi bi-person-circle modal-icon-green"></i>
                     </div>
-                    <h5>edu4rdorivera</h5>
+                    <h5 id="lblUsername">username</h5>
                     <label class="custom-text">Developer</label>
                 </div>
             </div>
         </div>
         <ul class="nav flex-column mb-0 mt-3">
             <li class="nav-item d-flex justify-content-center">
-                <a href="#" class="nav-link"><i class="bi bi-gear icon-size me-3"></i>Settings</a>
+                <a onclick="redirect('settings')" class="nav-link"><i class="bi bi-gear icon-size me-3"></i>Settings</a>
             </li>
             <li class="nav-item d-flex justify-content-center">
-                <a href="#" class="nav-link"><i class="bi bi-box-arrow-left icon-size me-3"></i>Log out</a>
+                <a onclick="logout()" class="nav-link"><i class="bi bi-box-arrow-left icon-size me-3"></i>Log out</a>
             </li>
         </ul>
     </div>
     <ul class="nav flex-column mb-0 mt-3">
         <li class="nav-item d-flex justify-content-center">
-            <a href="#" class="nav-link"><i class="bi bi-house-door icon-size me-3"></i>Overview</a>
+            <a onclick="redirect('dashboard')" class="nav-link"><i class="bi bi-house-door icon-size me-3"></i>Overview</a>
         </li>
         <li class="nav-item d-flex justify-content-center">
-            <a href="#" class="nav-link"><i class="bi bi-person-video2 icon-size me-3"></i>Users</a>
+            <a onclick="redirect('users')" class="nav-link"><i class="bi bi-person-video2 icon-size me-3"></i>Users</a>
         </li>
         <li class="nav-item d-flex justify-content-center">
-            <a href="#" class="nav-link"><i class="bi bi-box icon-size me-3"></i>Projects</a>
+            <a onclick="redirect('projects')" class="nav-link"><i class="bi bi-box icon-size me-3"></i>Projects</a>
         </li>
     </ul>
 
@@ -59,11 +59,11 @@
 <!-- Scripts -->
 <div th:fragment="scripts">
     <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/sweetalert2@11.js"></script>
     <script src="../js/popper.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/components.js"></script>
-    <script src="../js/sweetalert2@11.js"></script>
-    <script src="../controller/index.js"></script>
+    <script src="../js/datatables.min.js"></script>
     <script>
         $('#sidebarCollapse').on('click', function () {
             $('#sidebar, #content').toggleClass('active');

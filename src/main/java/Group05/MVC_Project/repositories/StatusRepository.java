@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface StatusRepository extends JpaRepository<Status, Long> {
 
-    @Query(value = "SELECT id,status FROM status ",
+    @Query(value = "SELECT id,status FROM status WHERE id = 1 OR id = 2",
             nativeQuery = true )
     List<Object> ListStatus();
 }

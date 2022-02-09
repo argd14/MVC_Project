@@ -50,7 +50,7 @@ public class AuthController {
                             response.setException("Incorrect password.");
                         }
                     } else {
-                        response.setException("your user is inactive");
+                        response.setException("Your user is inactive.");
                     }
                 } else {
                     response.setException("Sorry! Looks like your password is invalid.");
