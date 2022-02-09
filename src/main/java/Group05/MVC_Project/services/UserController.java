@@ -127,11 +127,13 @@ public Response getAvailableIssues(@RequestHeader(value = "Authorization") Strin
         initializeResponse();
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
-
         } else {
-
-            response.getDataset().addAll(issuesRepository.getAvailableIssues());
-            response.setStatus(true);
+            try{
+                response.getDataset().addAll(issuesRepository.getAvailableIssues());
+                response.setStatus(true);
+            } catch(DataAccessException ex) {
+                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+            }
         }
         return response;
     }

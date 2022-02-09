@@ -4,11 +4,7 @@ makeRequests();
 
 async function makeRequests() {
     fillManagersSprintTable().then(function () {
-        fillIssuesTable().then(function(){
-            fillSelect('../api/users/ListStatus', 'id_status', null);
-        });   
-       // 
-    
+        fillSelect('../api/users/ListStatus', 'id_status', null);
     });
 
 }
@@ -30,7 +26,6 @@ async function fillManagersSprintTable() {
         if (response.status) {
             console.log(response)
             document.getElementById('id_sprint').value = response.dataset[0].id;
-            console.log(response.dataset[0].id);
             $('#manager-table').DataTable().destroy();
             let content = '';
             response.dataset.map(function (row) {
@@ -41,30 +36,16 @@ async function fillManagersSprintTable() {
                     <td>${row[2]}</td>
                     <td>${row[3]}</td>
                     <td>${row[4]}</td>
-                    <td>${row[5]}</td>
                     <td>${row[6]}</td>
                     <th scope="row">
                     <div>
-                    <a onclick="getOneSprint(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
-                    <a onclick="deleteSprint(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>
-                    <a onclick="fillIssuesTable(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Add"><i class="bi bi-caret-down-square-fill"></i></a>
+                        <a onclick="getOneSprint(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
+                        <a onclick="issuesTable(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Add"><i class="bi bi-caret-down-square-fill"></i></a>
+                        <a onclick="deleteSprint(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>
+                    </div>
+                </th>
+            </tr>   
                 `
-               
-                if (row[6] == 'Active') {
-                    content += `
-                                <a onclick="disableUser(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set inactive"><i class="bi bi-x"></i></a>
-                            </div>
-                        </th>
-                    </tr>   
-                    `
-                } else if (row[6] == 'Inactive') {
-                    content += `
-                                <a onclick="enableUser(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set active"><i class="bi bi bi-check"></i></a>
-                            </div>
-                        </th>
-                    </tr>   
-                    `
-                }
             });
  
              document.getElementById('tbody-managers').innerHTML = content;
@@ -76,61 +57,62 @@ async function fillManagersSprintTable() {
 }
 
 
-async function fillIssuesTable(idIssue) {
-    const request = await fetch('../api/users/getAvailableIssues', {
+function issuesTable(idIssue) {
+    openModal('addIssues');
+
+
+    fetch('../api/users/getAvailableIssues', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': localStorage.token
         }
-    });
+    }).then(function(request){
+        // parses request to json
+        request.json().then(function (response) {
+            // checks response status
+            if (response.status) {
+                document.getElementById("id_sprint2").value = idIssue;
+                let content = '';
+                
+                $('#issues-table').DataTable().destroy();
+                $('#issues-table-selected').DataTable().destroy();
+                response.dataset.map(function (row) {
+                    content += `
+                    <tr>
+                        <th scope="row" class="id-padding">${row[0]}</th>
+                        <td>${row[1]}</td>
+                        <th scope="row">
+                            <div>
+                                <a onclick="selectIssue(${row[0]}, '${row[1]}')" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-plus"></i></a>
+                            </div>
+                        </th>
+                    </tr>                                                                                                                   
+                    `
+                });
     
-    // parses request to json
-    request.json().then(function (response) {
-        // checks response status
-
-        if (response.status) {
-            document.getElementById("id_sprint2").value = idIssue;
-            let content = '';
+                document.getElementById('tbody-issues').innerHTML = content;
+                document.getElementById('tbody-issues-selected').innerHTML = '';
+                $('#issues-table').DataTable({
+                    "bLengthChange": false,
+                    "bFilter": true,
+                    "bInfo": false,
+                    "bAutoWidth": false
+                });
+    
+                $('#issues-table-selected').DataTable({
+                    "bLengthChange": false,
+                    "bFilter": true,
+                    "bInfo": false,
+                    "bAutoWidth": false
+                });
+            } else {
+                Swal.fire('Warning!', response.exception, 'warning');
+            }
             
-            $('#issues-table').DataTable().destroy();
-            $('#issues-table-selected').DataTable().destroy();
-            response.dataset.map(function (row) {
-                content += `
-                <tr>
-                    <th scope="row" class="id-padding">${row[0]}</th>
-                    <td>${row[1]}</td>
-                    <th scope="row">
-                        <div>
-                            <a onclick="selectIssue(${row[0]}, '${row[1]}')" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-plus"></i></a>
-                        </div>
-                    </th>
-                </tr>                                                                                                                   
-                `
-            });
-
-            document.getElementById('tbody-issues').innerHTML = content;
-            document.getElementById('tbody-issues-selected').innerHTML = '';
-            $('#issues-table').DataTable({
-                "bLengthChange": false,
-                "bFilter": true,
-                "bInfo": false,
-                "bAutoWidth": false
-            });
-
-            $('#issues-table-selected').DataTable({
-                "bLengthChange": false,
-                "bFilter": true,
-                "bInfo": false,
-                "bAutoWidth": false
-            });
-        } else {
-            Swal.fire('Warning!', response.exception, 'warning');
-        }
-        
-    });
-    
+        });
+    }); 
 }
 
 
@@ -200,9 +182,10 @@ async function getOneSprint(id) {
     });
 
     request.json().then(function (response) {
+
+        console.log(response.dataset);
         if (response.status) {
-            console.log(response);
-            document.getElementById('id').value = response.dataset[0].id;
+            
             document.getElementById('name').value = response.dataset[0].cycle_name;
             document.getElementById('duration').value = response.dataset[0].duration;
             document.getElementById('start_date').value = response.dataset[0].start_date;
