@@ -3,28 +3,30 @@ package Group05.MVC_Project.models;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "development_cycle")
-public class DevelopmentCicle implements Serializable {
+@Table(name= "issue")
+public class Issue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private String cycle_name;
-    private String duration;
-    private LocalDate start_date;
-    private LocalDate end_date;
+    private String summary;
     private String description;
-
+    private int created_by;
+    private int issue_owner;
+    private int id_project;
     private int id_status;
+    private int id_type;
+    private int id_score;
+    private int id_development_cycle;
+    private LocalDate creation_date;
 
-    private LocalDateTime creation_date;
+
+
 
 
 }
