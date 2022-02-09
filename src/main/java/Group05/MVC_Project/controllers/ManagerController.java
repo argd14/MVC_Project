@@ -52,6 +52,24 @@ public class ManagerController {
         }
     }
 
+    @GetMapping("/sprints")
+    public String sprintManager(@RequestParam(name = "token", required = false) String token, Model model) {
+        if (validateToken.validateToken(token)) {
+            User userDB = validateToken.userDB();
+            if (userDB.getId_rol() == 1) {
+                model.addAttribute("title", "Sprints | Manager");
+                return "manager/sprints";
+            } else if (userDB.getId_rol() == 3) {
+                return "redirect:/developer/dashboard?token="+token;
+            }
+            model.addAttribute("title", "Dashboard | Manager");
+            return "manager/dashboard?token="+token;
+        } else {
+            return "redirect:/";
+        }
+    }
+
+
     @GetMapping("/projects")
     public String projectsManager(@RequestParam(name = "token", required = false) String token, Model model) {
         if (validateToken.validateToken(token)) {

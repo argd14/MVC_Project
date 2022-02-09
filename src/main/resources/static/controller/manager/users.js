@@ -4,17 +4,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function makeRequests() {
     fillManagersTable().then(function () {
-        fillDevelopersTable().then(function () {
+       fillDevelopersTable().then(function () {
             fillSelect('../api/users/ListRol', 'id_rol', null).then(function () {
                 fillSelect('../api/users/ListStatus', 'id_status', null).then(function () {
-                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                   /* var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
                     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                        return new bootstrap.Tooltip(tooltipTriggerEl)
+                        return new bootstrap.Tooltip(tooltipTriggerEl)*/
                     });
                 })
             });
         });
-    });
 }
 
 
@@ -87,9 +86,9 @@ async function getOneManager(id) {
         }
     });
 
-    request.json().then(function (response) {
+   request.json().then(function (response) {
         if (response.status) {
-
+            console.log(response)
             document.getElementById('id_user').value = response.dataset[0].id;
             document.getElementById('name').value = response.dataset[0].name;
             document.getElementById('userName').value = response.dataset[0].userName;
@@ -307,7 +306,7 @@ document.getElementById('manageUsers-form').addEventListener('submit', function 
     //prevents to reload the page
     event.preventDefault();
 
-    if (document.getElementById('password').value == document.getElementById('password2').value) {
+   // if (document.getElementById('password').value == document.getElementById('password2').value) {
         let data = {};
         data.name = document.getElementById('name').value;
         data.userName = document.getElementById('userName').value;
@@ -326,7 +325,7 @@ document.getElementById('manageUsers-form').addEventListener('submit', function 
                 makeRequests();
             });
         }
-    } else {
-        Swal.fire('Warning!', "The passwords aren't the same.", 'warning');
-    }
+    //} else {
+      //  Swal.fire('Warning!', "The passwords aren't the same.", 'warning');
+   // }
 });

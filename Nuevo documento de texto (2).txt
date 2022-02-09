@@ -1,0 +1,28 @@
+
+import java.time.LocalDate;
+
+@Entity
+@Data
+@Table(name= "issue")
+public class Issue {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    private String summary;
+    private String description;
+    private int created_by;
+    private int issue_owner;
+    private int id_project;
+    private int id_status;
+    private int id_type;
+    private int id_score;
+    private int id_development_cycle;
+    private LocalDate creation_date;
+
+
+
+
+
+}
