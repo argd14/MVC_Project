@@ -27,10 +27,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <a class="nav-link-nav"><i class="bi bi-box mt-1"></i></a>
+                <a class="nav-link-nav" onclick="redirect('dashboard')"><i class="bi bi-box mt-1"></i></a>
                 <a class="nav-link-nav" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-gear mt-1"></i></a>
                 <ul class="dropdown-menu ms-5 mb-2 animate__animated animate__fadeInUp animate__faster" aria-labelledby="navbarDarkDropdownMenuLink">
-                    <li><a class="dropdown-item" href="#">My Profile</a></li>
+                    <li><a class="dropdown-item" onclick="redirect('settings')">My profile</a></li>
                     <li><a class="dropdown-item" onclick="logout()">Log out</a></li>
                 </ul>
             </ul>
@@ -53,9 +53,4 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/components.js"></script>
     <script src="../js/datatables.min.js"></script>
-    <script>
-        $('#sidebarCollapse').on('click', function () {
-            $('#sidebar, #content').toggleClass('active');
-        });
-    </script>
 </div>

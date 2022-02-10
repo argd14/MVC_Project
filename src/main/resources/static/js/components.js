@@ -2,6 +2,10 @@ function redirect(url) {
     window.location.href = `${url}?token=${localStorage.token}`;
 }
 
+function redirectWithId(url, id) {
+    window.location.href = `${url}?token=${localStorage.token}&id=${id}`;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
