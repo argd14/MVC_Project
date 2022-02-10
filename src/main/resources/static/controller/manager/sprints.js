@@ -11,7 +11,7 @@ async function makeRequests() {
 
 
 async function fillManagersSprintTable() {
-    const request = await fetch('../api/users/sprints', {
+    const request = await fetch('../api/manageSprints/sprints', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -58,7 +58,7 @@ async function fillManagersSprintTable() {
 
 function issuesTable(idIssue) {
     openModal('addIssues');
-    fetch('../api/users/getAvailableIssues', {
+    fetch('../api/manageSprints/getAvailableIssues', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -114,7 +114,7 @@ function issuesTable(idIssue) {
 }
 
 function getAvailableIssuesBySprint(id){
-    fetch(`../api/users/getAvailableIssuesBySprint?id=${id}`, {
+    fetch(`../api/manageSprints/getAvailableIssuesBySprint?id=${id}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -159,7 +159,7 @@ function getAvailableIssuesBySprint(id){
 }
 
 async function deleteSelectedById(id) {
-    fetch(`../api/users/deleteSelectedById?id=${id}`, {
+    fetch(`../api/manageSprints/deleteSelectedById?id=${id}`, {
         method: 'DELETE',
         headers: {
         'Accept': 'application/json',
@@ -231,7 +231,7 @@ document.getElementById('btnAddIssues').addEventListener('click', function () {
 });
 
 async function getOneSprint(id) {
-    const request = await fetch(`../api/users/sprint?id=${id}`, {
+    const request = await fetch(`../api/manageSprints/sprint?id=${id}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -302,7 +302,7 @@ async function saveIssues() {
         console.log(data.id)
         data.issues = getSelectedValues();
         if (data.id != 0) {
-            const request = await fetch('../api/users/addIssuesToSprint', {
+            const request = await fetch('../api/manageSprints/addIssuesToSprint', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -353,11 +353,11 @@ async function saveIssues() {
 
             if (document.getElementById('id_sprint').value != '') {
                 data.id = document.getElementById('id_sprint').value;
-                saveOrUpdateData('../api/users/updateSprint', data, 'manageSprintsModal').then(function () {
+                saveOrUpdateData('../api/manageSprints/updateSprint', data, 'manageSprintsModal').then(function () {
                     makeRequests();
                 });
             } else {
-                saveOrUpdateData('../api/users/createSprint', data, 'manageSprintsModal').then(function () {
+                saveOrUpdateData('../api/manageSprints/createSprint', data, 'manageSprintsModal').then(function () {
                     makeRequests();
                 });
             }
