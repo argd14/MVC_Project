@@ -1,53 +1,31 @@
-package Group05.MVC_Project.models;
 
+package Group05.MVC_Project.models;
 import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity
 @Data
-@Table(name = "issue")
-public class Issue implements Serializable{
+@Table(name= "issue")
+public class Issue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
     private String summary;
     private String description;
-    @ManyToOne
-    @JoinColumn(name = "created_by")
-    private User created_by;
-    @ManyToOne
-    @JoinColumn(name = "issue_owner")
-    private User issue_owner;
-    @ManyToOne
-    @JoinColumn(name = "id_priority")
-    private Priority id_priority;
-    @ManyToOne
-    @JoinColumn(name = "id_project")
-    private Project id_project;
-    @ManyToOne
-    @JoinColumn(name = "id_status")
-    private Status id_status;
-    @ManyToOne
-    @JoinColumn(name = "id_type")
-    private Type id_type;
-    @ManyToOne
-    @JoinColumn(name = "id_score")
-    private Score id_score;
-    @ManyToOne
-    @JoinColumn(name = "id_development_cycle")
-    private DevelopmentCicle id_development_cycle;
-    private LocalDateTime creation_date;
+    private int created_by;
+    private int issue_owner;
+    private int id_project;
+    private int id_status;
+    private int id_type;
+    private int id_score;
+    private int id_development_cycle;
+    private LocalDate creation_date;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_issue",
-            joinColumns = @JoinColumn(name = "id_issue"),
-            inverseJoinColumns = @JoinColumn(name = "id_user"))
-    private Collection<User> user;
 }
-
-

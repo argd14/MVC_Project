@@ -1,5 +1,5 @@
-
 <!-- Headers -->
+
 <head th:fragment="head">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,55 +18,39 @@
 </head>
 
 
-<!-- Vertical navbar -->
-<div th:fragment="sidebar" class="vertical-nav" id="sidebar">
-    <div id="user-nav-space">
-        <div class="row">
-            <div class="col-12">
-                <div class="d-flex flex-column justify-content-center align-items-center">
-                    <div class="modal-icon-background-green mb-2">
-                        <i class="bi bi-person-circle modal-icon-green"></i>
-                    </div>
-                    <h5>edu4rdorivera</h5>
-                    <label class="custom-text">Developer</label>
+<!-- navbar -->
+<nav th:fragment="navbar" class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid px-4 py-2">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
+            aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <a class="nav-link-nav" onclick="redirect('dashboard')"><i class="bi bi-box mt-1"></i></a>
+                <a class="nav-link-nav" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-gear mt-1"></i></a>
+                <ul class="dropdown-menu ms-5 mb-2 animate__animated animate__fadeInUp animate__faster" aria-labelledby="navbarDarkDropdownMenuLink">
+                    <li><a class="dropdown-item" onclick="redirect('settings')">My profile</a></li>
+                    <li><a class="dropdown-item" onclick="logout()">Log out</a></li>
+                </ul>
+            </ul>
+            <div class="d-flex align-items-center">
+                <div class="modal-icon-background-green">
+                    <i class="bi bi-person-circle modal-icon-green"></i>
                 </div>
+                <span id="lblUsername" class="ms-3">Eduardo Rivera</span>
             </div>
         </div>
-        <ul class="nav flex-column mb-0 mt-3">
-            <li class="nav-item d-flex justify-content-center">
-                <a href="#" class="nav-link"><i class="bi bi-gear icon-size me-3"></i>Settings</a>
-            </li>
-            <li class="nav-item d-flex justify-content-center">
-                <a href="#" class="nav-link"><i class="bi bi-box-arrow-left icon-size me-3"></i>Log out</a>
-            </li>
-        </ul>
     </div>
-    <ul class="nav flex-column mb-0 mt-3">
-        <li class="nav-item d-flex justify-content-center">
-            <a href="#" class="nav-link"><i class="bi bi-house-door icon-size me-3"></i>Overview</a>
-        </li>
-        <li class="nav-item d-flex justify-content-center">
-            <a href="#" class="nav-link"><i class="bi bi-person-video2 icon-size me-3"></i>Users</a>
-        </li>
-        <li class="nav-item d-flex justify-content-center">
-            <a href="#" class="nav-link"><i class="bi bi-box icon-size me-3"></i>Projects</a>
-        </li>
-    </ul>
-
-</div>
+</nav>
 
 
 <!-- Scripts -->
 <div th:fragment="scripts">
     <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/sweetalert2@11.js"></script>
     <script src="../js/popper.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/components.js"></script>
-    <script src="../js/sweetalert2@11.js"></script>
-    <script src="../controller/index.js"></script>
-    <script>
-        $('#sidebarCollapse').on('click', function () {
-            $('#sidebar, #content').toggleClass('active');
-        });
-    </script>
+    <script src="../js/datatables.min.js"></script>
 </div>

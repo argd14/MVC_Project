@@ -14,6 +14,14 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
+    /*
+    *
+    *
+    *   QUERIES FOR MANAGER SITE
+    *
+    *
+     */
+
     @Query(value = "SELECT id_project,project_code,project_name FROM project",
             nativeQuery = true )
     List<Object> getProjects();
@@ -33,4 +41,21 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query(value = "SELECT id_user, name FROM user WHERE id_rol = 3 AND id_status = 1;",
             nativeQuery = true )
     List<Object> getAvailableDevelopers();
+
+    /*
+     *
+     *
+     *   QUERIES FOR DEVELOPER SITE
+     *
+     *
+     */
+
+    @Query(value = "SELECT id_project, project_name, project_code FROM user_project INNER JOIN project USING (id_project) WHERE id_user = :id",
+            nativeQuery = true )
+    List<Object> getMyProjects(@Param("id") Long id);
+
+    @Query(value = "SELECT*FROM user_project WHERE id_user = :id_user AND id_project = :id_project",
+            nativeQuery = true )
+    List<Object> checkIfDeveloperHasAccess(@Param("id_user") Long id_user, @Param("id_project") Long id_project);
+
 }

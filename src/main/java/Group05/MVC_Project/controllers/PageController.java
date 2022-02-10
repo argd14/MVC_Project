@@ -14,11 +14,6 @@ public class PageController {
         return "index";
     }
 
-    @GetMapping("developer/register")
-    public String registerDeveloper() {
-        return "developer/register";
-    }
-
 
     
 }
