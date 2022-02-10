@@ -315,6 +315,7 @@ document.getElementById('btnCreateProject').addEventListener('click', function (
 
 async function createProject() {
     data = {}
+
     data.project_name = document.getElementById('project_name').value;
     data.project_code = document.getElementById('project_code').value;
     data.description = document.getElementById('description').value;
@@ -332,7 +333,6 @@ async function createProject() {
     request.json().then(function (response) {
         if (response.status) {
             let id = response.dataset[0];
-            console.log(id);
             saveProject(id)
         } else {
             Swal.fire('Warning!', response.exception, 'warning').then(function () {

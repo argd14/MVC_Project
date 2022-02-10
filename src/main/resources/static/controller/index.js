@@ -52,7 +52,6 @@ async function login(data){
                 } else if (response.dataset[0].id_rol == 1){
                     window.location.href = `manager/dashboard?token=${response.token}`;
                 }
-
             });
         } else {
             Swal.fire('Warning!',response.exception,'warning');

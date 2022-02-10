@@ -11,11 +11,13 @@
         <div class="animate__animated animate__fadeInUp">
             <div class="d-flex align-items-center">
                 <div class="modal-icon-background-blue me-3">
-                    <i class="bi bi-box modal-icon-blue"></i>
+                    <i class="bi bi-list-nested modal-icon-blue"></i>
                 </div>
-                <h5 class="mt-2">My Projects</h5>
+                <input type="hidden" th:value="${id_project}" id="id_project">
+                <h5 class="mt-2">Backlog</h5>
+                <label class="custom-text ms-3 animate__animated animate__fadeInRight animate__delay-1s">My Projects / <span id="project_name"></span></label>
             </div>
-            <label class="custom-text mt-2">All the projects where you are enrolled in.</label>
+            <label class="custom-text mt-2 animate__animated animate__fadeInRight animate__delay-1s" id="description"></label>
         </div>
 
         <div class="row mt-2" id="tbody-projects">
@@ -23,7 +25,7 @@
         </div>
     </div>
 
-    <script src="../controller/developer/dashboard.js"></script>
+    <script src="../controller/developer/backlog.js"></script>
 
     <div th:replace="fragments/developer :: scripts"></div>
 </body>
