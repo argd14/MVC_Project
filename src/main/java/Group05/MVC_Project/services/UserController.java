@@ -23,7 +23,7 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
-    private IssuesRepository issuesRepository;
+    private IssueRepository issueRepository;
     @Autowired
     private ValidateToken validateToken;
 
@@ -53,7 +53,7 @@ public class UserController {
             response.setException("Unauthorized access.");
         } else {
             try {
-                response.getDataset().addAll(issuesRepository.getAvailableIssues());
+                response.getDataset().addAll(issueRepository.getAvailableIssues());
                 response.setStatus(true);
             } catch (DataAccessException ex) {
                 response.setException(SQLException.getException(String.valueOf(ex.getCause())));
@@ -72,11 +72,11 @@ public class UserController {
                 try {
                     DevelopmentCicle developmentCicle = developmentCycleRepository.findById(object.getId()).get();
                     for (int i = 0; i < object.getIssues().size(); i++) {
-                        Issue issue = issuesRepository.findById(object.getIssues().get(i)).get();
+                        Issue issue = issueRepository.findById(object.getIssues().get(i)).get();
 
-                        if (issuesRepository.existsById(issue.getId())) {
+                        if (issueRepository.existsById(issue.getId())) {
                             issue.setId_development_cycle(Math.toIntExact(developmentCicle.getId()));
-                            issuesRepository.save(issue);
+                            issueRepository.save(issue);
                             response.setStatus(true);
                             response.setMessage("Saved successfully!");
                         }
@@ -99,7 +99,7 @@ public class UserController {
             response.setException("Unauthorized access.");
         } else {
             try {
-                response.getDataset().addAll(issuesRepository.getAvailableIssuesBySprint(id));
+                response.getDataset().addAll(issueRepository.getAvailableIssuesBySprint(id));
                 response.setStatus(true);
             } catch (DataAccessException ex) {
                 response.setException(SQLException.getException(String.valueOf(ex.getCause())));
@@ -115,9 +115,9 @@ public class UserController {
             response.setException("Unauthorized access.");
         } else {
             if (id != 0) {
-                Issue issue = issuesRepository.getById(id);
+                Issue issue = issueRepository.getById(id);
                 issue.setId_development_cycle(1);
-                issuesRepository.save(issue);
+                issueRepository.save(issue);
                 response.setStatus(true);
             }
 
