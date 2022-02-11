@@ -1,14 +1,16 @@
 package Group05.MVC_Project.services;
 
-import Group05.MVC_Project.models.DevelopmentCicle;
-import Group05.MVC_Project.models.Issue;
-import Group05.MVC_Project.models.Response;
-import Group05.MVC_Project.models.SprintIssue;
+import Group05.MVC_Project.models.*;
 import Group05.MVC_Project.repositories.*;
 import Group05.MVC_Project.utils.NumberValidation;
 import Group05.MVC_Project.utils.SQLException;
 import Group05.MVC_Project.utils.StringValidation;
 import Group05.MVC_Project.utils.ValidateToken;
+import antlr.collections.List;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.*;
@@ -239,9 +241,52 @@ public class SprintController {
         return response;
     }
 
+    /*
+    *
+    *
+    * ENDPOINTS FOR DEVELOPERS
+    *
+    *
+    */
+
+    public ArrayList<Long> getSprintsOfAProject(Long id_project){
+        ArrayList<Long> sprintsList = new ArrayList<>();
+        sprintsList = developmentCycleRepository.getSprintsOfAProject(id_project);
+        return sprintsList;
+    }
+
+    @GetMapping("/getTasksOfASprint")
+    public Response getTasksOfASprint (@RequestHeader(value = "Authorization", required = false) String token, @RequestParam(name = "id") Long id_project){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access");
+        } else {
+            ArrayList<Long> sprintsList = new ArrayList<>();
+            sprintsList = getSprintsOfAProject(id_project);
+            if (!sprintsList.isEmpty()) {
+                try {
+                    for (Long aLong : sprintsList) {
+                        ProjectSprint projectSprint = new ProjectSprint();
+                        DevelopmentCicle sprint = developmentCycleRepository.findById(aLong).get();
+                        projectSprint.setId_sprint(sprint.getId());
+                        projectSprint.setSprint_name(sprint.getCycle_name());
+                        projectSprint.setTasks(developmentCycleRepository.getTasksOfASprint(sprint.getId(), id_project));
+                        response.getDataset().add(projectSprint);
+                    }
+                    response.setStatus(true);
+                } catch (NullPointerException ex) {
+                    response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                }
+            } else {
+                response.setException("This project does not have sprints.");
+            }
+        }
+        return response;
+    }
+
 
     public void initializeResponse() {
         this.response = new Response();
     }
-    ///////////////////////////////////////////////////////////////////////////////////
+    
 }
