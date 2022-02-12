@@ -35,7 +35,7 @@ public interface DevelopmentCycleRepository extends JpaRepository<DevelopmentCic
     "INNER JOIN type t ON i.id_type = t.id " +
     "INNER JOIN status s ON i.id_status = s.id " +
     "INNER JOIN user u1 ON i.created_by = u1.id_user " +
-    "INNER JOIN user u2 ON i.issue_owner = u2.id_user " +
+    "LEFT JOIN user u2 ON i.issue_owner = u2.id_user " +
     "WHERE id_development_cycle = :id_sprint AND id_project = :id_project",
     nativeQuery = true)
     ArrayList<Object> getTasksOfASprint(@Param("id_sprint") Long idDevelopmentCycle,
