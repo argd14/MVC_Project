@@ -25,6 +25,149 @@
         </div>
     </div>
 
+    <!-- Modal for managing tasks -->
+    <div class="modal fade" id="manageTasksModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header d-flex justify-content-start">
+                    <div class="modal-icon-background-red me-3">
+                        <i class="bi bi-journal-bookmark-fill modal-icon-red"></i>
+                    </div>
+                    <h5 class="modal-title" id="modal-title">Task info</h5>
+                </div>
+
+                <div class="modal-body mb-3 mt-2">
+                    <form action="#" id="taskInfo-form">
+                        <div class="row">
+                            <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center align-items-center flex-column">
+                                <input type="hidden" id="id_task">
+                                <div class="mb-3 d-flex flex-column text-center">
+                                    <label class="text-muted"><b>Summary</b></label>
+                                    <label class="text-muted" id="lblSummary"></label>
+                                </div>
+                                
+                                <div class="mb-3 d-flex flex-column text-center">
+                                    <label class="text-muted"><b>Priority</b></label>
+                                    <label class="text-muted" id="lblPriority"></label>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center align-items-center flex-column">
+                                <div class="mb-3 d-flex flex-column text-center">
+                                    <label class="text-muted"><b>Type</b></label>
+                                    <label class="text-muted" id="lblType"></label>
+                                </div>
+                                <div class="mb-3 d-flex flex-column text-center">
+                                    <label class="text-muted"><b>Status</b></label>
+                                    <label class="text-muted" id="lblStatus"></label>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex justify-content-center align-items-center flex-column">
+                                <div class="mb-3 d-flex flex-column text-center">
+                                    <label class="text-muted"><b>Created by</b></label>
+                                    <label class="text-muted" id="lblCreatedBy">Eduardo Rivera</label>
+                                </div>
+                                <div class="mb-3 d-flex flex-column text-center">
+                                    <label class="text-muted"><b>Description</b></label>
+                                    <label class="text-muted" id="lblDescription"></label>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-2 px-5" id="toDoOptions">
+                                <div class="mb-3 d-flex flex-column text-center">
+                                    <label class="text-muted">It looks like nobody is doing this task. Would you like to do it?</label>
+                                    <button type="submit" class="btn custom-btn pe-3 mt-2">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <i class="bi bi-check icon-color me-1"></i><span>Yes!</span>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-12 d-none my-3" id="doingOptions">
+                                <div class="mb-3 d-flex flex-column text-center">
+                                    <label class="text-muted">Actually, <b id="lblIssueOwner1"></b> is doing this.</label>
+                                    <button type="submit" class="btn custom-btn pe-3 mt-2">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <i class="bi bi-check icon-color me-1"></i><span>End this task</span>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-12 d-none my-3" id="doneOptions">
+                                <div class="mb-3 d-flex flex-column text-center">
+                                    <label class="text-muted"><b id="lblIssueOwner2"></b> done this.</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn custom-btn pe-3" data-bs-dismiss="modal">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-x icon-color me-1"></i><span>Close</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for creating tasks -->
+    <div class="modal fade" id="createTaskModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header d-flex justify-content-start">
+                    <div class="modal-icon-background-red me-3">
+                        <i class="bi bi-journal-plus modal-icon-red"></i>
+                    </div>
+                    <h5 class="modal-title" id="modal-title">Create task</h5>
+                </div>
+
+                <div class="modal-body mb-3 mt-2">
+                    <form id="createTask-form">
+                        <input type="hidden" id="id_development_cycle">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-2">
+                                    <label for="summary" class="custom-text">Summary:</label>
+                                    <input type="text" class="form-control" id="summary"
+                                        placeholder="Summary of the task...">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="description2" class="custom-text">Description:</label>
+                                    <textarea rows="4" type="text" class="form-control" id="description2"></textarea>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="priority" class="custom-text">Priority:</label>
+                                    <select class="form-select" id="priority">
+                                            
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="type" class="custom-text">Type:</label>
+                                    <select class="form-select" id="type">
+                                            
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="btnSubmitCreateTask-form" class="d-none" type="submit"></button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn custom-btn pe-3" data-bs-dismiss="modal">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-x icon-color me-1"></i><span>Close</span>
+                        </div>
+                    </button>
+                    <button onclick="simulateClick()" class="btn custom-btn pe-3">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-check icon-color me-1"></i><span>Save</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../controller/developer/backlog.js"></script>
 
     <div th:replace="fragments/developer :: scripts"></div>

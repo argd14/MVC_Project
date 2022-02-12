@@ -18,8 +18,9 @@ public class Issue {
 
     private String summary;
     private String description;
-    private int created_by;
-    private int issue_owner;
+    private Long created_by;
+    private Long issue_owner;
+    private int id_priority;
     private int id_project;
     private int id_status;
     private int id_type;

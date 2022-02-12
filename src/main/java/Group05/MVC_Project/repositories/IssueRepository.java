@@ -44,5 +44,23 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
             nativeQuery = true)
     List<Object> getAvailableIssuesBySprint(@Param("id") Long id);
 
+    /*
+    *
+    *
+    * QUERIES FOR DEVELOPERS SITE
+    * 
+    *
+    */
+
+    @Query(value = "SELECT i.id, i.summary, p.priority, t.type, s.status, u1.name as created_by, u2.name as issue_owner, i.description FROM issue i "+
+                "INNER JOIN priority p ON i.id_priority = p.id " +
+                "INNER JOIN type t ON i.id_type = t.id " +
+                "INNER JOIN status s ON i.id_status = s.id " +
+                "INNER JOIN user u1 ON i.created_by = u1.id_user " +
+                "INNER JOIN user u2 ON i.issue_owner = u2.id_user " +
+                "WHERE i.id = :id",
+           nativeQuery = true)
+    Object getTaskInfo(@Param("id") Long id);
+    
 }
 

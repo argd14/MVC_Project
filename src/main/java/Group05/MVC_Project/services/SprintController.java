@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("api/manageSprints")
@@ -28,6 +31,10 @@ public class SprintController {
     private RoleRepository roleRepository;
     @Autowired
     private IssueRepository issueRepository;
+    @Autowired
+    private PriorityRepository priorityRepository;
+    @Autowired
+    private TypeRepository typeRepository;
     @Autowired
     private ValidateToken validateToken;
 
@@ -284,9 +291,122 @@ public class SprintController {
         return response;
     }
 
+    @GetMapping("getTaskInfo")
+    public Response getTaskInfo(@RequestHeader(value="Authorization") String token, @RequestParam Long id){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            if (issueRepository.existsById(id)) {
+                Object task = issueRepository.getTaskInfo(id);
+                response.getDataset().add(task);
+                response.setStatus(true);
+            } else {
+                response.setException("The id of the issue that you set does not exists.");
+            }
+        }
+        return response;
+    }
+
+    @GetMapping("assignTask")
+    public Response assignTask(@RequestHeader(value="Authorization") String token, @RequestParam Long id){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            if (issueRepository.existsById(id)) {
+                Issue issue = issueRepository.findById(id).get();
+                if (issue.getId_status() == 3) {
+                    issue.setIssue_owner(validateToken.userDB().getId());
+                    issue.setId_status(4);
+                    issueRepository.save(issue);
+                    response.setStatus(true);
+                    response.setMessage("Assigned successfully!");
+                } else {
+                    response.setException("The task that you are trying to update has other status.");
+                }
+            } else {
+                response.setException("The id that you set does not exists.");
+            }
+        }
+        return response;
+    }
+
+    @GetMapping("endTask")
+    public Response endTask(@RequestHeader(value = "Authorization") String token, @RequestParam Long id) {
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            if (issueRepository.existsById(id)) {
+                Issue issue = issueRepository.findById(id).get();
+                if (issue.getIssue_owner() == validateToken.userDB().getId()) {
+                    issue.setId_status(5);
+                    issueRepository.save(issue);
+                    response.setStatus(true);
+                    response.setMessage("Task ended successfully!");
+                } else {
+                    response.setException("You can't end a task if you are not the owner.");
+                }
+            } else {
+                response.setException("The id that you set does not exists.");
+            }
+        }
+        return response;
+    }
+
+    @GetMapping("loadPriorities")
+    public Response loadPriorities(@RequestHeader(value="Authorization") String token){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            response.getDataset().addAll(priorityRepository.ListPriority());
+            response.setStatus(true);
+        }
+        return response;
+    }
+
+    @GetMapping("loadTypes")
+    public Response loadTypes(@RequestHeader(value="Authorization") String token){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            response.getDataset().addAll(typeRepository.ListTypes());
+            response.setStatus(true);
+        }
+        return response;
+    }
+
+    @PostMapping("saveTask")
+    public Response saveTask(@RequestHeader(value="Authorization") String token, @RequestBody Issue issue){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            if (stringValidation.validateAlphanumeric(issue.getSummary(), 150)) {
+                if (stringValidation.validateAlphanumeric(issue.getDescription(), 500)) {
+                    issue.setCreated_by(validateToken.userDB().getId());
+                    issue.setId_status(3);
+                    issue.setId_score(1);
+                    issueRepository.save(issue);
+                    response.setStatus(true);
+                    response.setMessage("Saved successfully!");
+                } else {
+                    response.setException("Invalid description.");
+                }
+            } else {
+                response.setException("Invalid summary.");
+            }
+        }
+        return response;
+    }
 
     public void initializeResponse() {
         this.response = new Response();
     }
     
 }
+
+
