@@ -121,7 +121,7 @@ public class UserController {
                     response.setStatus(true);
                     response.setMessage("User deleted successfully!");
                 } catch (DataAccessException ex) {
-                    response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                    response.setException("Sorry! We can't delete this register because it's linked to a project.");
                 }
             } else {
                 response.setException("The user doesn't exists.");
