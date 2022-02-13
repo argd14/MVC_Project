@@ -45,6 +45,7 @@ public class AuthController {
                             User returnUser = new User();
                             returnUser.setId_rol(userDB.getId_rol());
                             returnUser.setUserName(userDB.getUserName());
+                            returnUser.setId(userDB.getId());
                             response.setStatus(true);
                             response.setToken(tokenJwt);
                             response.getDataset().add(returnUser);

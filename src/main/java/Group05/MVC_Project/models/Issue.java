@@ -19,7 +19,9 @@ public class Issue {
     private String summary;
     private String description;
     private int created_by;
-    private int issue_owner;
+    @Column(name = "issue_owner", insertable = false, nullable=true)
+    private Integer issue_owner;
+    private int id_priority;
     private int id_project;
     private int id_status;
     private int id_type;

@@ -19,10 +19,10 @@
             </div>
             <label class="custom-text mt-2">Manage all the issues</label>
         </div>
-        <div class="row mt-1">
+        <div class="row mt-2 mb-4">
             <div class="col-12">
                 <div class="d-flex">
-                    <button id="btnOpenAddModal" class="btn custom-btn px-3" data-bs-toggle="modal" data-bs-target="#manageUsersModal">
+                    <button id="btnOpenAddModal" class="btn custom-btn px-3" data-bs-toggle="modal" data-bs-target="#manageIssuesModal">
                         <div class="d-flex justify-content-center align-items-center">
                             <i class="bi bi-plus icon-color me-1"></i><span>Add</span>
                         </div>
@@ -30,62 +30,29 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-1">
-            <div class="col-12">
-                <div class="d-flex justify-content-end">
-                    <button class="btn custom-btn px-3 mx-1" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="collapseManager collapseDeveloper">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <span>Change Table</span>
-                        </div>
-                    </button>
-
-                </div>
-            </div>
-        </div>
 
         <div id="accordion">
             <div class="row mt-2 table-responsive collapse multi-collapse show" id="collapseManager">
-                <h5 id="table-title">Managers</h5>
+                <h5 id="table-title">Issues</h5>
                 <div class="col-12">
                     <table id="manager-table" class="table table-borderless mt-3">
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Summary</th>
+                            <th scope="col">Submitted By</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Project</th>
+                            <th scope="col">Type</th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
                         <tbody id="tbody-managers">
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="row mt-2 table-responsive collapse multi-collapse" id="collapseDeveloper">
-                <h5 id="table-title">Developers</h5>
-                <div class="col-12">
-                    <table id="developer-table" class="table table-borderless mt-3">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody id="tbody-developers">
-
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -95,77 +62,66 @@
         <div class="modal-content p-3">
             <div class="modal-header d-flex justify-content-start">
                 <div class="modal-icon-background-red me-3">
-                    <i class="bi bi-person-video2 modal-icon-red"></i>
+                    <i class="bi bi-list-task modal-icon-red"></i>
                 </div>
-                <h5 class="modal-title" id="modal-title">Change this on js controller</h5>
+                <h5 class="modal-title" id="modal-title">Add Issues</h5>
             </div>
 
             <div class="modal-body mb-3 mt-1">
-                <form action="#" id="manageUsers-form">
-                    <input type="hidden" id="id_user">
+                <form action="#" id="manageIssues-form">
+                    <input type="hidden" id="id_issue">
+                    <input type="hidden" id="created_by">
                     <label class="custom-text">Please fill all the fields.</label>
                     <div class="row">
                         <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
                             <div class="mt-1">
                                 <div class="mb-2">
-                                    <label for="name" class="custom-text">Name:</label>
-                                    <input type="text" class="form-control" id="name"
-                                           placeholder="Your name...">
+                                    <label for="summary" class="custom-text">Summary:</label>
+                                    <input type="text" class="form-control" id="summary"
+                                           placeholder="Issue Summary...">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="userName" class="custom-text">Username:</label>
-                                    <input type="text" class="form-control" id="userName"
-                                           placeholder="Your username...">
-                                </div>
-                                <div class="mb-2">
-                                    <label for="phone_number" class="custom-text">Phone number:</label>
-                                    <input type="text" class="form-control" id="phone_number" placeholder="00000000">
-                                </div>
-                                <div class="mb-2">
-                                    <label for="email" class="custom-text">Email:</label>
-                                    <input type="email" class="form-control" id="email" placeholder="example@mail.com">
+                                    <label for="description" class="custom-text">Description:</label>
+                                    <input type="text" class="form-control" id="description"
+                                           placeholder="Issue Description...">
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
                             <div class="mt-1">
                                 <div class="mb-2">
-                                    <label for="id_rol" class="custom-text">Role:</label>
-                                    <select class="form-select" id="id_rol">
-
+                                    <label for="id_priority" class="custom-text">Priority:</label>
+                                    <select class="form-select" id="id_priority">
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="id_project" class="custom-text">Project:</label>
+                                    <select class="form-select" id="id_project">
                                     </select>
                                 </div>
                                 <div class="mb-2">
                                     <label for="id_status" class="custom-text">Status:</label>
                                     <select class="form-select" id="id_status">
-
                                     </select>
                                 </div>
-                                <div id="passwordControllers">
-                                    <div class="mb-2">
-                                        <label for="password" class="custom-text">Password:</label>
-                                        <input type="password" class="form-control" id="password" placeholder="Password" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                               title="Password must contain at least one digit [0-9].
-                                            Password must contain at least one lowercase Latin character [a-z].
-                                            Password must contain at least one uppercase Latin character [A-Z].
-                                            Password must contain at least one special character like ! @ # & ( ).
-                                            Password must contain a length of at least 8 characters and a maximum of 20 characters.">
-                                    </div>
-                                    <div class="mb-2">
-                                        <label for="password2" class="custom-text">Confirm password:</label>
-                                        <input type="password" class="form-control" id="password2" placeholder="Confirm password">
-                                    </div>
-                                    <div class="form-check form-switch mt-1">
-                                        <input onchange="showHidePassword('showPassword','password', 'password2')" class="form-check-input" type="checkbox" role="switch" id="showPassword">
-                                        <label class="custom-text" for="showPassword">Show password</label>
-                                    </div>
+                                <div class="mb-2">
+                                    <label for="id_type" class="custom-text">Type:</label>
+                                    <select class="form-select" id="id_type">
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="id_score" class="custom-text">Score:</label>
+                                    <select class="form-select" id="id_score">
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="id_development_cycle" class="custom-text">Sprint:</label>
+                                    <select class="form-select" id="id_development_cycle">
+                                    </select>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-
                     <button type="submit" id="submit-form" class="d-none"></button>
                 </form>
             </div>
@@ -175,13 +131,12 @@
                         <i class="bi bi-x icon-color me-1"></i><span>Close</span>
                     </div>
                 </button>
-                <button onclick="clickHiddenButton()" class="btn custom-btn pe-3">
+                <button onclick="clickIHiddenButton()" class="btn custom-btn pe-3">
                     <div class="d-flex justify-content-center align-items-center">
                         <i class="bi bi-check icon-color me-1"></i><span>Save</span>
                     </div>
                 </button>
             </div>
-
         </div>
     </div>
 </div>
@@ -189,5 +144,4 @@
 <div th:replace="fragments/manager :: scripts"></div>
 <script src="../controller/manager/issues.js"></script>
 </body>
-
 </html>

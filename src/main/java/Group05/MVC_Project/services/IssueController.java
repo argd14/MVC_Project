@@ -1,10 +1,8 @@
 package Group05.MVC_Project.services;
 
-import Group05.MVC_Project.models.*;
-import Group05.MVC_Project.repositories.IssueRepository;
-import Group05.MVC_Project.repositories.ProjectRepository;
-import Group05.MVC_Project.repositories.StatusRepository;
-import Group05.MVC_Project.repositories.UserRepository;
+import Group05.MVC_Project.models.Issue;
+import Group05.MVC_Project.models.Response;
+import Group05.MVC_Project.repositories.*;
 import Group05.MVC_Project.utils.NumberValidation;
 import Group05.MVC_Project.utils.SQLException;
 import Group05.MVC_Project.utils.StringValidation;
@@ -17,15 +15,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/issues")
 public class IssueController {
     @Autowired
+    private ValidateToken validateToken;
+    @Autowired
+    private IssueRepository issueRepository;
+    @Autowired
+    private PriorityRepository priorityRepository;
+    @Autowired
+    private TypeRepository typeRepository;
+    @Autowired
+    private ScoreRepository scoreRepository;
+    @Autowired
     private StatusRepository statusRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private ValidateToken validateToken;
-    @Autowired
-    private ProjectRepository projectRepository;
-    @Autowired
-    private IssueRepository issueRepository;
 
     private Response response;
     private StringValidation stringValidation = new StringValidation();
@@ -37,96 +39,100 @@ public class IssueController {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            User userDB = validateToken.userDB();
-            if (userDB.getId_rol() != 3) {
-                if (stringValidation.validateAlphanumeric(issue.getSummary(), 150)) {
-                    if (stringValidation.validateAlphabetic(issue.getDescription(), 500)) {
-                        if (numberValidation.validateInteger(String.valueOf(issue.getCreated_by()))) {
-                            if (numberValidation.validateInteger(String.valueOf(issue.getId_status()))) {
+            if (stringValidation.validateAlphanumeric(issue.getSummary(), 150)) {
+                if (stringValidation.validateAlphanumeric(issue.getDescription(), 500)) {
+                    if (numberValidation.validateInteger(String.valueOf(issue.getCreated_by()))) {
+                        if (numberValidation.validateInteger(String.valueOf(issue.getId_priority()))) {
+                            if (numberValidation.validateInteger(String.valueOf(issue.getId_project()))) {
                                 if (numberValidation.validateInteger(String.valueOf(issue.getId_type()))) {
-                                    if (numberValidation.validateInteger(String.valueOf(issue.getId_score()))) {
-                                        if (numberValidation.validateInteger(String.valueOf(issue.getId_development_cycle()))) {
-                                            try {
-                                                issueRepository.save(issue);
-                                                response.setStatus(true);
-                                                response.setMessage("Saved successfully!");
-                                            } catch (DataAccessException ex) {
-                                                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
-                                            }
-                                        } else {
-                                            response.setException("invalid developemt cycle");
-                                        }
-                                    } else {
-                                        response.setException("invalid score");
-
+                                    try {
+                                        issueRepository.save(issue);
+                                        response.setStatus(true);
+                                        response.setMessage("Saved successfully!");
+                                    } catch (DataAccessException ex) {
+                                        response.setException(SQLException.getException(String.valueOf(ex.getCause())));
                                     }
                                 } else {
                                     response.setException("invalid type");
                                 }
                             } else {
-                                response.setException("invalid status");
+                                response.setException("invalid project");
                             }
                         } else {
-                            response.setException("invalid user");
+                            response.setException("invalid priority");
                         }
                     } else {
-                        response.setException("invalid description");
+                        response.setException("invalid user");
+                    }
+                } else {
+                    response.setException("invalid description");
+                }
+            } else {
+                response.setException("invalid summary");
+            }
 
+        }
+        return response;
+    }
+
+    @PostMapping("/update")
+    public Response updateIssue(@RequestHeader(value = "Authorization") String token, @RequestBody Issue issue) {
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            if (issue.getId() != null) {
+                if (stringValidation.validateAlphanumeric(issue.getSummary(), 150)) {
+                    if (stringValidation.validateAlphanumeric(issue.getDescription(), 500)) {
+                            if (numberValidation.validateInteger(String.valueOf(issue.getId_priority()))) {
+                                if (numberValidation.validateInteger(String.valueOf(issue.getId_project()))) {
+                                    if (numberValidation.validateInteger(String.valueOf(issue.getId_type()))) {
+                                        try {
+                                            Issue issueDB = issueRepository.findById(issue.getId()).get();
+                                            issueDB.setSummary(issue.getSummary());
+                                            issueDB.setDescription(issue.getDescription());
+                                            issueDB.setId_priority(issue.getId_priority());
+                                            issueDB.setId_project(issue.getId_project());
+                                            issueDB.setId_status(issue.getId_status());
+                                            issueDB.setId_type(issue.getId_type());
+                                            issueDB.setId_score(issue.getId_score());
+                                            issueDB.setId_development_cycle(issue.getId_development_cycle());
+                                            issueRepository.save(issueDB);
+                                            response.setMessage("Updated successfully.");
+                                            response.setStatus(true);
+                                        } catch (DataAccessException ex) {
+                                            response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                                        }
+                                    } else {
+                                        response.setException("invalid type");
+                                    }
+                                } else {
+                                    response.setException("invalid project");
+                                }
+                            } else {
+                                response.setException("invalid priority");
+                            }
+                    } else {
+                        response.setException("invalid description");
                     }
                 } else {
                     response.setException("invalid summary");
                 }
             } else {
-                response.setException("you are not a manager");
+                response.setException("id can not be null");
             }
         }
-
         return response;
     }
 
-        @PostMapping("/update")
-        public Response updateProject(@RequestHeader(value = "Authorization") String token, @RequestBody Project project) {
-            initializeResponse();
-            if (!validateToken.validateToken(token)) {
-                response.setException("Unauthorized access.");
-            } else {
-                int rolDB = validateToken.userDB().getId_rol();
-                if (rolDB != 3) {
-                    if (stringValidation.validateAlphanumeric(project.getProject_code(), 15)) {
-                        if (stringValidation.validateAlphabetic(project.getProject_name(), 150)) {
-                                if (stringValidation.validateAlphabetic(project.getDescription(), 250)) {
-                                    try {
-                                        Project projectDB = projectRepository.getById(project.getId());
-                                        projectDB.setProject_code(project.getProject_code());
-                                        projectDB.setProject_name(projectDB.getProject_name());
-                                        projectDB.setDescription(project.getDescription());
-                                        response.setMessage("Updated successfully.");
-                                        response.setStatus(true);
-                                    }catch (DataAccessException ex) {
-                                        response.setException(SQLException.getException(String.valueOf(ex.getCause())));
-                                    }
-                                }
-                            } else {
-
-                            }
-                        } else {
-
-                        }
-                    } else {
-
-                    }
-            }
-            return response;
-        }
-
-        @GetMapping("/getAllIssues")
+        @GetMapping("/issues")
         public Response getAvailableDevelopers(@RequestHeader(value = "Authorization") String token){
             initializeResponse();
             if (!validateToken.validateToken(token)) {
                 response.setException("Unauthorized access.");
             } else {
                 try {
-                    response.getDataset().addAll(issueRepository.findAll());
+                    response.getDataset().addAll(issueRepository.getIssues());
                     response.setStatus(true);
                 } catch (DataAccessException ex) {
                     response.setException(SQLException.getException(String.valueOf(ex.getCause())));
@@ -135,8 +141,109 @@ public class IssueController {
             return response;
         }
 
-        public void initializeResponse() {
+    @GetMapping("/issue")
+    public Response getIssue(@RequestHeader(value = "Authorization") String token, @RequestParam(name = "id") Long id) {
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            if (issueRepository.findById(id) != null) {
+                response.getDataset().add(issueRepository.findById(id).get());
+                response.setStatus(true);
+            } else {
+                response.setException("The issue doesn't exists.");
+            }
+        }
+        return response;
+    }
+
+    @DeleteMapping("/delete")
+    public Response deleteIssue(@RequestHeader(value = "Authorization") String token, @RequestParam(name = "id") Long id) {
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            if (issueRepository.findById(id).get() != null) {
+                try {
+                    issueRepository.deleteById(id);
+                    response.setStatus(true);
+                    response.setMessage("Issue deleted successfully!");
+                } catch (DataAccessException ex) {
+                    response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                }
+            } else {
+                response.setException("The issue doesn't exists.");
+            }
+        }
+        return response;
+    }
+
+    @GetMapping("/priorities")
+    public Response getPriorities(@RequestHeader(value = "Authorization") String token){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            try {
+                response.getDataset().addAll(priorityRepository.ListPriority());
+                response.setStatus(true);
+            } catch (DataAccessException ex) {
+                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+            }
+        }
+        return response;
+    }
+
+    @GetMapping("/types")
+    public Response getTypes(@RequestHeader(value = "Authorization") String token){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            try {
+                response.getDataset().addAll(typeRepository.ListTypes());
+                response.setStatus(true);
+            } catch (DataAccessException ex) {
+                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+            }
+        }
+        return response;
+    }
+
+    @GetMapping("/scores")
+    public Response getScores(@RequestHeader(value = "Authorization") String token){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            try {
+                response.getDataset().addAll(scoreRepository.ListScore());
+                response.setStatus(true);
+            } catch (DataAccessException ex) {
+                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+            }
+        }
+        return response;
+    }
+
+
+    @GetMapping("/ListIssueStatus")
+    public Response getIssueListStatus(@RequestHeader(value = "Authorization") String token) {
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            try {
+                response.getDataset().addAll(statusRepository.ListIssueStatus());
+                response.setStatus(true);
+            } catch (DataAccessException ex) {
+                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+            }
+        }
+        return response;
+    }
+
+    public void initializeResponse() {
             this.response = new Response();
         }
-
     }
