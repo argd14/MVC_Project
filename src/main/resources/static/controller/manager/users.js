@@ -169,26 +169,26 @@ async function fillDevelopersTable() {
                     <td>${row[3]}</td>
                     <td>${row[5]}</td>
                     <th scope="row">
-                        <div>
-                            <a onclick="getOneManager(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
-                            <a onclick="deleteUsers(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>
-                            <a onclick="ExportButton(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Report"><i class="bi bi-arrow-down-square-fill"></i></a>
+                        <div class="d-flex">
+                            <a onclick="getOneManager(${row[0]})" class="btn btn-sm custom-btn mx-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
+                            <a onclick="deleteUsers(${row[0]})" class="btn btn-sm custom-btn mx-1"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>
+                            <a onclick="ExportButton(${row[0]})" class="btn btn-sm custom-btn mx-1"  data-bs-toggle="tooltip" data-bs-placement="top" title="Report"><i class="bi bi-arrow-down-square-fill"></i></a>
                                                                                                                      
                 `
 
                 if (row[5] == 'Active') {
                     content += `
-                                <a onclick="disableUser(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set inactive"><i class="bi bi-x"></i></a>
-                            </div>
-                        </th>
-                    </tr>   
+                            <a onclick="disableUser(${row[0]})" class="btn btn-sm custom-btn mx-1"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set inactive"><i class="bi bi-x"></i></a>
+                        </div>
+                    </th>
+                </tr>   
                     `
                 } else if (row[5] == 'Inactive') {
                     content += `
-                                <a onclick="enableUser(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set active"><i class="bi bi bi-check"></i></a>
-                            </div>
-                        </th>
-                    </tr>   
+                            <a onclick="enableUser(${row[0]})" class="btn btn-sm custom-btn mx-1"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set active"><i class="bi bi bi-check"></i></a>
+                        </div>
+                    </th>
+                </tr>   
                     `
                 }
 
