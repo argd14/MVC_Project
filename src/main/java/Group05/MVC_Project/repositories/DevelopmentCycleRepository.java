@@ -13,7 +13,7 @@ import java.util.List;
 public interface DevelopmentCycleRepository extends JpaRepository<DevelopmentCicle, Long> {
 
 
-    @Query(value = "SELECT c.id,c.cycle_name,c.duration,c.start_date,c.end_date,c.description,s.status FROM development_cycle c, status s WHERE  c.id_status = s.id",
+    @Query(value = "SELECT c.id,c.cycle_name,c.duration,c.start_date,c.end_date,c.description,s.status FROM development_cycle c, status s WHERE  c.id_status = s.id AND c.id_status = 1",
             nativeQuery = true)
     List<Object> ListDevelopmentCycle();
 
