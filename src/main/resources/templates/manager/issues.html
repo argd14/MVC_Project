@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org" lang="es">
+
+<head th:replace="fragments/manager :: head"></head>
+
+<body>
+
+<div th:replace="fragments/manager :: sidebar"></div>
+
+<div class="page-content mb-5 " id="content">
+    <button id="sidebarCollapse" type="button" class="m-2 btn custom-btn-2"><i class="bi bi-list"></i></button>
+    <div class="container-fluid animate__animated animate__fadeInRight px-5">
+        <div>
+            <div class="d-flex align-items-center">
+                <div class="modal-icon-background-blue me-3">
+                    <i class="bi bi-list-task modal-icon-blue"></i>
+                </div>
+                <h5 class="mt-2">Issues</h5>
+            </div>
+            <label class="custom-text mt-2">Manage all the issues</label>
+        </div>
+        <div class="row mt-2 mb-4">
+            <div class="col-12">
+                <div class="d-flex">
+                    <button id="btnOpenAddModal" class="btn custom-btn px-3" data-bs-toggle="modal" data-bs-target="#manageIssuesModal">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-plus icon-color me-1"></i><span>Add</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="accordion">
+            <div class="row mt-2 table-responsive collapse multi-collapse show" id="collapseManager">
+                <h5 id="table-title">Issues</h5>
+                <div class="col-12">
+                    <table id="manager-table" class="table table-borderless mt-3">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Summary</th>
+                            <th scope="col">Submitted By</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Project</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody-managers">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for managing issues -->
+<div class="modal fade" id="manageIssuesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+        <div class="modal-content p-3">
+            <div class="modal-header d-flex justify-content-start">
+                <div class="modal-icon-background-red me-3">
+                    <i class="bi bi-list-task modal-icon-red"></i>
+                </div>
+                <h5 class="modal-title" id="modal-title">Add Issues</h5>
+            </div>
+
+            <div class="modal-body mb-3 mt-1">
+                <form action="#" id="manageIssues-form">
+                    <input type="hidden" id="id_issue">
+                    <input type="hidden" id="created_by">
+                    <label class="custom-text">Please fill all the fields.</label>
+                    <div class="row">
+                        <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
+                            <div class="mt-1">
+                                <div class="mb-2">
+                                    <label for="summary" class="custom-text">Summary:</label>
+                                    <input type="text" class="form-control" id="summary"
+                                           placeholder="Issue Summary...">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="description" class="custom-text">Description:</label>
+                                    <input type="text" class="form-control" id="description"
+                                           placeholder="Issue Description...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
+                            <div class="mt-1">
+                                <div class="mb-2">
+                                    <label for="id_priority" class="custom-text">Priority:</label>
+                                    <select class="form-select" id="id_priority">
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="id_project" class="custom-text">Project:</label>
+                                    <select class="form-select" id="id_project">
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="id_status" class="custom-text">Status:</label>
+                                    <select class="form-select" id="id_status">
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="id_type" class="custom-text">Type:</label>
+                                    <select class="form-select" id="id_type">
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="id_score" class="custom-text">Score:</label>
+                                    <select class="form-select" id="id_score">
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="id_development_cycle" class="custom-text">Sprint:</label>
+                                    <select class="form-select" id="id_development_cycle">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" id="submit-form" class="d-none"></button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn custom-btn pe-3" data-bs-dismiss="modal">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <i class="bi bi-x icon-color me-1"></i><span>Close</span>
+                    </div>
+                </button>
+                <button onclick="clickIHiddenButton()" class="btn custom-btn pe-3">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <i class="bi bi-check icon-color me-1"></i><span>Save</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/manager :: scripts"></div>
+<script src="../controller/manager/issues.js"></script>
+</body>
+</html>

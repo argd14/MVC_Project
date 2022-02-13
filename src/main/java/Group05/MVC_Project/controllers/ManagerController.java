@@ -16,7 +16,7 @@ public class ManagerController {
 
     @Autowired
     private ValidateToken validateToken;
-    
+
     @GetMapping("/dashboard")
     public String dashboardManager(@RequestParam(name = "token", required = false) String token, Model model) {
         if (validateToken.validateToken(token)) {
@@ -104,4 +104,21 @@ public class ManagerController {
         }
     }
 
+    @GetMapping("/issues")
+    public String issuesManager(@RequestParam(name = "token", required = false) String token, Model model) {
+        if (validateToken.validateToken(token)) {
+            User userDB = validateToken.userDB();
+            if (userDB.getId_rol() == 1) {
+                model.addAttribute("title", "Issues | Manager");
+                return "manager/issues";
+            } else if (userDB.getId_rol() == 3) {
+                return "redirect:/developer/dashboard?token="+token;
+            }
+            model.addAttribute("title", "Dashboard | Manager");
+            return "manager/dashboard?token="+token;
+        } else {
+            return "redirect:/";
+        }
+    }
 }
+
