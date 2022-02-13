@@ -423,6 +423,53 @@ public class UserController {
         return response;
     }
 
+
+    @GetMapping("/getLoggedUser")
+public Response getLoggedUser(@RequestHeader(value = "Authorization") String token) {
+    initializeResponse();
+    if (!validateToken.validateToken(token)) {
+        response.setException("Unauthorized access.");
+    } else {
+        Long idL = validateToken.userDB().getId();
+        response.getDataset().addAll(userRepository.loggedUser(idL));
+        response.setStatus(true);
+    }
+    return response;
+}
+
+//    @GetMapping("/updateProfile")
+//    public Response updateProfile(@RequestHeader(value = "Authorization") String
+//                                           token, @RequestParam(name = "password1") String password1, @RequestParam(name = "password2") String password2) {
+//        initializeResponse();
+//        if (!validateToken.validateToken(token)) {
+//            response.setException("Unauthorized access.");
+//        } else {
+//            User userDB = validateToken.userDB();
+//            if (stringValidation.validatePassword(password1)) {
+//                if (stringValidation.validatePassword(password2)) {
+//                    if (userDB.getPassword().equals(password1)) {
+//                        try {
+//                            userDB.setPassword(password2);
+//                            userRepository.save(userDB);
+//                            response.setStatus(true);
+//                            response.setMessage("Password updated successfully!");
+//                        } catch (DataAccessException ex) {
+//                            response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+//                        }
+//                    } else {
+//                        response.setException("password not equals");
+//                    }
+//                } else {
+//                    response.setMessage("current password invalid");
+//                }
+//            } else {
+//                response.setMessage("new password invalid");
+//            }
+//        }
+//        return response;
+//    }
+
+
     public void initializeResponse() {
         this.response = new Response();
     }

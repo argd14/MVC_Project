@@ -1,3 +1,36 @@
+document.addEventListener('DOMContentLoaded', function () {
+    makeRequests();
+});
+
+async function makeRequests() {
+    getLoggedUser().then(function () {
+        });
+}
+
+async function getLoggedUser() {
+    const request = await fetch(`../api/users/getLoggedUser`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        }
+    });
+
+   request.json().then(function (response) {
+        if (response.status) {
+            console.log(response)
+            document.getElementById('id_user').value = response.dataset[0][0];
+            document.getElementById('name').value = response.dataset[0][1];
+            document.getElementById('userName').value = response.dataset[0][2];
+            document.getElementById('phone_number').value = response.dataset[0][3];
+            document.getElementById('email').value = response.dataset[0][4];
+        } else {
+            Swal.fire('Error!', response.exception, 'error')
+        }
+    });
+}
+
 function showHidePassword(checkbox, pass1, pass2, pass3) {
     var check = document.getElementById(checkbox);
     var password1 = document.getElementById(pass1);
