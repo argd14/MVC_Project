@@ -100,6 +100,7 @@ async function getOneManager(id) {
             });
 
             document.getElementById('passwordControllers').classList.add('d-none');
+            document.getElementById('btnResetPassword').classList.remove('d-none');
 
             document.getElementById('modal-title').textContent = 'Update user';
 
@@ -277,6 +278,39 @@ function enableUser(id) {
     });
 }
 
+function resetPassword() {
+    Swal.fire({
+        title: 'Reset Password',
+        text: "Are you sure that you want to reset the password?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, set it.'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`../api/users/resetPassword?id=${document.getElementById('id_user').value}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.token
+                }
+            }).then(function (request) {
+                request.json().then(function (response) {
+                    // checks response status
+                    if (response.status) {
+                        closeModal('manageUsersModal');
+                        Swal.fire('Success!', response.message, 'success');
+                    } else {
+                        Swal.fire('Warning!', response.exception, 'warning');
+                    }
+                });
+            });
+        }
+    });
+}
+
 function showHidePassword(checkbox, pass1, pass2) {
     var check = document.getElementById(checkbox);
     var password1 = document.getElementById(pass1);
@@ -295,6 +329,7 @@ function showHidePassword(checkbox, pass1, pass2) {
 document.getElementById('btnOpenAddModal').addEventListener('click', function () {
     document.getElementById('manageUsers-form').reset();
     document.getElementById('passwordControllers').classList.remove('d-none');
+    document.getElementById('btnResetPassword').classList.add('d-none');
     document.getElementById('modal-title').textContent = 'Add users';
 });
 
