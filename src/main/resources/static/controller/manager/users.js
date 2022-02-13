@@ -4,16 +4,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function makeRequests() {
     fillManagersTable().then(function () {
-       fillDevelopersTable().then(function () {
+        fillDevelopersTable().then(function () {
             fillSelect('../api/users/ListRol', 'id_rol', null).then(function () {
-                fillSelect('../api/users/ListStatus', 'id_status', null).then(function () {
-                   /* var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                fillSelect('../api/users/ListStatus', 'id_status', null).then(function(){
+                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
                     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                        return new bootstrap.Tooltip(tooltipTriggerEl)*/
+                        return new bootstrap.Tooltip(tooltipTriggerEl)
                     });
-                })
+                });
             });
         });
+    });
 }
 
 
@@ -86,7 +87,7 @@ async function getOneManager(id) {
         }
     });
 
-   request.json().then(function (response) {
+    request.json().then(function (response) {
         if (response.status) {
             console.log(response)
             document.getElementById('id_user').value = response.dataset[0].id;
@@ -306,26 +307,26 @@ document.getElementById('manageUsers-form').addEventListener('submit', function 
     //prevents to reload the page
     event.preventDefault();
 
-   // if (document.getElementById('password').value == document.getElementById('password2').value) {
-        let data = {};
-        data.name = document.getElementById('name').value;
-        data.userName = document.getElementById('userName').value;
-        data.phone_number = document.getElementById('phone_number').value;
-        data.email = document.getElementById('email').value;
-        data.id_rol = document.getElementById('id_rol').value;
-        data.id_status = document.getElementById('id_status').value;
-        data.password = document.getElementById('password').value;
-        if (document.getElementById('id_user').value != '') {
-            data.id = document.getElementById('id_user').value;
-            saveOrUpdateData('../api/users/update', data, 'manageUsersModal').then(function () {
-                makeRequests();
-            });
-        } else {
-            saveOrUpdateData('../api/users/create', data, 'manageUsersModal').then(function () {
-                makeRequests();
-            });
-        }
+    // if (document.getElementById('password').value == document.getElementById('password2').value) {
+    let data = {};
+    data.name = document.getElementById('name').value;
+    data.userName = document.getElementById('userName').value;
+    data.phone_number = document.getElementById('phone_number').value;
+    data.email = document.getElementById('email').value;
+    data.id_rol = document.getElementById('id_rol').value;
+    data.id_status = document.getElementById('id_status').value;
+    data.password = document.getElementById('password').value;
+    if (document.getElementById('id_user').value != '') {
+        data.id = document.getElementById('id_user').value;
+        saveOrUpdateData('../api/users/update', data, 'manageUsersModal').then(function () {
+            makeRequests();
+        });
+    } else {
+        saveOrUpdateData('../api/users/create', data, 'manageUsersModal').then(function () {
+            makeRequests();
+        });
+    }
     //} else {
-      //  Swal.fire('Warning!', "The passwords aren't the same.", 'warning');
-   // }
+    //  Swal.fire('Warning!', "The passwords aren't the same.", 'warning');
+    // }
 });
