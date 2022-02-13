@@ -43,7 +43,7 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
     @Query(value = "SELECT c.id,c.summary FROM issue c WHERE c.id_development_cycle = :id",
             nativeQuery = true)
     List<Object> getAvailableIssuesBySprint(@Param("id") Long id);
-
+    
     /*
      *
      *
