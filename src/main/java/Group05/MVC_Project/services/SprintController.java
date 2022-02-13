@@ -6,11 +6,7 @@ import Group05.MVC_Project.utils.NumberValidation;
 import Group05.MVC_Project.utils.SQLException;
 import Group05.MVC_Project.utils.StringValidation;
 import Group05.MVC_Project.utils.ValidateToken;
-import antlr.collections.List;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.*;
@@ -200,6 +196,7 @@ public class SprintController {
                             sprintDB.setStart_date(sprint.getStart_date());
                             sprintDB.setEnd_date(sprint.getEnd_date());
                             sprintDB.setDescription(sprint.getDescription());
+                            sprintDB.setId_status(sprint.getId_status());
                             developmentCycleRepository.save(sprintDB);
                             response.setMessage("Updated successfully.");
                             response.setStatus(true);
@@ -222,7 +219,6 @@ public class SprintController {
 
 
         }
-
 
         return response;
     }

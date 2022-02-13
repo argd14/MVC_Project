@@ -8,7 +8,6 @@ import java.util.Collection;
 
 
 @Data
-@NoArgsConstructor
 @Entity
 @Table(name = "user")
 public class User implements Serializable {

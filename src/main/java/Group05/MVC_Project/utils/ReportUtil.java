@@ -48,10 +48,6 @@ public class ReportUtil {
         if (reportFormat.equalsIgnoreCase("pdf")) {
             JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\users.pdf");
             JasperExportManager.exportReportToXmlFile(jasperPrint,path + "\\usersXL.pdf",true);
-          /*  JRXlsExporter exporter = new JRXlsExporter();
-            ArrayList<JasperPrint> sheets = new ArrayList<JasperPrint>();
-            sheets.add(jasperPrint);
-            exporter.setExporterInput(SimpleExporterInput.getInstance(sheets));*/
             response.setMessage("PDF report generated");
             response.setStatus(true);
         }

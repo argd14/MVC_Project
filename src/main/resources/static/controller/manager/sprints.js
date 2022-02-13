@@ -4,15 +4,11 @@ makeRequests();
 
 async function makeRequests() {
     fillManagersSprintTable().then(function () {
-        fillSelect('../api/users/ListStatus', 'id_status', null).then(function(){
-         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-         return new bootstrap.Tooltip(tooltipTriggerEl)
-        });
+        fillSelect('../api/users/ListStatus', 'id_status', null);
     });
 
-});
 }
+
 
 async function fillManagersSprintTable() {
     const request = await fetch('../api/manageSprints/sprints', {
@@ -28,8 +24,6 @@ async function fillManagersSprintTable() {
     request.json().then(function (response) {
         // checks response status
         if (response.status) {
-            console.log(response)
-            document.getElementById('id_sprint').value = response.dataset[0].id;
             $('#manager-table').DataTable().destroy();
             let content = '';
             response.dataset.map(function (row) {
@@ -172,9 +166,7 @@ async function deleteSelectedById(id) {
          }
      }).then(function(request){
         request.json().then(function (response) {
-            data = {};
-            data.id = document.getElementById('id_sprint2').value;
-           issuesTable(data.id);
+        
         });
     });
 }
@@ -248,7 +240,8 @@ async function getOneSprint(id) {
 
         console.log(response.dataset);
         if (response.status) {
-            
+            console.log(response)
+            document.getElementById('id_sprint').value = response.dataset[0].id;
             document.getElementById('name').value = response.dataset[0].cycle_name;
             document.getElementById('duration').value = response.dataset[0].duration;
             document.getElementById('start_date').value = response.dataset[0].start_date;
@@ -277,7 +270,7 @@ function deleteSprint(id) {
         confirmButtonText: 'Yes, delete it.'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`../api/users/deleteSprint?id=${id}`, {
+            fetch(`../api/manageSprints/deleteSprint?id=${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
@@ -327,7 +320,7 @@ async function saveIssues() {
         } else {
             Swal.fire("Error!", `We have an error, the id of the issue is ${id}.`, 'error');
         }
-    
+  }
 }
 
     // resets the form when the add button is pressed
@@ -346,7 +339,7 @@ async function saveIssues() {
         event.preventDefault();
 
             let data = {};
-        
+           
             data.cycle_name = document.getElementById('name').value;
             data.duration = document.getElementById('duration').value;
             data.start_date = document.getElementById('start_date').value;
@@ -354,13 +347,14 @@ async function saveIssues() {
             data.description = document.getElementById('description').value;
             data.id_status = document.getElementById('id_status').value;
 
-
             if (document.getElementById('id_sprint').value != '') {
-                data.id = document.getElementById('id_sprint').value;
+                 data.id = document.getElementById('id_sprint').value;
+                 console.log(data.id);
                 saveOrUpdateData('../api/manageSprints/updateSprint', data, 'manageSprintsModal').then(function () {
                     makeRequests();
                 });
             } else {
+                console.log(data.id);
                 saveOrUpdateData('../api/manageSprints/createSprint', data, 'manageSprintsModal').then(function () {
                     makeRequests();
                 });
@@ -369,4 +363,3 @@ async function saveIssues() {
 
     });
            
-}
