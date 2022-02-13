@@ -23,4 +23,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
             " status s WHERE u.id_status = s.id AND u.id_rol = 1 AND u.id_user <> ?",
     nativeQuery = true)
     List<Object> managers(@Param("id") Long id);
+
+    @Query(value = "SELECT user_name FROM user WHERE id_user = :id",
+            nativeQuery = true)
+    List<User> get(@Param("id") Long id);
+
+
 }

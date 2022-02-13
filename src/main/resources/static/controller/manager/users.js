@@ -46,8 +46,7 @@ async function fillManagersTable() {
                     <th scope="row">
                         <div>
                             <a onclick="getOneManager(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
-                            <a onclick="deleteUsers(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>
-                                                                                                                                                
+                            <a onclick="deleteUsers(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>                                                                                                                  
                 `
 
                 if (row[5] == 'Active') {
@@ -173,7 +172,8 @@ async function fillDevelopersTable() {
                         <div>
                             <a onclick="getOneManager(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
                             <a onclick="deleteUsers(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>
-                                                                                                                                                
+                            <a onclick="ExportButton(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Report"><i class="bi bi-arrow-down-square-fill"></i></a>
+                                                                                                                     
                 `
 
                 if (row[5] == 'Active') {
@@ -301,6 +301,25 @@ document.getElementById('btnOpenAddModal').addEventListener('click', function ()
 // to click the hidden button into the manageUsers-form
 function clickHiddenButton() {
     document.getElementById('submit-form').click();
+}
+ async function ExportButton(id){
+    var pdf = "pdf"
+    const request = await fetch(`../api/users/report?format=${pdf}&id=${id}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        }
+    });
+
+    request.json().then(function (response) {
+        if (response.status) {
+            Swal.fire('Success!', response.message, 'success');
+        } else {
+            Swal.fire('Error!', response.exception, 'error')
+        }
+    });
 }
 
 document.getElementById('manageUsers-form').addEventListener('submit', function (event) {
