@@ -31,6 +31,38 @@ async function getLoggedUser() {
     });
 }
 
+document.getElementById('manageAccount-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    data = {}
+    data.id = document.getElementById('id_user').value;
+    data.name = document.getElementById('name').value;
+    data.userName = document.getElementById('userName').value;
+    data.phone_number = document.getElementById('phone_number').value;
+    data.email = document.getElementById('email').value;
+
+    fetch('../api/users/updateProfile', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        },
+        body: JSON.stringify(data)
+    }).then(function (request) {
+        request.json().then(function (response) {
+            if (response.status) {
+//                closeModal('createProjectModal');
+                Swal.fire("Success!", response.message, 'success').then(function () {
+                    localStorage.username = document.getElementById('userName').value;
+                    redirect('settings');
+                });
+            } else {
+                Swal.fire("Warning!", response.exception, 'warning');
+            }
+        });
+    })
+});
+
 function showHidePassword(checkbox, pass1, pass2, pass3) {
     var check = document.getElementById(checkbox);
     var password1 = document.getElementById(pass1);
