@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    
     @Query(value = "SELECT u FROM User u WHERE u.email LIKE %:email% ")
     User getCredentials(@Param("email") String email);
 
