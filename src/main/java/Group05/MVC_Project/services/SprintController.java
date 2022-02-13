@@ -248,6 +248,54 @@ public class SprintController {
         return response;
     }
 
+    @GetMapping("getDoneTasks")
+    public Response getDoneTasks(@RequestHeader(value="Authorization") String token){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            if (validateToken.userDB().getId_rol() == 1) {
+                response.getDataset().addAll(developmentCycleRepository.getDoneTasks());
+                response.setStatus(true);
+            } else {
+                response.setException("You are not a manager.");
+            }
+        }
+        return response;
+    }
+
+    @GetMapping("getTasksByProject")
+    public Response getTasksByProject(@RequestHeader(value="Authorization") String token, @RequestParam Long id){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            if (validateToken.userDB().getId_rol() == 1) {
+                response.getDataset().addAll(developmentCycleRepository.getTasksByProject(id));
+                response.setStatus(true);
+            } else {
+                response.setException("You are not manager.");
+            }
+        }
+        return response;
+    }
+
+    @GetMapping("getProjectsWithTasks")
+    public Response getProjectsWithTasks(@RequestHeader(value="Authorization") String token){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access");
+        } else {
+            if (validateToken.userDB().getId_rol() == 1) {
+                response.getDataset().addAll(developmentCycleRepository.getProjectsWithTasks());
+                response.setStatus(true);
+            } else {
+                response.setException("You are not manager");
+            }
+        }
+        return response;
+    }
+
     /*
     *
     *
