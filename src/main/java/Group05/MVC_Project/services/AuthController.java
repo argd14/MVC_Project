@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 @RestController
 public class AuthController {
 
@@ -33,27 +35,31 @@ public class AuthController {
     @RequestMapping(value = "api/login", method = RequestMethod.POST)
     public Response login(@RequestBody User user) {
         initializeResponse();
-        if (user.getEmail() != "" || user.getPassword() != "") {
+        if (!Objects.equals(user.getEmail(), "") || !Objects.equals(user.getPassword(), "")) {
             if (stringValidation.validateEmail(user.getEmail())) {
                 if (stringValidation.validatePassword(user.getPassword())) {
                     User userDB = userRepository.getCredentials(user.getEmail());
-                    if (userDB.getId_status() != 2) {
-                        String passHash = userDB.getPassword();
-                        Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
-                        if (argon2.verify(passHash, user.getPassword())) {
-                            String tokenJwt = jwtUtil.create((userDB.getId()), userDB.getEmail());
-                            User returnUser = new User();
-                            returnUser.setId_rol(userDB.getId_rol());
-                            returnUser.setUserName(userDB.getUserName());
-                            response.setStatus(true);
-                            response.setToken(tokenJwt);
-                            response.getDataset().add(returnUser);
-                            response.setMessage("Session created successfully!");
+                    if (!Objects.equals(userDB, null)) {
+                        if (userDB.getId_status() != 2) {
+                            String passHash = userDB.getPassword();
+                            Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+                            if (argon2.verify(passHash, user.getPassword())) {
+                                String tokenJwt = jwtUtil.create((userDB.getId()), userDB.getEmail());
+                                User returnUser = new User();
+                                returnUser.setId_rol(userDB.getId_rol());
+                                returnUser.setUserName(userDB.getUserName());
+                                response.setStatus(true);
+                                response.setToken(tokenJwt);
+                                response.getDataset().add(returnUser);
+                                response.setMessage("Session created successfully!");
+                            } else {
+                                response.setException("Incorrect password.");
+                            }
                         } else {
-                            response.setException("Incorrect password.");
+                            response.setException("Your user is inactive.");
                         }
                     } else {
-                        response.setException("Your user is inactive.");
+                        response.setException("Sorry! Looks like this email is not associated to an account.");
                     }
                 } else {
                     response.setException("Sorry! Looks like your password is invalid.");
