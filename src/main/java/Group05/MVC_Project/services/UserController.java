@@ -88,10 +88,37 @@ public class UserController {
             response.setException("Unauthorized access.");
         } else {
             if (userRepository.findById(id) != null) {
-                response.getDataset().add(userRepository.findById(id).get());
+                User user = userRepository.findById(id).get();
+                user.setProject(null);
+                response.getDataset().add(user);
                 response.setStatus(true);
             } else {
                 response.setException("The user doesn't exists.");
+            }
+        }
+        return response;
+    }
+
+    @GetMapping("resetPassword")
+    public Response resetPassword(@RequestHeader(value="Authorization") String token, @RequestParam Long id){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            if (validateToken.userDB().getId_rol() == 1) {
+                if (userRepository.existsById(id)) {
+                    User user = userRepository.findById(id).get();
+                    Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+                    String hash = argon2.hash(1, 1024, 1, "Pass123@");
+                    user.setPassword(hash);
+                    userRepository.save(user);
+                    response.setStatus(true);
+                    response.setMessage("Password has been changed to Pass123@, change it after you get logged in.");
+                } else {
+                    response.setException("The id that you set does not exists.");
+                }
+            } else {
+                response.setException("You are not manager");
             }
         }
         return response;
