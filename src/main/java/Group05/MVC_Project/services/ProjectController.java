@@ -37,6 +37,14 @@ public class ProjectController {
     private StringValidation stringValidation = new StringValidation();
     private NumberValidation numberValidation = new NumberValidation();
 
+    /*
+     *
+     *
+     * METHODS FOR THE MANAGERS
+     *
+     *
+     */
+
     @PostMapping("/create")
     public Response createProject(@RequestHeader(value = "Authorization") String token, @RequestBody Project project) {
         initializeResponse();
@@ -257,16 +265,11 @@ public class ProjectController {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            int userBD = validateToken.userDB().getId_rol();
-            if (userBD != 3){
-                if (projectRepository.existsById(id)){
-                    response.getDataset().add(projectRepository.getProjectDetails(id));
-                    response.setStatus(true);
-                } else {
-                    response.setException("The id that you set does not exists.");
-                }
+            if (projectRepository.existsById(id)){
+                response.getDataset().add(projectRepository.getProjectDetails(id));
+                response.setStatus(true);
             } else {
-                response.setException("You are not manager.");
+                response.setException("The id that you set does not exists.");
             }
         }
         return response;
@@ -310,6 +313,31 @@ public class ProjectController {
                 }
             } else {
                 response.setException("You are not manager.");
+            }
+        }
+        return response;
+    }
+
+    /*
+    *
+    *
+    * METHODS FOR THE DEVELOPERS
+    *
+    *
+     */
+
+    @GetMapping("/getMyProjects")
+    public Response getMyProjects(@RequestHeader(value = "Authorization") String token){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            Long id = validateToken.userDB().getId();
+            try{
+                response.getDataset().addAll(projectRepository.getMyProjects(id));
+                response.setStatus(true);
+            } catch (NullPointerException ex){
+                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
             }
         }
         return response;

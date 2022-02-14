@@ -6,6 +6,11 @@ body {
   overflow-x: hidden !important;
 }
 
+.navbar{
+  background-color: white !important;
+  border-bottom: 2px solid #e8e8e8; 
+}
+
 #login-div {
   width: 25%;
 }
@@ -97,6 +102,25 @@ a:hover {
 
 .nav-link:hover {
   background-color: #e8e8e8 !important;
+}
+
+.nav-link-nav {
+  width: 40px !important;
+  height: 40px !important;
+  background-color: #F0F0F0 !important;
+  color: #808080 !important;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px !important;
+  border-radius: 24px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.nav-link-nav:hover {
+  background-color: #808080 !important;
+  color: #ffffff !important;
 }
 
 .rounded-border {

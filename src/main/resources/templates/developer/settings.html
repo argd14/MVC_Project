@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org" lang="es">
+
+<head th:replace="fragments/developer :: head"></head>
+
+<body>
+
+    <div th:replace="fragments/developer :: navbar"></div>
+
+    <div class="container-fluid p-5 mt-5">
+        <div class="animate__animated animate__fadeInUp ">
+            <div class="d-flex align-items-center">
+                <div class="modal-icon-background-blue me-3">
+                    <i class="bi bi-gear modal-icon-blue"></i>
+                </div>
+                <h5 class="mt-2">Settings</h5>
+            </div>
+            <label class="custom-text mt-2">Manage your account.</label>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+            <div>
+                <form action="#" id="manageAccount-form">
+                    <div class="row animate__animated animate__fadeInUp">
+                        <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
+                            <input type="text" id="id_user" placeholder="1" hidden>
+                            <div class="mb-2">
+                                <label for="name" class="custom-text">Name:</label>
+                                <input type="text" class="form-control" id="name">
+                            </div>
+                            <div class="mb-2">
+                                <label for="userName" class="custom-text">Username:</label>
+                                <input type="text" class="form-control" id="userName">
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
+                            <div class="mb-2">
+                                <label for="phone_number" class="custom-text">Phone number:</label>
+                                <input type="text" class="form-control" id="phone_number">
+                            </div>
+                            <div class="mb-2">
+                                <label for="email" class="custom-text">Email:</label>
+                                <input type="email" class="form-control" id="email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row animate__animated animate__fadeInUp">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-center my-4">
+                                <button type="submit" class="btn custom-btn pe-3">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <i class="bi bi-check icon-color me-1"></i><span>Save</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row mb-5 animate__animated animate__fadeInUp " style="border-top: 2px solid #e8e8e8;">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-center mt-4">
+                            <button data-bs-toggle="modal" data-bs-target="#manageUsersModal" type="submit"
+                                class="btn custom-btn pe-3">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <i class="bi bi-lock icon-color me-1"></i><span>Update password</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for managing users -->
+    <div class="modal fade" id="manageUsersModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header d-flex justify-content-start">
+                    <div class="modal-icon-background-red me-3">
+                        <i class="bi bi-person-video2 modal-icon-red"></i>
+                    </div>
+                    <h5 class="modal-title" id="modal-title">Update password</h5>
+                </div>
+
+                <div class="modal-body mb-3 mt-2">
+                    <form action="#" id="changePassword-form">
+                        <label class="custom-text">Please fill all the fields.</label>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mt-2">
+                                    <div class="mb-2">
+                                        <label for="currentPassword" class="custom-text">Current password:</label>
+                                        <input type="password" class="form-control" id="currentPassword"
+                                            placeholder="Current password">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="newPassword" class="custom-text">New password:</label>
+                                        <input type="password" class="form-control" id="newPassword"
+                                            placeholder="New password" data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            title="Password must contain at least one digit [0-9].
+                                        Password must contain at least one lowercase Latin character [a-z].
+                                        Password must contain at least one uppercase Latin character [A-Z].
+                                        Password must contain at least one special character like ! @ # & ( ).
+                                        Password must contain a length of at least 8 characters and a maximum of 20 characters.">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="newPassword2" class="custom-text">Confirm password:</label>
+                                        <input type="password" class="form-control" id="newPassword2"
+                                            placeholder="Confirm password">
+                                    </div>
+                                    <div class="form-check form-switch mt-2">
+                                        <input
+                                            onchange="showHidePassword('showPassword','currentPassword','newPassword','newPassword2')"
+                                            class="form-check-input" type="checkbox" role="switch" id="showPassword">
+                                        <label class="custom-text" for="showPassword">Show password</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn custom-btn pe-3" data-bs-dismiss="modal">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-x icon-color me-1"></i><span>Close</span>
+                        </div>
+                    </button>
+                    <button type="submit" class="btn custom-btn pe-3">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-check icon-color me-1"></i><span>Save</span>
+                        </div>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../controller/developer/settings.js"></script>
+
+    <div th:replace="fragments/developer :: scripts"></div>
+</body>
+
+</html>

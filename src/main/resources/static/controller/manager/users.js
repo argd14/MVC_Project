@@ -4,16 +4,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function makeRequests() {
     fillManagersTable().then(function () {
-       fillDevelopersTable().then(function () {
+        fillDevelopersTable().then(function () {
             fillSelect('../api/users/ListRol', 'id_rol', null).then(function () {
-                fillSelect('../api/users/ListStatus', 'id_status', null).then(function () {
-                   /* var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                fillSelect('../api/users/ListStatus', 'id_status', null).then(function(){
+                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
                     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                        return new bootstrap.Tooltip(tooltipTriggerEl)*/
+                        return new bootstrap.Tooltip(tooltipTriggerEl)
                     });
-                })
+                });
             });
         });
+    });
 }
 
 
@@ -45,8 +46,7 @@ async function fillManagersTable() {
                     <th scope="row">
                         <div>
                             <a onclick="getOneManager(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
-                            <a onclick="deleteUsers(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>
-                                                                                                                                                
+                            <a onclick="deleteUsers(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>                                                                                                                  
                 `
 
                 if (row[5] == 'Active') {
@@ -86,7 +86,7 @@ async function getOneManager(id) {
         }
     });
 
-   request.json().then(function (response) {
+    request.json().then(function (response) {
         if (response.status) {
             console.log(response)
             document.getElementById('id_user').value = response.dataset[0].id;
@@ -99,6 +99,7 @@ async function getOneManager(id) {
             });
 
             document.getElementById('passwordControllers').classList.add('d-none');
+            document.getElementById('btnResetPassword').classList.remove('d-none');
 
             document.getElementById('modal-title').textContent = 'Update user';
 
@@ -109,7 +110,6 @@ async function getOneManager(id) {
         }
     });
 }
-
 
 function deleteUsers(id) {
     Swal.fire({
@@ -169,25 +169,26 @@ async function fillDevelopersTable() {
                     <td>${row[3]}</td>
                     <td>${row[5]}</td>
                     <th scope="row">
-                        <div>
-                            <a onclick="getOneManager(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
-                            <a onclick="deleteUsers(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>
-                                                                                                                                                
+                        <div class="d-flex">
+                            <a onclick="getOneManager(${row[0]})" class="btn btn-sm custom-btn mx-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
+                            <a onclick="deleteUsers(${row[0]})" class="btn btn-sm custom-btn mx-1"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>
+                            <a onclick="ExportButton(${row[0]})" class="btn btn-sm custom-btn mx-1"  data-bs-toggle="tooltip" data-bs-placement="top" title="Report"><i class="bi bi-arrow-down-square-fill"></i></a>
+                                                                                                                     
                 `
 
                 if (row[5] == 'Active') {
                     content += `
-                                <a onclick="disableUser(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set inactive"><i class="bi bi-x"></i></a>
-                            </div>
-                        </th>
-                    </tr>   
+                            <a onclick="disableUser(${row[0]})" class="btn btn-sm custom-btn mx-1"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set inactive"><i class="bi bi-x"></i></a>
+                        </div>
+                    </th>
+                </tr>   
                     `
                 } else if (row[5] == 'Inactive') {
                     content += `
-                                <a onclick="enableUser(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set active"><i class="bi bi bi-check"></i></a>
-                            </div>
-                        </th>
-                    </tr>   
+                            <a onclick="enableUser(${row[0]})" class="btn btn-sm custom-btn mx-1"  data-bs-toggle="tooltip" data-bs-placement="top" title="Set active"><i class="bi bi bi-check"></i></a>
+                        </div>
+                    </th>
+                </tr>   
                     `
                 }
 
@@ -276,6 +277,39 @@ function enableUser(id) {
     });
 }
 
+function resetPassword() {
+    Swal.fire({
+        title: 'Reset Password',
+        text: "Are you sure that you want to reset the password?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, set it.'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`../api/users/resetPassword?id=${document.getElementById('id_user').value}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.token
+                }
+            }).then(function (request) {
+                request.json().then(function (response) {
+                    // checks response status
+                    if (response.status) {
+                        closeModal('manageUsersModal');
+                        Swal.fire('Success!', response.message, 'success');
+                    } else {
+                        Swal.fire('Warning!', response.exception, 'warning');
+                    }
+                });
+            });
+        }
+    });
+}
+
 function showHidePassword(checkbox, pass1, pass2) {
     var check = document.getElementById(checkbox);
     var password1 = document.getElementById(pass1);
@@ -294,6 +328,7 @@ function showHidePassword(checkbox, pass1, pass2) {
 document.getElementById('btnOpenAddModal').addEventListener('click', function () {
     document.getElementById('manageUsers-form').reset();
     document.getElementById('passwordControllers').classList.remove('d-none');
+    document.getElementById('btnResetPassword').classList.add('d-none');
     document.getElementById('modal-title').textContent = 'Add users';
 });
 
@@ -301,31 +336,50 @@ document.getElementById('btnOpenAddModal').addEventListener('click', function ()
 function clickHiddenButton() {
     document.getElementById('submit-form').click();
 }
+ async function ExportButton(id){
+    var pdf = "pdf"
+    const request = await fetch(`../api/users/report?format=${pdf}&id=${id}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        }
+    });
+
+    request.json().then(function (response) {
+        if (response.status) {
+            Swal.fire('Success!', response.message, 'success');
+        } else {
+            Swal.fire('Error!', response.exception, 'error')
+        }
+    });
+}
 
 document.getElementById('manageUsers-form').addEventListener('submit', function (event) {
     //prevents to reload the page
     event.preventDefault();
 
-   // if (document.getElementById('password').value == document.getElementById('password2').value) {
-        let data = {};
-        data.name = document.getElementById('name').value;
-        data.userName = document.getElementById('userName').value;
-        data.phone_number = document.getElementById('phone_number').value;
-        data.email = document.getElementById('email').value;
-        data.id_rol = document.getElementById('id_rol').value;
-        data.id_status = document.getElementById('id_status').value;
-        data.password = document.getElementById('password').value;
-        if (document.getElementById('id_user').value != '') {
-            data.id = document.getElementById('id_user').value;
-            saveOrUpdateData('../api/users/update', data, 'manageUsersModal').then(function () {
-                makeRequests();
-            });
-        } else {
-            saveOrUpdateData('../api/users/create', data, 'manageUsersModal').then(function () {
-                makeRequests();
-            });
-        }
+    // if (document.getElementById('password').value == document.getElementById('password2').value) {
+    let data = {};
+    data.name = document.getElementById('name').value;
+    data.userName = document.getElementById('userName').value;
+    data.phone_number = document.getElementById('phone_number').value;
+    data.email = document.getElementById('email').value;
+    data.id_rol = document.getElementById('id_rol').value;
+    data.id_status = document.getElementById('id_status').value;
+    data.password = document.getElementById('password').value;
+    if (document.getElementById('id_user').value != '') {
+        data.id = document.getElementById('id_user').value;
+        saveOrUpdateData('../api/users/update', data, 'manageUsersModal').then(function () {
+            makeRequests();
+        });
+    } else {
+        saveOrUpdateData('../api/users/create', data, 'manageUsersModal').then(function () {
+            makeRequests();
+        });
+    }
     //} else {
-      //  Swal.fire('Warning!', "The passwords aren't the same.", 'warning');
-   // }
+    //  Swal.fire('Warning!', "The passwords aren't the same.", 'warning');
+    // }
 });

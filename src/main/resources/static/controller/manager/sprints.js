@@ -11,7 +11,7 @@ async function makeRequests() {
 
 
 async function fillManagersSprintTable() {
-    const request = await fetch('../api/users/sprints', {
+    const request = await fetch('../api/manageSprints/sprints', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -24,8 +24,6 @@ async function fillManagersSprintTable() {
     request.json().then(function (response) {
         // checks response status
         if (response.status) {
-            console.log(response)
-            document.getElementById('id_sprint').value = response.dataset[0].id;
             $('#manager-table').DataTable().destroy();
             let content = '';
             response.dataset.map(function (row) {
@@ -39,8 +37,8 @@ async function fillManagersSprintTable() {
                     <td>${row[6]}</td>
                     <th scope="row">
                     <div>
-                        <a onclick="getOneSprint(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
-                        <a onclick="issuesTable(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Add"><i class="bi bi-caret-down-square-fill"></i></a>
+                        <a onclick="getOneSprint(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="update"><i class="bi bi-pencil-fill"></i></a>
+                        <a onclick="issuesTable(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Add issues"><i class="bi bi-caret-down-square-fill"></i></a>
                         <a onclick="deleteSprint(${row[0]})" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="bi bi-trash2-fill"></i></a>
                     </div>
                 </th>
@@ -56,12 +54,9 @@ async function fillManagersSprintTable() {
     });
 }
 
-
 function issuesTable(idIssue) {
     openModal('addIssues');
-
-
-    fetch('../api/users/getAvailableIssues', {
+    fetch('../api/manageSprints/getAvailableIssues', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -72,6 +67,7 @@ function issuesTable(idIssue) {
         // parses request to json
         request.json().then(function (response) {
             // checks response status
+            getAvailableIssuesBySprint(idIssue);
             if (response.status) {
                 document.getElementById("id_sprint2").value = idIssue;
                 let content = '';
@@ -85,7 +81,7 @@ function issuesTable(idIssue) {
                         <td>${row[1]}</td>
                         <th scope="row">
                             <div>
-                                <a onclick="selectIssue(${row[0]}, '${row[1]}')" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-plus"></i></a>
+                                <a onclick="selectIssue(${row[0]}, '${row[1]}')" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Add issue"><i class="bi bi-plus"></i></a>
                             </div>
                         </th>
                     </tr>                                                                                                                   
@@ -115,7 +111,66 @@ function issuesTable(idIssue) {
     }); 
 }
 
+function getAvailableIssuesBySprint(id){
+    fetch(`../api/manageSprints/getAvailableIssuesBySprint?id=${id}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        }
+    }).then(function(request){
+      
+        // parses request to json
+        request.json().then(function (response) {
+            if (response.status) {
+                console.log(response);
+                $('#issues-table-selected').DataTable().destroy();
+                let content = '';
+                response.dataset.map(function (row) {
+                    content += `
+                    <tr id="row-${row[0]}">
+                        <th scope="row" class="id-padding">${row[0]}</th>
+                        <td>${row[1]}</td>
+                        <input type="hidden" class="issue-selected" value=${row[0]}>
+                        <th scope="row">
+                            <div>
+                                <a onclick="deleteSelectedById(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="delete"><i class="bi bi-x"></i></a>
+                            </div>
+                        </th>
+                    </tr>  
+                `
+                });
+                document.getElementById('tbody-issues-selected').innerHTML = content;
+                $('#issues-table-selected').DataTable({
+                    "bLengthChange": false,
+                    "bFilter": true,
+                    "bInfo": false,
+                    "bAutoWidth": false
+                });
+    
+            } else {
+                Swal.fire('Warning!', response.exception, 'warning');
+            }
+        });
+    }); 
+}
 
+async function deleteSelectedById(id) {
+    fetch(`../api/manageSprints/deleteSelectedById?id=${id}`, {
+        method: 'DELETE',
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.token
+         }
+     }).then(function(request){
+        request.json().then(function (response) {
+        
+        });
+    });
+}
+    
 function selectIssue(id, name) {
  
     if (!!document.getElementById(`row-${id}`)) {
@@ -172,7 +227,7 @@ document.getElementById('btnAddIssues').addEventListener('click', function () {
 });
 
 async function getOneSprint(id) {
-    const request = await fetch(`../api/users/sprint?id=${id}`, {
+    const request = await fetch(`../api/manageSprints/sprint?id=${id}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -185,7 +240,8 @@ async function getOneSprint(id) {
 
         console.log(response.dataset);
         if (response.status) {
-            
+            console.log(response)
+            document.getElementById('id_sprint').value = response.dataset[0].id;
             document.getElementById('name').value = response.dataset[0].cycle_name;
             document.getElementById('duration').value = response.dataset[0].duration;
             document.getElementById('start_date').value = response.dataset[0].start_date;
@@ -214,7 +270,7 @@ function deleteSprint(id) {
         confirmButtonText: 'Yes, delete it.'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`../api/users/deleteSprint?id=${id}`, {
+            fetch(`../api/manageSprints/deleteSprint?id=${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
@@ -237,16 +293,13 @@ function deleteSprint(id) {
 }
 
 async function saveIssues() {
-
-    let data = {};
-            data.id = document.getElementById('id_sprint2').value;
-            console.log(data);
- /*  if (getSelectedValues().length != 0) {
+  if (getSelectedValues().length != 0) {
         data = {};
-        data.id_project = id;
-        data.developers = getSelectedValues();
-        if (id != 0) {
-            const request = await fetch('../api/projects/addDevelopersToProject', {
+        data.id = document.getElementById('id_sprint2').value;
+        console.log(data.id)
+        data.issues = getSelectedValues();
+        if (data.id != 0) {
+            const request = await fetch('../api/manageSprints/addIssuesToSprint', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -258,58 +311,16 @@ async function saveIssues() {
 
             request.json().then(function (response) {
                 if (response.status) {
-                    closeModal('addUsersProject');
+                    closeModal('addIssues');
                     Swal.fire("Success!", response.message, 'success').then(function () {
-                        fillProjects().then(function () {
-                            fillDevelopersTable();
-                        });
-                    });
-                } else {
-                    Swal.fire('Warning!', response.exception, 'warning').then(function () {
-                        fetch(`../api/projects/delete?id=${id}`, {
-                            method: 'DELETE',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json',
-                                'Authorization': localStorage.token
-                            }
-                        }).then(function (request) {
-                            request.json().then(function (response) {
-                                if (response.status) {
-                                    console.log(response.message);
-                                } else {
-                                    console.log(response.exception);
-                                }
-                            });
-                        });
+                       makeRequests();
                     });
                 }
             });
         } else {
-            Swal.fire("Error!", `We have an error, the id of the project is ${id}.`, 'error');
+            Swal.fire("Error!", `We have an error, the id of the issue is ${id}.`, 'error');
         }
-    } else {
-        console.log(id);
-        Swal.fire('Warning!', "You need to select developers for the project.", 'warning').then(function () {
-            fetch(`../api/projects/delete?id=${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': localStorage.token
-                }
-            }).then(function (request) {
-                request.json().then(function (response) {
-                    if (response.status) {
-                        console.log(response.message);
-                    } else {
-                        console.log(response.exception);
-                    }
-                });
-            });
-        });
-
-    }*/
+  }
 }
 
     // resets the form when the add button is pressed
@@ -328,7 +339,7 @@ async function saveIssues() {
         event.preventDefault();
 
             let data = {};
-        
+           
             data.cycle_name = document.getElementById('name').value;
             data.duration = document.getElementById('duration').value;
             data.start_date = document.getElementById('start_date').value;
@@ -336,14 +347,15 @@ async function saveIssues() {
             data.description = document.getElementById('description').value;
             data.id_status = document.getElementById('id_status').value;
 
-
             if (document.getElementById('id_sprint').value != '') {
-                data.id = document.getElementById('id_sprint').value;
-                saveOrUpdateData('../api/users/updateSprint', data, 'manageSprintsModal').then(function () {
+                 data.id = document.getElementById('id_sprint').value;
+                 console.log(data.id);
+                saveOrUpdateData('../api/manageSprints/updateSprint', data, 'manageSprintsModal').then(function () {
                     makeRequests();
                 });
             } else {
-                saveOrUpdateData('../api/users/createSprint', data, 'manageSprintsModal').then(function () {
+                console.log(data.id);
+                saveOrUpdateData('../api/manageSprints/createSprint', data, 'manageSprintsModal').then(function () {
                     makeRequests();
                 });
             }

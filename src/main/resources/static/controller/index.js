@@ -46,13 +46,13 @@ async function login(data){
                 localStorage.token = response.token;
                 localStorage.username = response.dataset[0].userName;
                 localStorage.role = response.dataset[0].id_rol;
+                localStorage.userid = response.dataset[0].id;
                 
                 if(response.dataset[0].id_rol == 3){
                     window.location.href = `../developer/dashboard?token=${response.token}`;
                 } else if (response.dataset[0].id_rol == 1){
                     window.location.href = `manager/dashboard?token=${response.token}`;
                 }
-
             });
         } else {
             Swal.fire('Warning!',response.exception,'warning');

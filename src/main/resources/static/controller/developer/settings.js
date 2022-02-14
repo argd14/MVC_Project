@@ -20,7 +20,6 @@ async function getLoggedUser() {
    request.json().then(function (response) {
         if (response.status) {
             console.log(response)
-            document.getElementById('id_user').value = response.dataset[0][0];
             document.getElementById('name').value = response.dataset[0][1];
             document.getElementById('userName').value = response.dataset[0][2];
             document.getElementById('phone_number').value = response.dataset[0][3];
@@ -34,7 +33,7 @@ async function getLoggedUser() {
 document.getElementById('manageAccount-form').addEventListener('submit', function (event) {
     event.preventDefault();
     data = {}
-//    data.id = document.getElementById('id_user').value;
+    //data.id = document.getElementById('id_user').value;
     data.name = document.getElementById('name').value;
     data.userName = document.getElementById('userName').value;
     data.phone_number = document.getElementById('phone_number').value;

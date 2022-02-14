@@ -8,7 +8,6 @@ import java.util.Collection;
 
 
 @Data
-@NoArgsConstructor
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
@@ -22,7 +21,6 @@ public class User implements Serializable {
     private String phone_number;
     private String email;
     private String password;
-
     private int id_status;
     private int id_rol;
     private LocalDateTime creation_date;

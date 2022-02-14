@@ -13,4 +13,8 @@ public interface StatusRepository extends JpaRepository<Status, Long> {
     @Query(value = "SELECT id,status FROM status WHERE id = 1 OR id = 2",
             nativeQuery = true )
     List<Object> ListStatus();
+
+    @Query(value = "SELECT id,status FROM status WHERE id = 3 OR id = 4 OR id = 5",
+            nativeQuery = true )
+    List<Object> ListIssueStatus();
 }

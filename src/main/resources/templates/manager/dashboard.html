@@ -9,8 +9,8 @@
 
     <div class="page-content" id="content">
         <button id="sidebarCollapse" type="button" class="m-2 btn custom-btn-2"><i class="bi bi-list"></i></button>
-        <div class="container-fluid animate__animated animate__fadeInRight px-5">
-            <div>
+        <div class="container-fluid px-5">
+            <div class="animate__animated animate__fadeInRight">
                 <div class="d-flex align-items-center">
                     <div class="modal-icon-background-blue me-3">
                         <i class="bi bi-house-door modal-icon-blue"></i>
@@ -19,8 +19,68 @@
                 </div>
                 <label class="custom-text mt-2">Get a general view of everything.</label>
             </div>
+            <div class="row my-3">
+                <div class="p-5 col-xl-6 col-md-12 col-sm-12 col-xs-12 animate__animated animate__fadeInUp animate__delay-1s">
+                    <h5 class="text-center">Done tasks by developers</h5>
+                    <canvas id="chart1" width="400" height="400"></canvas>
+                </div>
+                <div class="p-5 col-xl-6 col-md-12 col-sm-12 col-xs-12 animate__animated animate__fadeInUp animate__delay-1s">
+                    <h5 class="text-center">Percentage of tasks by status / <span id="lblProjectName" class="text-muted">Selected Project</span></h5>
+                    <div id="projectChartDiv">
+                        <canvas id="chart2" width="400" height="400"></canvas>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button onclick="loadTable()" class="btn btn-sm custom-btn"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Change project"><i class="bi bi-pencil-fill"></i></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Modal for changing data of the chart -->
+    <div class="modal fade" id="changeChartModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header d-flex justify-content-start">
+                    <div class="modal-icon-background-red me-3">
+                        <i class="bi bi-box modal-icon-red"></i>
+                    </div>
+                    <h5 class="modal-title" id="modal-title">Choose a project to show on chart.</h5>
+                </div>
+
+                <div class="modal-body mb-3 mt-2">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center align-items-center">
+                            <div style="width: 300px;">
+                                <table id="project-table" class="table table-borderless mt-3">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Project</th>
+                                            <th scope="col">Tasks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-project">
+        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn custom-btn pe-3" data-bs-dismiss="modal">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="bi bi-x icon-color me-1"></i><span>Close</span>
+                        </div>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/chart.min.js"></script>
 
     <script src="../controller/manager/dashboard.js"></script>
 
