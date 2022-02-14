@@ -58,7 +58,7 @@
 
 <!-- Modal for managing issues -->
 <div class="modal fade" id="manageIssuesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content p-3">
             <div class="modal-header d-flex justify-content-start">
                 <div class="modal-icon-background-red me-3">
@@ -73,7 +73,7 @@
                     <input type="hidden" id="created_by">
                     <label class="custom-text">Please fill all the fields.</label>
                     <div class="row">
-                        <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-12">
                             <div class="mt-1">
                                 <div class="mb-2">
                                     <label for="summary" class="custom-text">Summary:</label>
@@ -82,17 +82,7 @@
                                 </div>
                                 <div class="mb-2">
                                     <label for="description" class="custom-text">Description:</label>
-                                    <input type="text" class="form-control" id="description"
-                                           placeholder="Issue Description...">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
-                            <div class="mt-1">
-                                <div class="mb-2">
-                                    <label for="id_priority" class="custom-text">Priority:</label>
-                                    <select class="form-select" id="id_priority">
-                                    </select>
+                                    <textarea class="form-select" id="description" rows="5"></textarea>
                                 </div>
                                 <div class="mb-2">
                                     <label for="id_project" class="custom-text">Project:</label>
@@ -100,8 +90,13 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="id_status" class="custom-text">Status:</label>
-                                    <select class="form-select" id="id_status">
+                                    <label for="id_development_cycle" class="custom-text">Sprint:</label>
+                                    <select class="form-select" id="id_development_cycle">
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="id_priority" class="custom-text">Priority:</label>
+                                    <select class="form-select" id="id_priority">
                                     </select>
                                 </div>
                                 <div class="mb-2">
@@ -109,18 +104,14 @@
                                     <select class="form-select" id="id_type">
                                     </select>
                                 </div>
-                                <div class="mb-2">
-                                    <label for="id_score" class="custom-text">Score:</label>
-                                    <select class="form-select" id="id_score">
-                                    </select>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="id_development_cycle" class="custom-text">Sprint:</label>
-                                    <select class="form-select" id="id_development_cycle">
+                                <div class="mb-2" id="divStatus">
+                                    <label for="id_status" class="custom-text">Status:</label>
+                                    <select class="form-select" id="id_status">
                                     </select>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                     <button type="submit" id="submit-form" class="d-none"></button>
                 </form>

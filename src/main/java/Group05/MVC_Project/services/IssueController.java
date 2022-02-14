@@ -41,16 +41,22 @@ public class IssueController {
         } else {
             if (stringValidation.validateAlphanumeric(issue.getSummary(), 150)) {
                 if (stringValidation.validateAlphanumeric(issue.getDescription(), 500)) {
-                    if (numberValidation.validateInteger(String.valueOf(issue.getCreated_by()))) {
-                        if (numberValidation.validateInteger(String.valueOf(issue.getId_priority()))) {
+                    if (numberValidation.validateInteger(String.valueOf(issue.getId_priority()))) {
                             if (numberValidation.validateInteger(String.valueOf(issue.getId_project()))) {
                                 if (numberValidation.validateInteger(String.valueOf(issue.getId_type()))) {
-                                    try {
-                                        issueRepository.save(issue);
-                                        response.setStatus(true);
-                                        response.setMessage("Saved successfully!");
-                                    } catch (DataAccessException ex) {
-                                        response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                                    if (numberValidation.validateInteger(String.valueOf(issue.getId_development_cycle()))) {
+                                        try {
+                                            issue.setCreated_by(validateToken.userDB().getId());
+                                            issue.setId_status(3);
+                                            issue.setId_score(1);
+                                            issueRepository.save(issue);
+                                            response.setStatus(true);
+                                            response.setMessage("Saved successfully!");
+                                        } catch (DataAccessException ex) {
+                                            response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                                        }
+                                    } else {
+                                        response.setException("Invalid sprint.");
                                     }
                                 } else {
                                     response.setException("invalid type");
@@ -61,14 +67,11 @@ public class IssueController {
                         } else {
                             response.setException("invalid priority");
                         }
-                    } else {
-                        response.setException("invalid user");
-                    }
                 } else {
-                    response.setException("invalid description");
+                    response.setException("Invalid description.");
                 }
             } else {
-                response.setException("invalid summary");
+                response.setException("Invalid summary.");
             }
 
         }
@@ -83,25 +86,33 @@ public class IssueController {
         } else {
             if (issue.getId() != null) {
                 if (stringValidation.validateAlphanumeric(issue.getSummary(), 150)) {
-                    if (stringValidation.validateAlphanumeric(issue.getDescription(), 500)) {
+                    if (stringValidation.validateAlphabetic(issue.getDescription(), 500)) {
                             if (numberValidation.validateInteger(String.valueOf(issue.getId_priority()))) {
                                 if (numberValidation.validateInteger(String.valueOf(issue.getId_project()))) {
                                     if (numberValidation.validateInteger(String.valueOf(issue.getId_type()))) {
-                                        try {
-                                            Issue issueDB = issueRepository.findById(issue.getId()).get();
-                                            issueDB.setSummary(issue.getSummary());
-                                            issueDB.setDescription(issue.getDescription());
-                                            issueDB.setId_priority(issue.getId_priority());
-                                            issueDB.setId_project(issue.getId_project());
-                                            issueDB.setId_status(issue.getId_status());
-                                            issueDB.setId_type(issue.getId_type());
-                                            issueDB.setId_score(issue.getId_score());
-                                            issueDB.setId_development_cycle(issue.getId_development_cycle());
-                                            issueRepository.save(issueDB);
-                                            response.setMessage("Updated successfully.");
-                                            response.setStatus(true);
-                                        } catch (DataAccessException ex) {
-                                            response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                                        if (numberValidation.validateInteger(String.valueOf(issue.getId_development_cycle()))) {
+                                            if (numberValidation.validateInteger(String.valueOf(issue.getId_status()))) {
+                                                try {
+                                                    Issue issueDB = issueRepository.findById(issue.getId()).get();
+                                                    issueDB.setSummary(issue.getSummary());
+                                                    issueDB.setDescription(issue.getDescription());
+                                                    issueDB.setId_priority(issue.getId_priority());
+                                                    issueDB.setId_project(issue.getId_project());
+                                                    issueDB.setId_status(issue.getId_status());
+                                                    issueDB.setId_type(issue.getId_type());
+                                                    issueDB.setId_score(1);
+                                                    issueDB.setId_development_cycle(issue.getId_development_cycle());
+                                                    issueRepository.save(issueDB);
+                                                    response.setMessage("Updated successfully.");
+                                                    response.setStatus(true);
+                                                } catch (DataAccessException ex) {
+                                                    response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                                                }
+                                            } else {
+                                                response.setException("Invalid status.");
+                                            }
+                                        } else {
+                                            response.setException("Invalid sprint.");
                                         }
                                     } else {
                                         response.setException("invalid type");
@@ -113,33 +124,33 @@ public class IssueController {
                                 response.setException("invalid priority");
                             }
                     } else {
-                        response.setException("invalid description");
+                        response.setException("Invalid description.");
                     }
                 } else {
-                    response.setException("invalid summary");
+                    response.setException("Invalid summary.");
                 }
             } else {
-                response.setException("id can not be null");
+                response.setException("Id can not be null.");
             }
         }
         return response;
     }
 
-        @GetMapping("/issues")
-        public Response getAvailableDevelopers(@RequestHeader(value = "Authorization") String token){
-            initializeResponse();
-            if (!validateToken.validateToken(token)) {
-                response.setException("Unauthorized access.");
-            } else {
-                try {
-                    response.getDataset().addAll(issueRepository.getIssues());
-                    response.setStatus(true);
-                } catch (DataAccessException ex) {
-                    response.setException(SQLException.getException(String.valueOf(ex.getCause())));
-                }
+    @GetMapping("/issues")
+    public Response getAvailableDevelopers(@RequestHeader(value = "Authorization") String token){
+        initializeResponse();
+        if (!validateToken.validateToken(token)) {
+            response.setException("Unauthorized access.");
+        } else {
+            try {
+                response.getDataset().addAll(issueRepository.getIssues());
+                response.setStatus(true);
+            } catch (DataAccessException ex) {
+                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
             }
-            return response;
         }
+        return response;
+    }
 
     @GetMapping("/issue")
     public Response getIssue(@RequestHeader(value = "Authorization") String token, @RequestParam(name = "id") Long id) {

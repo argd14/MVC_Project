@@ -20,8 +20,14 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
             nativeQuery = true )
     List<Object> ListClosedIssues();
 
-    @Query(value = "SELECT id,summary,created_by,id_priority,id_project,id_type FROM issue",
-            nativeQuery = true )
+    @Query(value = "SELECT i.id, i.summary, p.priority, t.type, s.status, u1.name as created_by, u2.name as issue_owner, pr.project_name FROM issue i "+
+                "INNER JOIN priority p ON i.id_priority = p.id " +
+                "INNER JOIN type t ON i.id_type = t.id " +
+                "INNER JOIN status s ON i.id_status = s.id " +
+                "INNER JOIN user u1 ON i.created_by = u1.id_user " +
+                "LEFT JOIN user u2 ON i.issue_owner = u2.id_user " +
+                "INNER JOIN project pr ON i.id_project = pr.id_project",
+        nativeQuery = true)
     List<Object> getIssues();
 
     @Query(value = "SELECT id,summary,created_by,id_priority,id_project,id_type FROM issue WHERE summary LIKE %:search% ",

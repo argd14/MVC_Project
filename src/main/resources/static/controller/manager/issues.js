@@ -9,9 +9,7 @@ async function makeRequests() {
             fillSelect('../api/projects/getProjects', 'id_project', null).then(function () {
                 fillSelect('../api/issues/ListIssueStatus', 'id_status', null).then(function () {
                     fillSelect('../api/issues/types', 'id_type', null).then(function () {
-                        fillSelect('../api/issues/scores', 'id_score', null).then(function () {
-                            fillSelect('../api/users/sprints', 'id_development_cycle', null).then(function () {
-                            });
+                        fillSelect('../api/manageSprints/sprints', 'id_development_cycle', null).then(function () {
                         });
                     });
                 });
@@ -35,20 +33,18 @@ async function fillIssuesTable() {
     request.json().then(function (response) {
         // checks response status
         if (response.status) {
-            console.log(response)
-            document.getElementById('id_issue').value = response.dataset[0].id;
             $('#manager-table').DataTable().destroy();
             let content = '';
-            console.log(response.dataset);
+            
             response.dataset.map(function (row) {
                 content += `
                 <tr>
                     <th scope="row" class="id-padding">${row[0]}</th>
                     <td>${row[1]}</td>
-                    <td>${row[2]}</td>
-                    <td>${row[3]}</td>
-                    <td>${row[4]}</td>
                     <td>${row[5]}</td>
+                    <td>${row[2]}</td>
+                    <td>${row[7]}</td>
+                    <td>${row[3]}</td>
                     <th scope="row">
                         <div>
                             <a onclick="getOneIssue(${row[0]})" class="btn btn-sm custom-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update"><i class="bi bi-pencil-fill"></i></a>
@@ -68,6 +64,7 @@ async function fillIssuesTable() {
 }
 
 async function getOneIssue(id) {
+    document.getElementById('divStatus').classList.remove('d-none');
     const request = await fetch(`../api/issues/issue?id=${id}`, {
         method: 'GET',
         headers: {
@@ -78,9 +75,8 @@ async function getOneIssue(id) {
     });
 
     request.json().then(function (response) {
-        console.log(response.dataset);
+        
         if (response.status) {
-            console.log(response)
             document.getElementById('id_issue').value = response.dataset[0].id;
             document.getElementById('summary').value = response.dataset[0].summary;
             document.getElementById('description').value = response.dataset[0].description;
@@ -89,9 +85,7 @@ async function getOneIssue(id) {
                 fillSelect('../api/projects/getProjects', 'id_project', response.dataset[0].id_project).then(function () {
                     fillSelect('../api/issues/ListIssueStatus', 'id_status', response.dataset[0].id_status).then(function () {
                         fillSelect('../api/issues/types', 'id_type', response.dataset[0].id_type).then(function () {
-                            fillSelect('../api/issues/scores', 'id_score', response.dataset[0].id_score).then(function () {
-                                fillSelect('../api/users/sprints', 'id_development_cycle', response.dataset[0].id_development_cycle).then(function () {
-                                });
+                            fillSelect('../api/manageSprints/sprints', 'id_development_cycle', response.dataset[0].id_development_cycle).then(function () {
                             });
                         });
                     });
@@ -146,6 +140,8 @@ function deleteIssues(id) {
 document.getElementById('btnOpenAddModal').addEventListener('click', function () {
     document.getElementById('manageIssues-form').reset();
     document.getElementById('modal-title').textContent = 'Add Issues';
+
+    document.getElementById('divStatus').classList.add('d-none');
 });
 
 // to click the hidden button into the manageIssues-form
@@ -160,26 +156,20 @@ document.getElementById('manageIssues-form').addEventListener('submit', function
     let data = {};
     data.summary = document.getElementById('summary').value;
     data.description = document.getElementById('description').value;
-    //document.getElementById('created_by').value = localStorage.userid;
-    //data.issue_owner = document.getElementById('issue_owner').value;
     data.id_priority = document.getElementById('id_priority').value;
     data.id_project = document.getElementById('id_project').value;
     data.id_status = document.getElementById('id_status').value;
     data.id_type = document.getElementById('id_type').value;
-    data.id_score = document.getElementById('id_score').value;
     data.id_development_cycle = document.getElementById('id_development_cycle').value;
 
-    if (document.getElementById('id_issue').value != 'undefined') {
+    if (document.getElementById('id_issue').value != '') {
         data.id = document.getElementById('id_issue').value;
         data.created_by = document.getElementById('created_by').value;
-        console.log("Here " + data.id + " " + data.created_by);
         saveOrUpdateData('../api/issues/update', data, 'manageIssuesModal').then(function () {
-            console.log("Status " + data.id_status + " Type " + data.id_type );
             makeRequests();
         });
     } else {
         data.created_by = localStorage.userid;
-        console.log("created by  " + data.created_by);
         saveOrUpdateData('../api/issues/create', data, 'manageIssuesModal').then(function () {
             makeRequests();
         });
