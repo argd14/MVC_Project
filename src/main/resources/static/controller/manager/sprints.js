@@ -4,11 +4,15 @@ makeRequests();
 
 async function makeRequests() {
     fillManagersSprintTable().then(function () {
-        fillSelect('../api/users/ListStatus', 'id_status', null);
+        fillSelect('../api/users/ListStatus', 'id_status', null).then(function(){
+         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+         return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
     });
 
+});
 }
-
 
 async function fillManagersSprintTable() {
     const request = await fetch('../api/manageSprints/sprints', {

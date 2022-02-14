@@ -45,6 +45,11 @@ public interface IssueRepository extends JpaRepository<Issue, Long>{
     @Query(value = "SELECT c.id,c.summary FROM issue c WHERE c.id_development_cycle = 1",
             nativeQuery = true)
     List<Object> getAvailableIssues();
+    @Query(value = "SELECT * FROM issue WHERE created_by = :id",
+            nativeQuery = true)
+    List<Issue> issuesByIdUser(@Param("id") Long id);
+
+    //List<Issue> findAll()
 
     @Query(value = "SELECT c.id,c.summary FROM issue c WHERE c.id_development_cycle = :id",
             nativeQuery = true)

@@ -26,6 +26,8 @@ public class UserController {
     private IssueRepository issueRepository;
     @Autowired
     private ValidateToken validateToken;
+    @Autowired
+    private ReportUtil service;
 
     private Response response;
     private StringValidation stringValidation = new StringValidation();
@@ -248,8 +250,7 @@ public class UserController {
     }
 
     @PostMapping("/updatePassword")
-    public Response updatePassword(@RequestHeader(value = "Authorization") String
-                                           token, @RequestParam(name = "password1") String password1, @RequestParam(name = "password2") String password2) {
+    public Response updatePassword(@RequestHeader(value = "Authorization") String token, @RequestParam(name = "password1") String password1, @RequestParam(name = "password2") String password2) {
         initializeResponse();
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
