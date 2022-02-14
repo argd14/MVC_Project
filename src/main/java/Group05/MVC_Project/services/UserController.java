@@ -26,8 +26,6 @@ public class UserController {
     private IssueRepository issueRepository;
     @Autowired
     private ValidateToken validateToken;
-    @Autowired
-    private ReportUtil service;
 
     private Response response;
     private StringValidation stringValidation = new StringValidation();
@@ -89,10 +87,8 @@ public class UserController {
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            if (userRepository.existsById(id)) {
-                User user = userRepository.findById(id).get();
-                user.setProject(null);
-                response.getDataset().add(user);
+            if (userRepository.findById(id) != null) {
+                response.getDataset().add(userRepository.findById(id).get());
                 response.setStatus(true);
             } else {
                 response.setException("The user doesn't exists.");
@@ -250,7 +246,8 @@ public class UserController {
     }
 
     @PostMapping("/updatePassword")
-    public Response updatePassword(@RequestHeader(value = "Authorization") String token, @RequestParam(name = "password1") String password1, @RequestParam(name = "password2") String password2) {
+    public Response updatePassword(@RequestHeader(value = "Authorization") String
+                                           token, @RequestParam(name = "password1") String password1, @RequestParam(name = "password2") String password2) {
         initializeResponse();
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
@@ -280,30 +277,92 @@ public class UserController {
         return response;
     }
 
-    @GetMapping("resetPassword")
-    public Response resetPassword(@RequestHeader(value="Authorization") String token, @RequestParam Long id){
+
+    @GetMapping("/getLoggedUser")
+public Response getLoggedUser(@RequestHeader(value = "Authorization") String token) {
+    initializeResponse();
+    if (!validateToken.validateToken(token)) {
+        response.setException("Unauthorized access.");
+    } else {
+        Long idL = validateToken.userDB().getId();
+        response.getDataset().addAll(userRepository.loggedUser(idL));
+        response.setStatus(true);
+    }
+    return response;
+}
+
+    @PostMapping("/updateProfile")
+    public Response updateProfile(@RequestHeader(value = "Authorization") String token, @RequestBody User user) {
         initializeResponse();
         if (!validateToken.validateToken(token)) {
             response.setException("Unauthorized access.");
         } else {
-            if (validateToken.userDB().getId_rol() == 1) {
-                if (userRepository.existsById(id)) {
-                    User user = userRepository.findById(id).get();
-                    Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
-                    String hash = argon2.hash(1, 1024, 1, "Pass123@");
-                    user.setPassword(hash);
-                    userRepository.save(user);
-                    response.setStatus(true);
-                    response.setMessage("Password has been changed to Pass123@, change it after you get logged in.");
+//            User userDB = validateToken.userDB();
+
+            if (stringValidation.validateAlphabetic(user.getName(), 40)) {
+                if (stringValidation.validateAlphanumeric(user.getUserName(),40)) {
+                    if (numberValidation.validatePhone(user.getPhone_number())) {
+                        if (stringValidation.validateEmail(user.getEmail())) {
+//                            System.out.println("Llego");
+                            try {
+                                User userDB = userRepository.findById(validateToken.userDB().getId()).get();
+                                userDB.setName(user.getName());
+                                userDB.setUserName(user.getUserName());
+                                userDB.setPhone_number(user.getPhone_number());
+                                userDB.setEmail(user.getEmail());
+                                userRepository.save(userDB);
+                                response.setMessage("Updated successfully.");
+                                response.setStatus(true);
+                            } catch (DataAccessException ex) {
+                                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+                            }
+
+                        } else {
+                            response.setException("Invalid E-Mail");
+                        }
+                    } else {
+                        response.setException("Invalid Phone Number");
+                    }
                 } else {
-                    response.setException("The id that you set does not exists.");
+                    response.setException("Invalid User Name");
                 }
             } else {
-                response.setException("You are not manager");
+                response.setException("Invalid Name");
             }
+
+
+//            if (userDB.getId_rol() != 3) {
+//                if (stringValidation.validateAlphanumeric(project.getProject_code(), 15)) {
+//                    if (stringValidation.validateAlphabetic(project.getProject_name(), 150)) {
+//                        if (stringValidation.validateAlphabetic(project.getDescription(), 250)) {
+//                            try {
+//                                Project existentProject = projectRepository.findById(project.getId()).get();
+//                                existentProject.setProject_code(project.getProject_code());
+//                                existentProject.setProject_name(project.getProject_name());
+//                                existentProject.setDescription(project.getDescription());
+//                                projectRepository.save(existentProject);
+//                                response.setStatus(true);
+//                                response.setMessage("Updated successfully!");
+//                            } catch (DataAccessException ex) {
+//                                response.setException(SQLException.getException(String.valueOf(ex.getCause())));
+//                            }
+//                        } else {
+//                            response.setException("Invalid description.");
+//                        }
+//                    } else {
+//                        response.setException("Invalid project name.");
+//                    }
+//                } else {
+//                    response.setException("Invalid project code.");
+//                }
+//            } else {
+//                response.setException("You are not a manager.");
+//            }
+
         }
         return response;
     }
+
 
     public void initializeResponse() {
         this.response = new Response();
