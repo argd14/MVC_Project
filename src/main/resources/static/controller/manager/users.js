@@ -111,7 +111,6 @@ async function getOneManager(id) {
     });
 }
 
-
 function deleteUsers(id) {
     Swal.fire({
         title: 'Delete',
