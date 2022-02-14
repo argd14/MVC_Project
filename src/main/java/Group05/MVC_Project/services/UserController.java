@@ -305,7 +305,7 @@ public Response getLoggedUser(@RequestHeader(value = "Authorization") String tok
                         if (stringValidation.validateEmail(user.getEmail())) {
 //                            System.out.println("Llego");
                             try {
-                                User userDB = userRepository.findById(user.getId()).get();
+                                User userDB = userRepository.findById(validateToken.userDB().getId()).get();
                                 userDB.setName(user.getName());
                                 userDB.setUserName(user.getUserName());
                                 userDB.setPhone_number(user.getPhone_number());
